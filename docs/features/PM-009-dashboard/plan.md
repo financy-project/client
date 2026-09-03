@@ -67,6 +67,7 @@ Source: https://www.figma.com/design/ZF0QlJlYLMEUz6DH93SwbK/Financy--Community-?
 
 ```ts
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface AuthUser {
   id: string
@@ -79,13 +80,18 @@ interface AuthState {
   setUser: (user: AuthUser) => void
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  setUser: (user) => set({ user }),
-}))
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (user) => set({ user }),
+    }),
+    { name: 'financy:auth-user' },
+  ),
+)
 ```
 
-Written once, in `LoginForm`'s `onSubmit` success branch (`setUser(result)`, where `result` is `LoginData['login']` — same shape as `AuthUser`). Read in `Header` via `useAuthStore((state) => state.user)`.
+Written once, in `LoginForm`'s `onSubmit` success branch (`setUser(result)`, where `result` is `LoginData['login']` — same shape as `AuthUser`). Read in `Header` via `useAuthStore((state) => state.user)`. Wrapped in zustand's `persist` middleware (`localStorage`, key `financy:auth-user`) so the avatar survives a page refresh — per user decision (2026-09-03), see Risks & Mitigations for the accepted staleness tradeoff.
 
 **New utility:** `getInitials(name: string): string` — `src/lib/utils.ts` (alongside `cn`). The `LOGIN` mutation only returns a single `name` string (no separate first/last name field), so initials are derived client-side: first letter of the first word + first letter of the last word, uppercased (`"Carlos Teixeira"` → `"CT"`; single-word name → just that initial).
 
@@ -99,7 +105,7 @@ Written once, in `LoginForm`'s `onSubmit` success branch (`setUser(result)`, whe
 - **User Experience:** `Header` is presentational/always-available once a route mounts it — no loading or error state of its own. Active nav item uses `text-primary`/`font-semibold` vs. `text-gray-600`/`font-normal` for inactive, per Figma. Avatar renders empty (not a placeholder glyph) when `useAuthStore`'s `user` is `null` (e.g., a placeholder page opened directly without logging in first) — acceptable since these are throwaway placeholder pages, not the final protected-route experience.
 - **Testing & Validation:** Vitest + RTL. `Header` gets its own component test (`src/components/__tests__/header.test.tsx`) — renders logo/nav/avatar, highlights the active item per `MemoryRouter` `initialEntries`, shows initials when `useAuthStore` has a user (test seeds the store directly), renders empty avatar when it doesn't. `getInitials` gets a small util test. `LoginForm`'s existing test file is updated (not rewritten) for the two behavior changes: `navigate('/dashboard')` instead of `'/'`, and `useAuthStore`'s `user` is populated after a successful submit. `App.test.tsx` gains one smoke test per new route.
 - **Implementation Details:** new dependency — `zustand` (`pnpm add zustand`). New files: `src/components/header.tsx`, `src/modules/auth/stores/use-auth-store.ts`, `src/pages/{dashboard,transactions,categories}-page.tsx`. Modified files: `src/lib/utils.ts` (+`getInitials`), `src/modules/auth/components/login-form.tsx` (+`setUser` call, redirect target), `src/App.tsx` (+3 routes).
-- **Security Considerations:** the Zustand store holds only `{ id, email, name }` — the same non-sensitive fields the server already returns from `login`; no token/credential is stored client-side (the session itself stays in the httpOnly cookie, per PM-007). Store is in-memory only (no `persist` middleware) — a hard refresh clears `user` until the user logs in again; this is a deliberate, minimal choice for this ticket (see Risks).
+- **Security Considerations:** the Zustand store holds only `{ id, email, name }` — the same non-sensitive fields the server already returns from `login`; no token/credential is stored client-side (the session itself stays in the httpOnly cookie, per PM-007). Store uses zustand's `persist` middleware (`localStorage`, key `financy:auth-user`) so a hard refresh (F5) on `/dashboard` etc. doesn't clear the avatar — per user decision (2026-09-03), superseding this ticket's original in-memory-only choice (see Risks).
 - **Cross-Cutting Concerns:** no logging/analytics added. No shared error boundary needed — `Header` has no failure mode of its own.
 - **Error Scenarios & Failure Modes:** none specific to `Header` (no network calls, no form). `getInitials('')` (edge case: an empty/whitespace-only name, shouldn't happen given the server requires a name at registration) returns an empty string rather than throwing.
 - **Performance & Scale:** not applicable — static header, 3 nav items, no lists.
@@ -157,7 +163,7 @@ Written once, in `LoginForm`'s `onSubmit` success branch (`setUser(result)`, whe
 
 | Risk | Impact | Mitigation |
 | --- | --- | --- |
-| `useAuthStore` is in-memory only (no `persist` middleware) — a hard page refresh on `/dashboard` clears `user`, so the avatar goes empty even though the httpOnly session cookie is still valid | Medium | Deliberate, minimal scope for this ticket (see Architectural Decisions/Security). A future "restore session on load" feature (e.g. a `whoami` query, flagged as out-of-scope back in PM-007) is the real fix — not solved by persisting a stale name/email to `localStorage` |
+| `useAuthStore`'s `persist` middleware can go stale: `localStorage` still holds `{ id, email, name }` after the httpOnly session cookie expires/is revoked server-side (e.g. logout on another tab, session timeout) — the avatar would show a name for a user who isn't actually authenticated anymore | Medium | Accepted for this ticket — there's no logout flow or session-expiry handling yet to clear it either way. A future "restore/validate session on load" feature (e.g. a `whoami` query, flagged as out-of-scope back in PM-007) is the real fix: validate the persisted user against the server, not just trust `localStorage` |
 | Placeholder `DashboardPage`/`TransactionsPage`/`CategoriesPage` live under `src/pages/` (flat), not `src/modules/{dashboard,transactions,categories}/` — future features building out that real content may need to relocate them | Low | Deliberate — avoids scaffolding empty module directories ahead of any real feature for them (YAGNI); relocating 3 small placeholder files later is cheap |
 | Nav item routes (`/transacoes`, `/categorias`) don't correspond to any real feature yet — someone could click them expecting real content | Low | Placeholder page text makes this explicit ("em breve"), same pattern already shipped for `LoginPage` before PM-007 |
 

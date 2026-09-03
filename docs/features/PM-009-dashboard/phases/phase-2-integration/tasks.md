@@ -9,3 +9,4 @@
 - [x] F-009: Unit test for `getInitials` (`src/lib/__tests__/utils.test.ts` or alongside existing util tests): two-word name → both initials uppercased; single-word name → one initial; empty string → `""`
 - [x] F-010: Update `LoginForm`'s existing test (`src/modules/auth/components/__tests__/login-form.test.tsx`): the "navigates to /" assertions become "navigates to /dashboard"; add a case asserting `useAuthStore.getState().user` is populated with the mutation's result after a successful submit
 - [x] F-011: Add one smoke test per new route to `src/App.test.tsx`: `/dashboard`, `/transacoes`, `/categorias` each render `Header`'s "Dashboard" nav label (confirms the route + `Header` mount correctly)
+- [x] F-012: Wrap `useAuthStore` (`src/modules/auth/stores/use-auth-store.ts`) in zustand's `persist` middleware (`localStorage`, key `financy:auth-user`) so the logged-in user — and the header avatar — survives a page refresh (F5)

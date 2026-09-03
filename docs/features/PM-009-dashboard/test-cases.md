@@ -19,3 +19,4 @@
 - [x] T-012: `LoginForm` calls `navigate('/dashboard')` (not `/`) on a successful submit
 - [x] T-013: `LoginForm` populates `useAuthStore`'s `user` with the mutation's result on a successful submit
 - [x] T-014: `/dashboard`, `/transacoes`, `/categorias` each render `Header` (smoke test in `App.test.tsx`)
+- [x] T-015: `useAuthStore` persists the user to `localStorage` (key `financy:auth-user`) on `setUser`
