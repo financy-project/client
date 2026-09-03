@@ -9,7 +9,7 @@ const CATEGORY = {
   description: 'Restaurantes, delivery e refeições',
   icon: 'Utensils',
   color: '#2563EB',
-  transactionQuantity: 12,
+  transactionsQuantity: 12,
 }
 
 describe('CategoryCard', () => {
@@ -22,9 +22,21 @@ describe('CategoryCard', () => {
     expect(screen.getByText('12 itens')).toBeInTheDocument()
   })
 
-  it('renders "1 item" (singular) when transactionQuantity is 1', () => {
+  it('renders the icon square and name badge using the color-family light/base/dark tokens (not inline styles)', () => {
+    render(<CategoryCard category={CATEGORY} onEdit={vi.fn()} onDelete={vi.fn()} />)
+
+    const iconWrapper = screen.getByTestId('category-card-icon')
+    expect(iconWrapper).toHaveClass('bg-blue-light', 'text-blue-base')
+    expect(iconWrapper).not.toHaveAttribute('style')
+
+    const badges = screen.getAllByText('Alimentação')
+    const badge = badges.find((el) => el.getAttribute('data-slot') === 'tag')
+    expect(badge).toHaveClass('bg-blue-light', 'text-blue-dark')
+  })
+
+  it('renders "1 item" (singular) when transactionsQuantity is 1', () => {
     render(
-      <CategoryCard category={{ ...CATEGORY, transactionQuantity: 1 }} onEdit={vi.fn()} onDelete={vi.fn()} />,
+      <CategoryCard category={{ ...CATEGORY, transactionsQuantity: 1 }} onEdit={vi.fn()} onDelete={vi.fn()} />,
     )
 
     expect(screen.getByText('1 item')).toBeInTheDocument()
