@@ -16,6 +16,6 @@
 - [ ] T-009: `Header` highlights "Categorias" as active when mounted at `/categorias`
 - [ ] T-010: Clicking a `Header` nav item navigates to its corresponding route
 - [ ] T-011: `Header` renders `getInitials(user.name)` in the avatar when `useAuthStore` has a seeded user
-- [ ] T-012: `LoginForm` calls `navigate('/dashboard')` (not `/`) on a successful submit
-- [ ] T-013: `LoginForm` populates `useAuthStore`'s `user` with the mutation's result on a successful submit
+- [x] T-012: `LoginForm` calls `navigate('/dashboard')` (not `/`) on a successful submit
+- [x] T-013: `LoginForm` populates `useAuthStore`'s `user` with the mutation's result on a successful submit
 - [ ] T-014: `/dashboard`, `/transacoes`, `/categorias` each render `Header` (smoke test in `App.test.tsx`)
