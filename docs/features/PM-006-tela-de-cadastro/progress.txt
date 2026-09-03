@@ -35,3 +35,11 @@
     RegisterPage(): JSX.Element (src/modules/auth/pages/register-page.tsx) — final implementation
     LoginPage(): JSX.Element (src/modules/auth/pages/login-page.tsx) — final placeholder implementation
     Manually verified via pnpm dev + browser: /cadastro validation, password toggle, /login link/route all working
+
+[2026-09-03 10:21:56] ✅ Phase 4: Integration & Verification
+  Branch: PM-006/phase-4-integration-verification
+  - F-014: App.test.tsx covers /cadastro, /, /login, /preview
+  - F-015: manual verification (done during phase 3 browser session)
+  - F-016: pnpm lint, build, test all pass
+  Exports:
+    All 4 phases of PM-006 complete. Feature ready to merge down the stack into main.
