@@ -55,7 +55,7 @@ export function IconPicker({ value, onChange }: IconPickerProps): JSX.Element {
           aria-pressed={value === name}
           onClick={() => onChange(name)}
           className={cn(
-            'flex size-[42px] items-center justify-center rounded-[8px] border',
+            'flex size-[42px] cursor-pointer items-center justify-center rounded-[8px] border',
             value === name
               ? 'border-primary bg-gray-100 text-primary'
               : 'border-gray-300 text-gray-800',

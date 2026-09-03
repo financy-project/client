@@ -28,7 +28,7 @@ export function ColorPicker({ value, onChange }: ColorPickerProps): JSX.Element 
           aria-pressed={value === option.value}
           onClick={() => onChange(option.value)}
           className={cn(
-            'flex flex-1 items-center justify-center rounded-[8px] border p-[5px]',
+            'flex flex-1 cursor-pointer items-center justify-center rounded-[8px] border p-[5px]',
             value === option.value ? 'border-primary bg-gray-100' : 'border-gray-300',
           )}
         >
