@@ -38,7 +38,7 @@ describe('App', () => {
       </MockedProvider>,
     )
 
-    expect(screen.getByText('Login em breve')).toBeInTheDocument()
+    expect(screen.getByText('Fazer login')).toBeInTheDocument()
   })
 
   it('renders PreviewPage at /preview', () => {
