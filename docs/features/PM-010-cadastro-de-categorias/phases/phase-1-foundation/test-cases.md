@@ -2,9 +2,9 @@
 
 ### Phase 1: Foundation
 
-- [ ] T-001: `useCreateCategory` resolves with `{ id, title, description, icon, color }` and `isLoading` toggles `true` → `false` around the mutation call
-- [ ] T-002: `useCreateCategory` maps `extensions.validationErrors` straight to `fieldErrors` when present
-- [ ] T-003: `useCreateCategory` sets `formError` to the fallback message on a network/unexpected error
+- [x] T-001: `useCreateCategory` resolves with `{ id, title, description, icon, color }` and `isLoading` toggles `true` → `false` around the mutation call
+- [x] T-002: `useCreateCategory` maps `extensions.validationErrors` straight to `fieldErrors` when present
+- [x] T-003: `useCreateCategory` sets `formError` to the fallback message on a network/unexpected error
 - [ ] T-004: `IconPicker` renders all 16 icon options
 - [ ] T-005: `IconPicker` calls `onChange` with an option's name when clicked
 - [ ] T-006: `IconPicker` marks the option matching `value` with `aria-pressed="true"` and the rest `"false"`
