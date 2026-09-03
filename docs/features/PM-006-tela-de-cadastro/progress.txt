@@ -13,3 +13,13 @@
     PreviewPage(): JSX.Element (src/pages/preview-page.tsx)
     Toaster (src/components/ui/sonner.tsx), mounted at App root
     Routes: / -> /cadastro (redirect), /cadastro, /login, /preview
+
+[2026-09-03 10:15:13] ✅ Phase 2: API Layer
+  Branch: PM-006/phase-2-api-layer
+  - F-007: REGISTER_USER mutation + RegisterUserInput/RegisterUserData types
+  - F-008: useRegisterUser hook
+  - F-009: unit tests for useRegisterUser
+  Exports:
+    REGISTER_USER (gql), RegisterUserInput, RegisterUserData (src/modules/auth/graphql/mutations.ts)
+    useRegisterUser(): { registerUser(input): Promise<RegisterUserData['registerUser'] | null>, isLoading: boolean, fieldErrors: RegisterFieldError[], formError: string | null } (src/modules/auth/hooks/use-register-user.ts)
+    RegisterFieldError: { path: string, message: string }
