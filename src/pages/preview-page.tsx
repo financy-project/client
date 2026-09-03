@@ -1,3 +1,5 @@
+import type { JSX } from 'react'
+
 import { ComponentsPreview } from '@/components/components-preview'
 import { ContactForm } from '@/components/contact-form'
 import { CountriesList } from '@/components/countries-list'
