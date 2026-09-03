@@ -1,4 +1,4 @@
-import type { JSX } from 'react'
+import type { JSX, MouseEvent } from 'react'
 
 import { toast } from 'sonner'
 import {
@@ -27,7 +27,7 @@ export function DeleteCategoryAlert({
 }: DeleteCategoryAlertProps): JSX.Element {
   const { deleteCategory, isLoading, error } = useDeleteCategory()
 
-  const handleDelete = async (event: Event) => {
+  const handleDelete = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     const result = await deleteCategory(category.id)
     if (result) {

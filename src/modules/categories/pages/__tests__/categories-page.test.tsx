@@ -3,11 +3,34 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useCreateCategory } from '@/modules/categories/hooks/use-create-category'
+import { useListCategories } from '@/modules/categories/hooks/use-list-categories'
 import { CategoriesPage } from '@/modules/categories/pages/categories-page'
 
 vi.mock('@/modules/categories/hooks/use-create-category')
+vi.mock('@/modules/categories/hooks/use-list-categories')
+vi.mock('@/modules/categories/hooks/use-update-category', () => ({
+  useUpdateCategory: () => ({
+    updateCategory: vi.fn().mockResolvedValue(null),
+    isLoading: false,
+    fieldErrors: [],
+    formError: null,
+  }),
+}))
+vi.mock('@/modules/categories/hooks/use-delete-category', () => ({
+  useDeleteCategory: () => ({ deleteCategory: vi.fn().mockResolvedValue(false), isLoading: false, error: null }),
+}))
 
 const useCreateCategoryMock = vi.mocked(useCreateCategory)
+const useListCategoriesMock = vi.mocked(useListCategories)
+
+const CATEGORY = {
+  id: '1',
+  title: 'Alimentação',
+  description: 'Restaurantes e mercado',
+  icon: 'Utensils',
+  color: '#2563EB',
+  transactionQuantity: 12,
+}
 
 function renderCategoriesPage() {
   return render(
@@ -25,6 +48,7 @@ describe('CategoriesPage', () => {
       fieldErrors: [],
       formError: null,
     })
+    useListCategoriesMock.mockReturnValue({ categories: [], isLoading: false, error: null })
   })
 
   it('renders the page header and the app Header nav', () => {
@@ -68,5 +92,57 @@ describe('CategoriesPage', () => {
     await waitFor(() =>
       expect(screen.queryByRole('heading', { name: 'Nova categoria' })).not.toBeInTheDocument(),
     )
+  })
+
+  it('renders a loading message while useListCategories is loading', () => {
+    useListCategoriesMock.mockReturnValue({ categories: [], isLoading: true, error: null })
+    renderCategoriesPage()
+
+    expect(screen.getByText(/carregando categorias/i)).toBeInTheDocument()
+  })
+
+  it('renders an error banner when useListCategories errors', () => {
+    useListCategoriesMock.mockReturnValue({
+      categories: [],
+      isLoading: false,
+      error: 'Não foi possível carregar as categorias.',
+    })
+    renderCategoriesPage()
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Não foi possível carregar as categorias.')
+  })
+
+  it('renders an empty-state message when there are no categories', () => {
+    renderCategoriesPage()
+
+    expect(screen.getByText(/nenhuma categoria cadastrada/i)).toBeInTheDocument()
+  })
+
+  it('renders one CategoryCard per category when populated', () => {
+    useListCategoriesMock.mockReturnValue({ categories: [CATEGORY], isLoading: false, error: null })
+    renderCategoriesPage()
+
+    expect(screen.getByRole('heading', { name: 'Alimentação' })).toBeInTheDocument()
+  })
+
+  it("opens EditCategoryDialog for the clicked card's category", async () => {
+    useListCategoriesMock.mockReturnValue({ categories: [CATEGORY], isLoading: false, error: null })
+    const user = userEvent.setup()
+    renderCategoriesPage()
+
+    await user.click(screen.getByRole('button', { name: /editar/i }))
+
+    expect(screen.getByRole('heading', { name: 'Editar categoria' })).toBeInTheDocument()
+    expect(screen.getByLabelText(/título/i)).toHaveValue('Alimentação')
+  })
+
+  it("opens DeleteCategoryAlert for the clicked card's category", async () => {
+    useListCategoriesMock.mockReturnValue({ categories: [CATEGORY], isLoading: false, error: null })
+    const user = userEvent.setup()
+    renderCategoriesPage()
+
+    await user.click(screen.getByRole('button', { name: /excluir/i }))
+
+    expect(screen.getByText(/alimentação/i, { selector: '[data-slot="alert-dialog-description"]' })).toBeInTheDocument()
   })
 })

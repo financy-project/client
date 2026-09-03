@@ -24,8 +24,8 @@
 - [x] T-017: `CategoryCard` renders title, description, name badge, and "N itens"/"N item" text
 - [x] T-018: `CategoryCard` renders the icon matching `category.icon`, falling back to a generic icon for an unrecognized value
 - [x] T-019: `CategoryCard`'s edit/delete buttons call `onEdit`/`onDelete` with the category
-- [ ] T-020: `CategoriesPage` renders a loading message while `useListCategories` is loading
-- [ ] T-021: `CategoriesPage` renders an error banner when `useListCategories` errors
-- [ ] T-022: `CategoriesPage` renders an empty-state message when there are no categories
-- [ ] T-023: `CategoriesPage` renders one `CategoryCard` per category when populated
-- [ ] T-024: `CategoriesPage` opens `EditCategoryDialog`/`DeleteCategoryAlert` for the correct category when a card's edit/delete is clicked
+- [x] T-020: `CategoriesPage` renders a loading message while `useListCategories` is loading
+- [x] T-021: `CategoriesPage` renders an error banner when `useListCategories` errors
+- [x] T-022: `CategoriesPage` renders an empty-state message when there are no categories
+- [x] T-023: `CategoriesPage` renders one `CategoryCard` per category when populated
+- [x] T-024: `CategoriesPage` opens `EditCategoryDialog`/`DeleteCategoryAlert` for the correct category when a card's edit/delete is clicked
