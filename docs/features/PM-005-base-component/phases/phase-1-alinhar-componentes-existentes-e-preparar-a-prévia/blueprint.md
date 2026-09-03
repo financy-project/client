@@ -1,6 +1,5 @@
-# Base Component - PM-005 - Implementation Plan
+# PM-005 Blueprints (from plan.md, unmodified — same content in every phase folder)
 
-## Definition of Ready (DoR) Blueprints
 
 ### 1. Component Blueprint
 
@@ -119,76 +118,3 @@ Eight components total: two existing components verified/aligned (no structural 
 ### 4. State Blueprint
 
 **Omitted:** every component is either stateless (`Tag`, `Link`, `TransactionTypeIndicator`) or exposes controlled state to its caller via props (`Select` via Radix's own `value`/`onValueChange`, `Pagination` via `page`/`onPageChange`) rather than owning it internally. The only actual `useState` in this feature's scope lives in `ComponentsPreview`, and it is component-local to that temporary file — no context, no new React Query key, nothing shared across components.
-
-## Implementation Phases
-
-### Phase 1: Alinhar componentes existentes e preparar a prévia
-
-- [ ] Verificar `src/components/ui/input.tsx` contra o Figma (Style Guide → Componentes → Input): confirmar visualmente os 6 estados (vazio, ativo, preenchido, erro via `aria-invalid`, desabilitado) batem com o protótipo. Ajustar classes Tailwind inline no arquivo apenas se houver divergência real encontrada durante a Fase 4 (prévia visual) — não são esperadas mudanças estruturais.
-- [ ] Verificar `src/components/ui/button.tsx` contra o Figma (Style Guide → Componentes → Label Button): confirmar visualmente Md/Sm × Default/Hover/Disabled batem com o protótipo. Mesmo critério de ajuste da F-001.
-- [ ] Criar `src/components/components-preview.tsx` (`ComponentsPreview`, sem props) com a estrutura de seções vazias (títulos: Input, Button, Select, IconButton, Link, Pagination, Tag, TransactionTypeIndicator) — o conteúdo de cada seção é preenchido nas fases seguintes, à medida que cada componente é criado.
-
-### Phase 2: Select, IconButton, Link
-
-- [ ] Gerar `src/components/ui/select.tsx` via `pnpm dlx shadcn@latest add select` (ou porte manual dos primitivos `Select.*` de `radix-ui` seguindo a convenção `data-slot` + `cn()` já usada em `label.tsx`, caso a CLI não esteja disponível no ambiente de execução).
-- [ ] Testes para `Select` em `src/components/ui/__tests__/select.test.tsx`: renderiza placeholder quando vazio; abre a lista de opções ao clicar no trigger; seleciona uma opção e reflete no trigger; não abre quando `disabled`.
-- [ ] Criar `src/components/ui/icon-button.tsx` (`IconButton`, props conforme blueprint acima) — wrapper de `Button` forçando `size` a um dos variantes `icon*`, `icon` renderizado como filho, `aria-label` obrigatório no tipo.
-- [ ] Testes para `IconButton` em `src/components/ui/__tests__/icon-button.test.tsx`: renderiza o ícone passado; aplica o `aria-label` recebido; fica `disabled` quando a prop é passada; erro de tipo (não em runtime) se `aria-label` for omitido — validar isso como comentário no teste, já que TS pega em compile-time.
-- [ ] Criar `src/components/ui/link.tsx` (`Link`, props conforme blueprint acima) — renderiza `<a>` reaproveitando `buttonVariants({ variant: "link", size, className })`.
-- [ ] Testes para `Link` em `src/components/ui/__tests__/link.test.tsx`: renderiza como `<a>` com o `href` recebido; aplica as classes de `buttonVariants({variant: "link"})`; repassa `target`/`rel` quando fornecidos.
-- [ ] Preencher as seções "Select", "Icon Button" e "Link" em `src/components/components-preview.tsx` com os estados de cada um (Select: vazio/aberto/selecionado/desabilitado; IconButton: default/disabled com um ícone de exemplo do `lucide-react`; Link: default, e um exemplo com `target="_blank"`).
-
-### Phase 3: Pagination, Tag, TransactionTypeIndicator
-
-- [ ] Criar `src/components/ui/pagination.tsx` (`Pagination`, props conforme blueprint acima) — usa `IconButton` para prev/next (`ChevronLeft`/`ChevronRight` do `lucide-react`) e `Button` (`variant="default"` na página atual, `variant="ghost"` nas demais) para os números 1..`totalPages`.
-- [ ] Testes para `Pagination` em `src/components/ui/__tests__/pagination.test.tsx`: renderiza um botão por página; chama `onPageChange` com o número correto ao clicar; desabilita "anterior" quando `page === 1`; desabilita "próximo" quando `page === totalPages`; desabilita tudo quando `disabled` é `true`; marca a página atual com `variant="default"`.
-- [ ] Criar `src/components/ui/tag.tsx` (`Tag`, props conforme blueprint acima) — mapeia `color` para as classes `bg-{color}-light text-{color}-dark` já existentes em `src/index.css`.
-- [ ] Testes para `Tag` em `src/components/ui/__tests__/tag.test.tsx`: renderiza o texto filho; aplica as classes corretas para cada uma das 7 cores; aplica o tamanho correto (`sm`/`md`); usa `color="blue"` e `size="md"` como default quando omitidos.
-- [ ] Criar `src/components/transaction-type-indicator.tsx` (`TransactionTypeIndicator`, props conforme blueprint acima) — ícone `CircleArrowUp`/`text-success` para `type="income"`, `CircleArrowDown`/`text-destructive` para `type="expense"`, label "Entrada"/"Saída" respectivamente.
-- [ ] Testes para `TransactionTypeIndicator` em `src/components/__tests__/transaction-type-indicator.test.tsx`: renderiza "Entrada" com o ícone e a cor corretos para `type="income"`; renderiza "Saída" com o ícone e a cor corretos para `type="expense"`.
-- [ ] Preencher as seções "Pagination", "Tag" e "TransactionTypeIndicator" em `src/components/components-preview.tsx` com os estados de cada um (Pagination: controle interativo com `useState` local; Tag: grid com as 7 cores × 2 tamanhos; TransactionTypeIndicator: os dois tipos lado a lado).
-
-### Phase 4: Integração da prévia e verificação final
-
-- [ ] Montar `<ComponentsPreview />` em `src/App.tsx`, como uma nova seção abaixo do conteúdo existente (exemplo GraphQL + formulário), sob um heading `Prévia de Componentes (temporário)` — não remove nem altera o conteúdo já existente no arquivo.
-- [ ] Rodar `pnpm build`, `pnpm lint` e `pnpm test` — todos devem passar. Revisar visualmente `pnpm dev` com a prévia montada contra os frames do Figma (Style Guide → Componentes) e aplicar qualquer ajuste fino de classe Tailwind encontrado (incluindo eventuais ajustes pendentes de F-001/F-002).
-
-## Test Cases
-
-### Phase 1: Alinhar componentes existentes e preparar a prévia
-
-- [ ] `Input` renderiza corretamente com `aria-invalid` (estado de erro) — cobertura já implícita nos testes existentes/manuais; nenhum teste novo obrigatório nesta fase além da confirmação visual.
-- [ ] `Button` renderiza corretamente nos tamanhos `default`/`sm` com `disabled` — mesma observação acima.
-- [ ] `ComponentsPreview` renderiza sem erros com todas as seções (mesmo vazias) presentes.
-
-### Phase 2: Select, IconButton, Link
-
-- [ ] `Select` renderiza o placeholder quando nenhum valor está selecionado
-- [ ] `Select` abre a lista de opções ao clicar no trigger
-- [ ] `Select` reflete a opção escolhida no trigger após seleção
-- [ ] `Select` não abre a lista quando `disabled`
-- [ ] `IconButton` renderiza o ícone recebido via prop `icon`
-- [ ] `IconButton` aplica o `aria-label` recebido no elemento renderizado
-- [ ] `IconButton` fica desabilitado quando `disabled` é passado
-- [ ] `Link` renderiza um elemento `<a>` com o `href` recebido
-- [ ] `Link` aplica as classes de `buttonVariants({ variant: "link" })`
-- [ ] `Link` repassa `target`/`rel` quando fornecidos
-
-### Phase 3: Pagination, Tag, TransactionTypeIndicator
-
-- [ ] `Pagination` renderiza um botão para cada página de 1 a `totalPages`
-- [ ] `Pagination` chama `onPageChange` com o número correto ao clicar em uma página
-- [ ] `Pagination` desabilita o botão "anterior" quando `page === 1`
-- [ ] `Pagination` desabilita o botão "próximo" quando `page === totalPages`
-- [ ] `Pagination` desabilita todos os controles quando `disabled` é `true`
-- [ ] `Pagination` marca a página atual com `variant="default"` e as demais com `variant="ghost"`
-- [ ] `Tag` renderiza o texto filho passado
-- [ ] `Tag` aplica as classes de background/texto corretas para cada uma das 7 cores
-- [ ] `Tag` aplica o tamanho correto (`sm`/`md`) e usa `color="blue"`/`size="md"` como default
-- [ ] `TransactionTypeIndicator` renderiza "Entrada" com ícone `CircleArrowUp` e classe `text-success` para `type="income"`
-- [ ] `TransactionTypeIndicator` renderiza "Saída" com ícone `CircleArrowDown` e classe `text-destructive` para `type="expense"`
-
-### Phase 4: Integração da prévia e verificação final
-
-- [ ] `pnpm build`, `pnpm lint` e `pnpm test` passam sem erros após a integração em `App.tsx`
-- [ ] Revisão visual manual confirma que todos os 8 componentes/estados batem com o Figma (Style Guide → Componentes)
