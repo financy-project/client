@@ -56,7 +56,9 @@ export function IconPicker({ value, onChange }: IconPickerProps): JSX.Element {
           onClick={() => onChange(name)}
           className={cn(
             'flex size-[42px] items-center justify-center rounded-[8px] border',
-            value === name ? 'border-primary bg-gray-100' : 'border-gray-300',
+            value === name
+              ? 'border-primary bg-gray-100 text-primary'
+              : 'border-gray-300 text-gray-800',
           )}
         >
           <Icon className="size-5" />

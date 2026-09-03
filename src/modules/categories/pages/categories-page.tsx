@@ -1,7 +1,7 @@
 import type { JSX } from 'react'
 
 import { useState } from 'react'
-import { UserRoundPlus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { Header } from '@/components/header'
 import { Button } from '@/components/ui/button'
 import { NewCategoryDialog } from '@/modules/categories/components/new-category-dialog'
@@ -19,7 +19,7 @@ export function CategoriesPage(): JSX.Element {
             <p className="text-base text-gray-600">Organize suas transações por categorias</p>
           </div>
           <Button size="lg" className="gap-2 px-3" onClick={() => setOpen(true)}>
-            <UserRoundPlus className="size-4" />
+            <Plus className="size-4" />
             Nova categoria
           </Button>
         </div>
