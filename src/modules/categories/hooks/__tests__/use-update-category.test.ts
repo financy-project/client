@@ -21,7 +21,7 @@ describe('useUpdateCategory', () => {
         request: { query: UPDATE_CATEGORY, variables: { id: ID, input: INPUT } },
         result: {
           data: {
-            updateCategory: { id: ID, ...INPUT, transactionQuantity: 3 },
+            updateCategory: { id: ID, ...INPUT, transactionsQuantity: 3 },
           },
         },
       },
@@ -35,7 +35,7 @@ describe('useUpdateCategory', () => {
       response = await result.current.updateCategory(ID, INPUT)
     })
 
-    expect(response).toEqual({ id: ID, ...INPUT, transactionQuantity: 3 })
+    expect(response).toEqual({ id: ID, ...INPUT, transactionsQuantity: 3 })
     await waitFor(() => expect(result.current.isLoading).toBe(false))
   })
 

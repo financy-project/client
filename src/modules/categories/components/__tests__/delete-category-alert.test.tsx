@@ -14,7 +14,7 @@ const CATEGORY = {
   description: 'Restaurantes e mercado',
   icon: 'Utensils',
   color: '#16A34A',
-  transactionQuantity: 3,
+  transactionsQuantity: 3,
 }
 
 describe('DeleteCategoryAlert', () => {

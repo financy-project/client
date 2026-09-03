@@ -29,7 +29,7 @@ const CATEGORY = {
   description: 'Restaurantes e mercado',
   icon: 'Utensils',
   color: '#2563EB',
-  transactionQuantity: 12,
+  transactionsQuantity: 12,
 }
 
 function renderCategoriesPage() {
