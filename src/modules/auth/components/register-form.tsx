@@ -62,45 +62,47 @@ export function RegisterForm(): JSX.Element {
   }
 
   return (
-    <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <TextInput
-        id="name"
-        label="Nome completo"
-        placeholder="Seu nome completo"
-        leftIcon={<User />}
-        errorMessage={errors.name?.message}
-        {...register('name')}
-      />
-      <TextInput
-        id="email"
-        type="email"
-        label="E-mail"
-        placeholder="mail@exemplo.com"
-        leftIcon={<Mail />}
-        errorMessage={errors.email?.message}
-        {...register('email')}
-      />
-      <div className="grid gap-2">
-        <PasswordInput
-          id="password"
-          label="Senha"
-          placeholder="Digite sua senha"
-          leftIcon={<Lock />}
-          errorMessage={errors.password?.message}
-          {...register('password')}
+    <form className="grid gap-6" onSubmit={handleSubmit(onSubmit)} noValidate>
+      <div className="grid gap-4">
+        <TextInput
+          id="name"
+          label="Nome completo"
+          placeholder="Seu nome completo"
+          leftIcon={<User />}
+          errorMessage={errors.name?.message}
+          {...register('name')}
         />
-        {!errors.password && (
-          <p className="text-muted-foreground text-xs">
-            A senha deve ter no mínimo 8 caracteres
-          </p>
-        )}
+        <TextInput
+          id="email"
+          type="email"
+          label="E-mail"
+          placeholder="mail@exemplo.com"
+          leftIcon={<Mail />}
+          errorMessage={errors.email?.message}
+          {...register('email')}
+        />
+        <div className="grid gap-2">
+          <PasswordInput
+            id="password"
+            label="Senha"
+            placeholder="Digite sua senha"
+            leftIcon={<Lock />}
+            errorMessage={errors.password?.message}
+            {...register('password')}
+          />
+          {!errors.password && (
+            <p className="text-muted-foreground text-xs">
+              A senha deve ter no mínimo 8 caracteres
+            </p>
+          )}
+        </div>
       </div>
       {formError && (
         <p role="alert" className="text-destructive text-sm">
           {formError}
         </p>
       )}
-      <Button type="submit" disabled={isLoading}>
+      <Button type="submit" size="xl" disabled={isLoading}>
         {isLoading ? 'Criando conta…' : 'Cadastrar'}
       </Button>
     </form>

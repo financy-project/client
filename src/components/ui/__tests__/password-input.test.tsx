@@ -25,4 +25,17 @@ describe('PasswordInput', () => {
     render(<PasswordInput id="password" label="Senha" errorMessage="Senha inválida" />)
     expect(screen.getByText('Senha inválida')).toBeInTheDocument()
   })
+
+  it('uses the DS eye-closed/eye icon pair, not eye-off, for the visibility toggle', async () => {
+    const user = userEvent.setup()
+    const { container } = render(<PasswordInput id="password" label="Senha" />)
+
+    expect(container.querySelector('.lucide-eye-closed')).toBeInTheDocument()
+    expect(container.querySelector('.lucide-eye-off')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /mostrar senha/i }))
+
+    expect(container.querySelector('.lucide-eye')).toBeInTheDocument()
+    expect(container.querySelector('.lucide-eye-closed')).not.toBeInTheDocument()
+  })
 })

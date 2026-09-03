@@ -22,17 +22,24 @@ function TextInput({
 }: TextInputProps) {
   return (
     <div className="grid gap-2" data-slot="text-input">
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id} className="text-gray-700">
+        {label}
+      </Label>
       <div className="relative">
         {leftIcon && (
-          <span className="text-muted-foreground pointer-events-none absolute inset-y-0 left-3 my-auto flex items-center [&_svg]:size-4">
+          <span className="text-gray-400 pointer-events-none absolute inset-y-0 left-3 my-auto flex items-center [&_svg]:size-4">
             {leftIcon}
           </span>
         )}
         <Input
           id={id}
           aria-invalid={!!errorMessage}
-          className={cn(leftIcon && "pl-9", rightIcon && "pr-9", className)}
+          className={cn(
+            "h-12 text-base md:text-base placeholder:text-gray-400",
+            leftIcon && "pl-10",
+            rightIcon && "pr-9",
+            className,
+          )}
           {...props}
         />
         {rightIcon && (
