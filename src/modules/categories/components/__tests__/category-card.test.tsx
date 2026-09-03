@@ -1,0 +1,57 @@
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
+import { CategoryCard } from '@/modules/categories/components/category-card'
+
+const CATEGORY = {
+  id: '1',
+  title: 'Alimentação',
+  description: 'Restaurantes, delivery e refeições',
+  icon: 'Utensils',
+  color: '#2563EB',
+  transactionQuantity: 12,
+}
+
+describe('CategoryCard', () => {
+  it('renders title, description, name badge, and item count', () => {
+    render(<CategoryCard category={CATEGORY} onEdit={vi.fn()} onDelete={vi.fn()} />)
+
+    expect(screen.getByRole('heading', { name: 'Alimentação' })).toBeInTheDocument()
+    expect(screen.getByText('Restaurantes, delivery e refeições')).toBeInTheDocument()
+    expect(screen.getAllByText('Alimentação')).toHaveLength(2) // title + name badge
+    expect(screen.getByText('12 itens')).toBeInTheDocument()
+  })
+
+  it('renders "1 item" (singular) when transactionQuantity is 1', () => {
+    render(
+      <CategoryCard category={{ ...CATEGORY, transactionQuantity: 1 }} onEdit={vi.fn()} onDelete={vi.fn()} />,
+    )
+
+    expect(screen.getByText('1 item')).toBeInTheDocument()
+  })
+
+  it('falls back to the generic icon for an unrecognized category.icon', () => {
+    render(
+      <CategoryCard
+        category={{ ...CATEGORY, icon: 'SomeUnknownIcon' }}
+        onEdit={vi.fn()}
+        onDelete={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByTestId('category-card-icon')).toBeInTheDocument()
+  })
+
+  it("edit/delete buttons call onEdit/onDelete with the category", async () => {
+    const onEdit = vi.fn()
+    const onDelete = vi.fn()
+    const user = userEvent.setup()
+    render(<CategoryCard category={CATEGORY} onEdit={onEdit} onDelete={onDelete} />)
+
+    await user.click(screen.getByRole('button', { name: /editar/i }))
+    await user.click(screen.getByRole('button', { name: /excluir/i }))
+
+    expect(onEdit).toHaveBeenCalledWith(CATEGORY)
+    expect(onDelete).toHaveBeenCalledWith(CATEGORY)
+  })
+})
