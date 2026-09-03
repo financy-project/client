@@ -1,32 +1,49 @@
-# React + TypeScript + Vite
+# Financy — Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Frontend do Financy: React + Vite + TypeScript, GraphQL (Apollo Client), React Query, React Hook Form + Zod, Tailwind CSS + shadcn/ui.
 
-Currently, two official plugins are available:
+O backend GraphQL vive em `../server` (repositório/projeto separado).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- **React 19** + **Vite** + **TypeScript**
+- **Apollo Client v4** para GraphQL
+- **TanStack React Query** para estado assíncrono fora do GraphQL
+- **React Hook Form** + **Zod** para formulários e validação
+- **Tailwind CSS v4** + **shadcn/ui** (style `radix-nova`) para UI
+- **Lucide** como biblioteca de ícones
+- **pnpm** como gerenciador de pacotes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Setup
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+pnpm install
+cp .env.example .env   # ajuste VITE_GRAPHQL_URI se necessário
+pnpm dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Scripts
+
+| Comando        | Descrição                                              |
+| -------------- | -------------------------------------------------------|
+| `pnpm dev`     | Sobe o servidor de desenvolvimento (Vite)               |
+| `pnpm build`   | Type-check (`tsc -b`) e build de produção (`vite build`)|
+| `pnpm lint`    | Lint com oxlint                                         |
+| `pnpm preview` | Serve o build de produção localmente                    |
+
+## Variáveis de ambiente
+
+| Variável            | Descrição                                  |
+| ------------------- | ------------------------------------------- |
+| `VITE_GRAPHQL_URI`  | Endpoint da API GraphQL usado pelo Apollo Client |
+
+## Design system
+
+O design system (cores, tipografia, ícones, logo) segue o Figma **"Financy (Community)"** (página Style Guide):
+
+- **Fonte**: Inter (`@fontsource-variable/inter`)
+- **Ícones**: Lucide (`lucide-react`) — nomes dos ícones no Figma batem com os exports do pacote
+- **Logo**: `src/assets/logo.svg`
+- **Cores**: paleta da marca (brand, gray, blue, purple, pink, red, orange, yellow, green) definida em `src/index.css` como CSS variables e exposta como utilities do Tailwind (`bg-blue-base`, `text-purple-dark`, etc.)
+
+Mais detalhes de arquitetura para desenvolvimento assistido por IA estão em [`CLAUDE.md`](./CLAUDE.md).
