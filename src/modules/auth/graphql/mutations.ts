@@ -23,3 +23,26 @@ export interface RegisterUserData {
     name: string
   }
 }
+
+export const LOGIN = gql`
+  mutation Login($input: LoginInput!) {
+    login(input: $input) {
+      id
+      email
+      name
+    }
+  }
+`
+
+export interface LoginInput {
+  email: string
+  password: string
+}
+
+export interface LoginData {
+  login: {
+    id: string
+    email: string
+    name: string
+  }
+}
