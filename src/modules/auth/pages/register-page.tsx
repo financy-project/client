@@ -1,10 +1,10 @@
 import type { JSX } from 'react'
 
 import { LogIn } from 'lucide-react'
-import { Link as RouterLink } from 'react-router-dom'
 import logo from '@/assets/logo.svg'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { AuthDivider } from '@/modules/auth/components/auth-divider'
+import { AuthSwitchLink } from '@/modules/auth/components/auth-switch-link'
 import { RegisterForm } from '@/modules/auth/components/register-form'
 
 export function RegisterPage(): JSX.Element {
@@ -20,20 +20,13 @@ export function RegisterPage(): JSX.Element {
         </CardHeader>
         <CardContent className="grid gap-6">
           <RegisterForm />
-          <div className="flex items-center gap-3">
-            <hr className="flex-1 border-gray-300" />
-            <span className="text-muted-foreground text-sm">ou</span>
-            <hr className="flex-1 border-gray-300" />
-          </div>
-          <div className="grid gap-4">
-            <p className="text-center text-sm text-gray-600">Já tem uma conta?</p>
-            <Button asChild variant="outline" size="xl" className="border-gray-300 text-gray-700">
-              <RouterLink to="/login">
-                <LogIn />
-                Fazer login
-              </RouterLink>
-            </Button>
-          </div>
+          <AuthDivider />
+          <AuthSwitchLink
+            message="Já tem uma conta?"
+            to="/login"
+            label="Fazer login"
+            icon={<LogIn className="size-[18px]" />}
+          />
         </CardContent>
       </Card>
     </main>
