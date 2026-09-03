@@ -8,8 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
+import { CheckboxField } from '@/components/ui/checkbox-field'
 import { PasswordInput } from '@/components/ui/password-input'
 import { TextInput } from '@/components/ui/text-input'
 import { useLoginUser } from '@/modules/auth/hooks/use-login-user'
@@ -86,20 +85,18 @@ export function LoginForm(): JSX.Element {
         />
       </div>
       <div className="flex items-center justify-between">
-        <Label htmlFor="rememberMe" className="font-normal text-gray-700">
-          <Controller
-            control={control}
-            name="rememberMe"
-            render={({ field }) => (
-              <Checkbox
-                id="rememberMe"
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
-            )}
-          />
-          Lembrar-me
-        </Label>
+        <Controller
+          control={control}
+          name="rememberMe"
+          render={({ field }) => (
+            <CheckboxField
+              id="rememberMe"
+              label="Lembrar-me"
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          )}
+        />
         <Button type="button" variant="link" disabled className="h-auto p-0 text-sm font-medium">
           Recuperar senha
         </Button>
