@@ -1,3 +1,4 @@
+import { ComponentsPreview } from '@/components/components-preview'
 import { ContactForm } from '@/components/contact-form'
 import { CountriesList } from '@/components/countries-list'
 
@@ -13,6 +14,7 @@ function App() {
       </div>
       <CountriesList />
       <ContactForm />
+      <ComponentsPreview />
     </main>
   )
 }
