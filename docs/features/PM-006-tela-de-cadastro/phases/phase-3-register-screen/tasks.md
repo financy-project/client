@@ -1,9 +1,9 @@
 ### Phase 3: Register Screen
 
-- [ ] F-010: Implement `RegisterForm` in `src/modules/auth/components/register-form.tsx` per the Component + Form & Validation Blueprints (schema, `useForm`, `useRegisterUser`, `useNavigate`, `toast`, password show/hide `IconButton`)
-- [ ] F-011: Implement `RegisterPage` in `src/modules/auth/pages/register-page.tsx` per the Component Blueprint (logo, "Criar conta" heading + subtitle, `RegisterForm`, divider, "Fazer login" link to `/login`)
-- [ ] F-012: Implement `LoginPage` placeholder in `src/modules/auth/pages/login-page.tsx` per the Component Blueprint
-- [ ] F-013: Component tests for `RegisterForm` in `src/modules/auth/components/__tests__/register-form.test.tsx` (mocking `useRegisterUser`, rendered inside a `MemoryRouter`):
+- [x] F-010: Implement `RegisterForm` in `src/modules/auth/components/register-form.tsx` per the Component + Form & Validation Blueprints (schema, `useForm`, `useRegisterUser`, `useNavigate`, `toast`, password show/hide `IconButton`)
+- [x] F-011: Implement `RegisterPage` in `src/modules/auth/pages/register-page.tsx` per the Component Blueprint (logo, "Criar conta" heading + subtitle, `RegisterForm`, divider, "Fazer login" link to `/login`)
+- [x] F-012: Implement `LoginPage` placeholder in `src/modules/auth/pages/login-page.tsx` per the Component Blueprint
+- [x] F-013: Component tests for `RegisterForm` in `src/modules/auth/components/__tests__/register-form.test.tsx` (mocking `useRegisterUser`, rendered inside a `MemoryRouter`):
   - [ ] shows "O nome é obrigatório" when submitting with an empty name
   - [ ] shows "Informe um e-mail válido" for an invalid email
   - [ ] shows "A senha deve ter no mínimo 8 caracteres" for a 7-character password

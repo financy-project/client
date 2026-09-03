@@ -23,3 +23,15 @@
     REGISTER_USER (gql), RegisterUserInput, RegisterUserData (src/modules/auth/graphql/mutations.ts)
     useRegisterUser(): { registerUser(input): Promise<RegisterUserData['registerUser'] | null>, isLoading: boolean, fieldErrors: RegisterFieldError[], formError: string | null } (src/modules/auth/hooks/use-register-user.ts)
     RegisterFieldError: { path: string, message: string }
+
+[2026-09-03 10:20:32] ✅ Phase 3: Register Screen
+  Branch: PM-006/phase-3-register-screen
+  - F-010: RegisterForm
+  - F-011: RegisterPage (final, replaces phase-1 placeholder)
+  - F-012: LoginPage (final, replaces phase-1 placeholder)
+  - F-013: component tests for RegisterForm
+  Exports:
+    RegisterForm(): JSX.Element (src/modules/auth/components/register-form.tsx) — no props, self-contained (useRegisterUser + useNavigate internally)
+    RegisterPage(): JSX.Element (src/modules/auth/pages/register-page.tsx) — final implementation
+    LoginPage(): JSX.Element (src/modules/auth/pages/login-page.tsx) — final placeholder implementation
+    Manually verified via pnpm dev + browser: /cadastro validation, password toggle, /login link/route all working
