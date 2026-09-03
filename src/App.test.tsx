@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 import App from '@/App'
 
 describe('App', () => {
-  it('redirects / to /cadastro', () => {
+  it('redirects / to /login', () => {
     render(
       <MockedProvider>
         <MemoryRouter initialEntries={['/']}>
@@ -14,7 +14,7 @@ describe('App', () => {
       </MockedProvider>,
     )
 
-    expect(screen.getByText('Criar conta')).toBeInTheDocument()
+    expect(screen.getByText('Fazer login')).toBeInTheDocument()
   })
 
   it('renders RegisterPage at /cadastro', () => {

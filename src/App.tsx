@@ -9,7 +9,7 @@ function App() {
     <>
       <Toaster />
       <Routes>
-        <Route path="/" element={<Navigate to="/cadastro" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/cadastro" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/preview" element={<PreviewPage />} />
