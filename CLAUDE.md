@@ -38,6 +38,7 @@ Source: Figma file "Financy (Community)" — Style Guide page.
 - **Logo**: `src/assets/logo.svg` (brand wordmark + mark).
 - **Colors**: the full brand palette (brand, gray, blue, purple, pink, red, orange, yellow, green — each with `dark`/`base`/`light`, plus `danger`/`success`) is defined as CSS custom properties in `src/index.css` and exposed as Tailwind utilities through the `@theme inline` block (e.g. `bg-blue-base`, `text-purple-dark`). `--primary` is mapped to brand-base (`#1F6F43`).
 - Figma's Style Guide only defines light-mode colors; the `.dark` values in `src/index.css` were derived from the same scale rather than pulled from Figma — double-check against design before relying on them for dark-mode work.
+- Before implementing or auditing any screen against a Figma link, run `/figma-fidelity` — it extracts a full numeric spec (sizing, spacing, colors, typography, icons) and maps every value to this repo's tokens/components instead of relying on a screenshot by eye. `/feature-plan` invokes it automatically when `spec.md` links a Figma design.
 
 ## Spec Driven Development (SDD)
 
@@ -77,5 +78,6 @@ Features are driven by specifications, not tickets. All feature work must align 
 
 - `/commit` — Create atomic, semantic commits (source + test grouped together)
 - `/grill-me` — Interactively clarify requirements across all 13 planning areas
+- `/figma-fidelity` — Extract a full numeric Figma spec and map it to this repo's tokens/components before (or after) implementing a screen; invoked automatically by `/feature-plan` when `spec.md` links a Figma design
 - `/feature-new`, `/feature-plan`, `/feature-task`, `/feature-status`, `/feature-list` — SDD workflow
 - `/workflow` — Autonomous phase-by-phase stacked implementation
