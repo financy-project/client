@@ -2,7 +2,7 @@
 
 ### Phase 1: Foundation
 
-- [ ] T-001: `App` redirects `/` to `/cadastro`
+- [x] T-001: `App` redirects `/` to `/cadastro`
 
 ### Phase 2: API Layer
 
