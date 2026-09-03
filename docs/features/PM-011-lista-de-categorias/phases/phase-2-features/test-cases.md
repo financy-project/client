@@ -7,9 +7,9 @@
 - [x] T-011: `NewCategoryDialog` closes and toasts on a successful `createCategory` call
 - [x] T-012: `EditCategoryDialog` renders "Editar categoria" and pre-fills the form from its `category` prop
 - [x] T-013: `EditCategoryDialog` calls `updateCategory(category.id, values)` on submit and closes + toasts on success
-- [ ] T-014: `DeleteCategoryAlert` renders the category's title in its confirmation copy
-- [ ] T-015: `DeleteCategoryAlert` calls `deleteCategory(category.id)` only when "Excluir" is confirmed, not on "Cancelar"
-- [ ] T-016: `DeleteCategoryAlert` closes and toasts on a successful delete
+- [x] T-014: `DeleteCategoryAlert` renders the category's title in its confirmation copy
+- [x] T-015: `DeleteCategoryAlert` calls `deleteCategory(category.id)` only when "Excluir" is confirmed, not on "Cancelar"
+- [x] T-016: `DeleteCategoryAlert` closes and toasts on a successful delete
 - [ ] T-017: `CategoryCard` renders title, description, name badge, and "N itens"/"N item" text
 - [ ] T-018: `CategoryCard` renders the icon matching `category.icon`, falling back to a generic icon for an unrecognized value
 - [ ] T-019: `CategoryCard`'s edit/delete buttons call `onEdit`/`onDelete` with the category
