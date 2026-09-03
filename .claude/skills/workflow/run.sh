@@ -103,8 +103,8 @@ push_with_retry() {
 get_phase_tasks() {
   local phase_num="$1"
   local in_phase=false
-  local phase_pat="^## Phase ${phase_num}:"
-  local next_pat="^## Phase [0-9]"
+  local phase_pat="^### Phase ${phase_num}:"
+  local next_pat="^### Phase [0-9]"
   local task_pat="^- \["
   while IFS= read -r line; do
     if [[ "$line" =~ $phase_pat ]]; then
@@ -160,7 +160,7 @@ echo ""
 # Initialize stack pointer to the last completed phase branch (if any).
 PREV_PHASE_BRANCH="$FEATURE_BRANCH"
 LAST_COMPLETED_PHASE=0
-DETECT_PAT="^## Phase ([0-9]+): (.+)$"
+DETECT_PAT="^### Phase ([0-9]+): (.+)$"
 while IFS= read -r line; do
   if [[ "$line" =~ $DETECT_PAT ]]; then
     PHASE_N="${BASH_REMATCH[1]}"
@@ -197,7 +197,7 @@ while [ $ITERATION -lt $MAX_ITERATIONS ]; do
   CURRENT_PHASE_NUM=""
   CURRENT_PHASE_NAME=""
   PHASE_HAS_PENDING=false
-  PHASE_HDR_PAT="^## Phase ([0-9]+): (.+)$"
+  PHASE_HDR_PAT="^### Phase ([0-9]+): (.+)$"
   PENDING_TASK_PAT="^- \[ \] F-"
 
   while IFS= read -r line; do
