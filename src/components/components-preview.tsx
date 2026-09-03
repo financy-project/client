@@ -6,6 +6,7 @@ import { IconButton } from "@/components/ui/icon-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Link } from "@/components/ui/link"
+import { Pagination } from "@/components/ui/pagination"
 import {
   Select,
   SelectContent,
@@ -13,6 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Tag, type TagColor } from "@/components/ui/tag"
+import { TransactionTypeIndicator } from "@/components/transaction-type-indicator"
 
 function PreviewSection({ title, children }: { title: string; children?: React.ReactNode }) {
   return (
@@ -114,6 +117,44 @@ function LinkSection() {
   )
 }
 
+function PaginationSection() {
+  const [page, setPage] = useState(2)
+
+  return (
+    <PreviewSection title="Pagination">
+      <Pagination page={page} totalPages={5} onPageChange={setPage} />
+    </PreviewSection>
+  )
+}
+
+const tagColors: TagColor[] = ["blue", "purple", "pink", "red", "orange", "yellow", "green"]
+
+function TagSection() {
+  return (
+    <PreviewSection title="Tag">
+      {tagColors.map((color) => (
+        <div key={color} className="grid gap-1.5">
+          <Tag color={color} size="md">
+            {color}
+          </Tag>
+          <Tag color={color} size="sm">
+            {color}
+          </Tag>
+        </div>
+      ))}
+    </PreviewSection>
+  )
+}
+
+function TransactionTypeIndicatorSection() {
+  return (
+    <PreviewSection title="TransactionTypeIndicator">
+      <TransactionTypeIndicator type="income" />
+      <TransactionTypeIndicator type="expense" />
+    </PreviewSection>
+  )
+}
+
 export function ComponentsPreview() {
   return (
     <div className="grid gap-8 rounded-lg border border-dashed border-border p-6">
@@ -130,9 +171,9 @@ export function ComponentsPreview() {
       <SelectSection />
       <IconButtonSection />
       <LinkSection />
-      <PreviewSection title="Pagination" />
-      <PreviewSection title="Tag" />
-      <PreviewSection title="TransactionTypeIndicator" />
+      <PaginationSection />
+      <TagSection />
+      <TransactionTypeIndicatorSection />
     </div>
   )
 }
