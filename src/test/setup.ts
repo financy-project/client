@@ -22,6 +22,16 @@ if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {}
 }
 
+// jsdom doesn't implement ResizeObserver, which Radix UI's Checkbox (via
+// react-use-size) calls on mount to track its indicator size.
+if (!window.ResizeObserver) {
+  window.ResizeObserver = class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+}
+
 // jsdom doesn't implement window.matchMedia, which sonner's <Toaster />
 // (via next-themes' useTheme) calls on mount to resolve the system theme.
 if (!window.matchMedia) {
