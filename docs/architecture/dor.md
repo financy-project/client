@@ -22,6 +22,15 @@ Define the UI surface this feature adds or changes.
   ```
 - **Composition:** which existing components/`shadcn/ui` primitives it renders, and any new primitive that needs adding via the shadcn CLI first
 - **States to render:** loading, error, empty, populated — as applicable
+- **Figma Fidelity (required if `spec.md` links a `figma.com` design):** the `/figma-fidelity` skill's output — a spec table of exact size/padding/gap/radius/border/color/typography/icon values per element, each mapped to this repo's actual token classes (`src/index.css`) and existing/new component variants. Paste the table; do not summarize it as "matches the design" or "standard spacing" — the whole point is to name the exact values so an implementer isn't guessing or reusing the nearest default by eye.
+
+  Example row:
+  ```markdown
+  | Element              | Size    | Padding      | Gap | Radius | Border           | BG      | Text                | Font                | Icon        |
+  |-----------------------|--------|--------------|-----|--------|-------------------|---------|----------------------|----------------------|-------------|
+  | Submit button (`Button` `xl`) | 100%×48px | 16px×12px | 8px | 8px | none | `bg-primary` (#1F6F43) | `text-primary-foreground` (white) | medium/16px/24px | — |
+  | Name field icon       | 16×16  | —            | —   | —      | —                 | —       | `text-gray-400` (#9CA3AF) | —                | `User` (lucide) |
+  ```
 
 ### 2. GraphQL/API Blueprint
 
