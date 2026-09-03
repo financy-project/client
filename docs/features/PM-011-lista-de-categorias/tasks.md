@@ -2,7 +2,7 @@
 
 ### Phase 1: Foundation
 
-- [ ] F-001: Add the shadcn `AlertDialog` primitive: `pnpm dlx shadcn@latest add alert-dialog` (no `-p` flag) → `src/components/ui/alert-dialog.tsx`
+- [x] F-001: Add the shadcn `AlertDialog` primitive: `pnpm dlx shadcn@latest add alert-dialog` (no `-p` flag) → `src/components/ui/alert-dialog.tsx`
 - [ ] F-002: Add `LIST_CATEGORIES` query + `Category`/`ListCategoriesData` types to `src/modules/categories/graphql/queries.ts` (exact `gql` document + types above, including `transactionQuantity`)
 - [ ] F-003: Add `UPDATE_CATEGORY`/`DELETE_CATEGORY` mutations + `UpdateCategoryInput`/`UpdateCategoryData`/`DeleteCategoryData` types to `src/modules/categories/graphql/mutations.ts` (exact documents + types above)
 - [ ] F-004: Implement `useListCategories()` (`src/modules/categories/hooks/use-list-categories.ts`): wraps `useQuery<ListCategoriesData>(LIST_CATEGORIES)`; returns `{ categories, isLoading, error }`, `categories` defaults to `[]`, `error` is the fallback message `'Não foi possível carregar as categorias.'` when `useQuery`'s `error` is set
