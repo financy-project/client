@@ -1,0 +1,15 @@
+
+[2026-09-03 10:12:58] ✅ Phase 1: Foundation
+  Branch: PM-006/phase-1-foundation
+  - F-001: Add react-router-dom as a dependency
+  - F-002: Add the shadcn sonner toast primitive
+  - F-003: Wrap <App /> with <BrowserRouter> in src/main.tsx
+  - F-004: Create src/pages/preview-page.tsx
+  - F-005: Rewrite src/App.tsx with <Routes>
+  - F-006: Scaffold auth module (placeholder RegisterPage/LoginPage)
+  Exports:
+    RegisterPage(): JSX.Element (src/modules/auth/pages/register-page.tsx) — placeholder, replaced in phase 3
+    LoginPage(): JSX.Element (src/modules/auth/pages/login-page.tsx) — placeholder, replaced in phase 3
+    PreviewPage(): JSX.Element (src/pages/preview-page.tsx)
+    Toaster (src/components/ui/sonner.tsx), mounted at App root
+    Routes: / -> /cadastro (redirect), /cadastro, /login, /preview
