@@ -12,6 +12,7 @@ import { CheckboxField } from '@/components/ui/checkbox-field'
 import { PasswordInput } from '@/components/ui/password-input'
 import { TextInput } from '@/components/ui/text-input'
 import { useLoginUser } from '@/modules/auth/hooks/use-login-user'
+import { useAuthStore } from '@/modules/auth/stores/use-auth-store'
 
 const REMEMBERED_EMAIL_KEY = 'financy:remembered-email'
 
@@ -26,6 +27,7 @@ type LoginFormValues = z.infer<typeof loginFormSchema>
 export function LoginForm(): JSX.Element {
   const navigate = useNavigate()
   const { loginUser, isLoading, fieldErrors, formError } = useLoginUser()
+  const setUser = useAuthStore((state) => state.setUser)
 
   const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY)
 
@@ -58,8 +60,9 @@ export function LoginForm(): JSX.Element {
       } else {
         localStorage.removeItem(REMEMBERED_EMAIL_KEY)
       }
+      setUser(result)
       toast.success('Login realizado com sucesso!')
-      navigate('/')
+      navigate('/dashboard')
     }
   }
 

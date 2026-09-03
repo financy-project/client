@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { LoginForm } from '@/modules/auth/components/login-form'
 import { useLoginUser } from '@/modules/auth/hooks/use-login-user'
+import { useAuthStore } from '@/modules/auth/stores/use-auth-store'
 
 vi.mock('@/modules/auth/hooks/use-login-user')
 
@@ -36,6 +37,7 @@ describe('LoginForm', () => {
   beforeEach(() => {
     mockNavigate.mockClear()
     localStorage.clear()
+    useAuthStore.setState({ user: null })
     useLoginUserMock.mockReturnValue({
       loginUser: vi.fn().mockResolvedValue(null),
       isLoading: false,
@@ -116,7 +118,7 @@ describe('LoginForm', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('E-mail ou senha inválidos.')
   })
 
-  it('calls loginUser with { email, password } (no rememberMe) and navigates to / on success', async () => {
+  it('calls loginUser with { email, password } (no rememberMe) and navigates to /dashboard on success', async () => {
     const loginUser = vi.fn().mockResolvedValue({ id: '1', ...VALID_INPUT, name: 'Ana Silva' })
     useLoginUserMock.mockReturnValue({
       loginUser,
@@ -131,7 +133,24 @@ describe('LoginForm', () => {
     await user.click(screen.getByRole('button', { name: /^entrar$/i }))
 
     await waitFor(() => expect(loginUser).toHaveBeenCalledWith(VALID_INPUT))
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/'))
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/dashboard'))
+  })
+
+  it('populates useAuthStore with the logged-in user on a successful submit', async () => {
+    const loggedInUser = { id: '1', ...VALID_INPUT, name: 'Ana Silva' }
+    useLoginUserMock.mockReturnValue({
+      loginUser: vi.fn().mockResolvedValue(loggedInUser),
+      isLoading: false,
+      fieldErrors: [],
+      formError: null,
+    })
+    const user = userEvent.setup()
+    renderLoginForm()
+
+    await fillValidForm(user)
+    await user.click(screen.getByRole('button', { name: /^entrar$/i }))
+
+    await waitFor(() => expect(useAuthStore.getState().user).toEqual(loggedInUser))
   })
 
   it('persists the submitted email to localStorage when "Lembrar-me" is checked on success', async () => {

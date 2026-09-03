@@ -52,4 +52,16 @@ describe('App', () => {
 
     expect(screen.getByRole('heading', { name: 'Financy' })).toBeInTheDocument()
   })
+
+  it.each(['/dashboard', '/transacoes', '/categorias'])('renders Header at %s', (path) => {
+    render(
+      <MockedProvider>
+        <MemoryRouter initialEntries={[path]}>
+          <App />
+        </MemoryRouter>
+      </MockedProvider>,
+    )
+
+    expect(screen.getByText('Dashboard')).toBeInTheDocument()
+  })
 })
