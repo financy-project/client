@@ -1,16 +1,15 @@
 import type { JSX } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Eye, EyeOff } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Lock, Mail, User } from 'lucide-react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
-import { IconButton } from '@/components/ui/icon-button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { PasswordInput } from '@/components/ui/password-input'
+import { TextInput } from '@/components/ui/text-input'
 import { useRegisterUser } from '@/modules/auth/hooks/use-register-user'
 
 const registerFormSchema = z.object({
@@ -32,7 +31,6 @@ type RegisterFormValues = z.infer<typeof registerFormSchema>
 export function RegisterForm(): JSX.Element {
   const navigate = useNavigate()
   const { registerUser, isLoading, fieldErrors, formError } = useRegisterUser()
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   const {
     register,
@@ -64,45 +62,47 @@ export function RegisterForm(): JSX.Element {
   }
 
   return (
-    <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="grid gap-1.5">
-        <Label htmlFor="name">Nome</Label>
-        <Input id="name" {...register('name')} />
-        {errors.name && <p className="text-destructive text-sm">{errors.name.message}</p>}
-      </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="email">E-mail</Label>
-        <Input id="email" type="email" {...register('email')} />
-        {errors.email && <p className="text-destructive text-sm">{errors.email.message}</p>}
-      </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="password">Senha</Label>
-        <div className="relative">
-          <Input
+    <form className="grid gap-6" onSubmit={handleSubmit(onSubmit)} noValidate>
+      <div className="grid gap-4">
+        <TextInput
+          id="name"
+          label="Nome completo"
+          placeholder="Seu nome completo"
+          leftIcon={<User />}
+          errorMessage={errors.name?.message}
+          {...register('name')}
+        />
+        <TextInput
+          id="email"
+          type="email"
+          label="E-mail"
+          placeholder="mail@exemplo.com"
+          leftIcon={<Mail />}
+          errorMessage={errors.email?.message}
+          {...register('email')}
+        />
+        <div className="grid gap-2">
+          <PasswordInput
             id="password"
-            type={isPasswordVisible ? 'text' : 'password'}
+            label="Senha"
+            placeholder="Digite sua senha"
+            leftIcon={<Lock />}
+            errorMessage={errors.password?.message}
             {...register('password')}
           />
-          <IconButton
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            className="absolute inset-y-0 right-1 my-auto"
-            icon={isPasswordVisible ? <EyeOff /> : <Eye />}
-            aria-label={isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha'}
-            onClick={() => setIsPasswordVisible((visible) => !visible)}
-          />
+          {!errors.password && (
+            <p className="text-muted-foreground text-xs">
+              A senha deve ter no mínimo 8 caracteres
+            </p>
+          )}
         </div>
-        {errors.password && (
-          <p className="text-destructive text-sm">{errors.password.message}</p>
-        )}
       </div>
       {formError && (
         <p role="alert" className="text-destructive text-sm">
           {formError}
         </p>
       )}
-      <Button type="submit" disabled={isLoading}>
+      <Button type="submit" size="xl" disabled={isLoading}>
         {isLoading ? 'Criando conta…' : 'Cadastrar'}
       </Button>
     </form>
