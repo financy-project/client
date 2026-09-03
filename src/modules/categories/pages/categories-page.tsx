@@ -18,7 +18,7 @@ export function CategoriesPage(): JSX.Element {
             <h1 className="text-2xl font-bold text-gray-800">Categorias</h1>
             <p className="text-base text-gray-600">Organize suas transações por categorias</p>
           </div>
-          <Button size="lg" className="gap-2 px-3" onClick={() => setOpen(true)}>
+          <Button size="xl" className="gap-2 px-3" onClick={() => setOpen(true)}>
             <Plus className="size-4" />
             Nova categoria
           </Button>
