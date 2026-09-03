@@ -3,13 +3,12 @@ import type { JSX } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { TextInput } from '@/components/ui/text-input'
+import type { RegisterFieldError } from '@/modules/auth/hooks/use-register-user'
 import { COLOR_OPTIONS, ColorPicker } from '@/modules/categories/components/color-picker'
 import { ICON_OPTIONS, IconPicker } from '@/modules/categories/components/icon-picker'
-import { useCreateCategory } from '@/modules/categories/hooks/use-create-category'
 
 const categoryFormSchema = z.object({
   title: z.string().min(1, 'O título é obrigatório'),
@@ -18,15 +17,23 @@ const categoryFormSchema = z.object({
   color: z.string().min(1, 'Selecione uma cor'),
 })
 
-type CategoryFormValues = z.infer<typeof categoryFormSchema>
+export type CategoryFormValues = z.infer<typeof categoryFormSchema>
 
 interface CategoryFormProps {
-  onSuccess: () => void
+  defaultValues?: Partial<CategoryFormValues>
+  isLoading: boolean
+  fieldErrors: RegisterFieldError[]
+  formError: string | null
+  onSubmit: (values: CategoryFormValues) => void | Promise<void>
 }
 
-export function CategoryForm({ onSuccess }: CategoryFormProps): JSX.Element {
-  const { createCategory, isLoading, fieldErrors, formError } = useCreateCategory()
-
+export function CategoryForm({
+  defaultValues,
+  isLoading,
+  fieldErrors,
+  formError,
+  onSubmit,
+}: CategoryFormProps): JSX.Element {
   const {
     register,
     control,
@@ -40,6 +47,7 @@ export function CategoryForm({ onSuccess }: CategoryFormProps): JSX.Element {
       description: '',
       icon: ICON_OPTIONS[0].name,
       color: COLOR_OPTIONS[0].value,
+      ...defaultValues,
     },
   })
 
@@ -49,21 +57,12 @@ export function CategoryForm({ onSuccess }: CategoryFormProps): JSX.Element {
     }
   }, [fieldErrors, setError])
 
-  const onSubmit = async (values: CategoryFormValues) => {
-    const result = await createCategory({
-      title: values.title,
-      description: values.description,
-      icon: values.icon,
-      color: values.color,
-    })
-    if (result) {
-      toast.success('Categoria criada com sucesso!')
-      onSuccess()
-    }
-  }
-
   return (
-    <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form
+      className="grid gap-4"
+      onSubmit={handleSubmit((values) => onSubmit(values))}
+      noValidate
+    >
       <TextInput
         id="title"
         label="Título"

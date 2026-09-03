@@ -13,8 +13,8 @@
 
 ### Phase 2: Features
 
-- [ ] T-009: `CategoryForm` calls `onSubmit` with the form values on a valid submit (no longer asserts a specific mutation)
-- [ ] T-010: `CategoryForm` pre-fills title/description and pre-selects icon/color from a passed `defaultValues` prop
+- [x] T-009: `CategoryForm` calls `onSubmit` with the form values on a valid submit (no longer asserts a specific mutation)
+- [x] T-010: `CategoryForm` pre-fills title/description and pre-selects icon/color from a passed `defaultValues` prop
 - [ ] T-011: `NewCategoryDialog` closes and toasts on a successful `createCategory` call
 - [ ] T-012: `EditCategoryDialog` renders "Editar categoria" and pre-fills the form from its `category` prop
 - [ ] T-013: `EditCategoryDialog` calls `updateCategory(category.id, values)` on submit and closes + toasts on success
