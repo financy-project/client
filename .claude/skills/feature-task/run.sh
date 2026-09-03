@@ -72,8 +72,8 @@ extract_section() {
   in_section {
     # Continuation lines belonging to the current bullet (code fences,
     # indented detail, blank separators) — copied verbatim so a task with
-    # an embedded code block (e.g. a Prisma schema snippet) is not silently
-    # truncated to just its first line.
+    # an embedded code block (e.g. a GraphQL query or Zod schema snippet)
+    # is not silently truncated to just its first line.
     print
     next
   }
