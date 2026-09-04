@@ -3,6 +3,7 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { createElement } from 'react'
 import { describe, expect, it } from 'vitest'
 import { UPDATE_CATEGORY } from '@/modules/categories/graphql/mutations'
+import { LIST_CATEGORIES } from '@/modules/categories/graphql/queries'
 import { useUpdateCategory } from '@/modules/categories/hooks/use-update-category'
 
 const ID = '1'
@@ -24,6 +25,10 @@ describe('useUpdateCategory', () => {
             updateCategory: { id: ID, ...INPUT, transactionsQuantity: 3 },
           },
         },
+      },
+      {
+        request: { query: LIST_CATEGORIES },
+        result: { data: { listCategories: [{ id: ID, ...INPUT, transactionsQuantity: 3 }] } },
       },
     ]
 
