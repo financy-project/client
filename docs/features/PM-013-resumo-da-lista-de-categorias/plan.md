@@ -32,7 +32,8 @@ interface SummaryCardProps {
 
 - **States to render:** No independent loading/error state — `CategoriesSummary` is a pure presentational component driven entirely by the `categories` array already loaded by `useListCategories()` in `categories-page.tsx`. Two content states:
   - **Populated:** always renders card 1 (total) and card 2 (sum), computed from `categories` (including when `categories` is empty → shows "0" / "0").
-  - **No most-used category:** card 3 is omitted entirely (not an empty-state placeholder) when every category has `transactionsQuantity === 0`, or `categories` is empty — per spec.md's acceptance criterion and the "Card 3 não é exibido... quando não há nenhuma categoria com transações" requirement. Decision: **omit**, not "show empty state" (the alternative the spec explicitly allowed) — simpler, and nothing in the Figma design shows an empty-state variant for this card.
+  - **No most-used category:** card 3 falls back to the most recently created category (`categories[categories.length - 1]`, since `listCategories` is server-ordered by `createdAt asc`) when every category has `transactionsQuantity === 0`, labeled "Categoria mais recente" instead of "Categoria mais utilizada" — per spec.md's acceptance criterion. Card 3 is omitted entirely only when `categories` is empty (nothing to fall back to).
+  - **Correction (2026-09-04):** an earlier version of this plan chose to omit card 3 entirely in the no-most-used case; that missed a requirement the user had already given during planning. Corrected per spec.md.
 
 #### Figma Fidelity
 
@@ -84,7 +85,8 @@ Source: [node 3104-2499](https://www.figma.com/design/ZF0QlJlYLMEUz6DH93SwbK/Fin
 
 Cover all applicable areas from `/grill-me`. Mark any area "Not Applicable" with justification rather than omitting it silently.
 
-- **Scope & Requirements:** Matches spec.md's 3 acceptance criteria + the total-transactions client-side-sum decision already recorded there. One additional decision made during planning: the summary row renders whenever `useListCategories()` has resolved (`!isLoading && !error`), **including when `categories` is empty** (shows "0"/"0", card 3 omitted) — rather than hiding the whole row alongside the grid's "Nenhuma categoria cadastrada ainda." empty-state message. Rationale: "0 categorias, 0 transações" is itself informative and consistent, and nothing in the spec asks for the row to disappear in the empty state.
+- **Scope & Requirements:** Matches spec.md's 3 acceptance criteria + the total-transactions client-side-sum decision already recorded there.
+  - **Correction (2026-09-04):** an earlier version of this plan rendered the summary row even when `categories` is empty (showing "0"/"0"). Reverted: `categories-page.tsx` now gates `CategoriesSummary` on `!!categories.length` too, so the whole row is hidden alongside the grid's "Nenhuma categoria cadastrada ainda." empty-state message rather than showing "0 categorias, 0 transações".
 - **Data & State:** Purely derived from `useListCategories()`'s existing result (PM-011) — no new fetch, no new cache entry, no staleness beyond what that hook's `refetchQueries` already guarantees after create/update/delete mutations (summary numbers update on the same refetch that updates the grid).
 - **User Experience:** No independent loading skeleton for the summary — it mounts once the page's existing `isLoading`/`error` branches have already resolved, same as the grid below it. No interactivity (confirmed out-of-scope): no hover/click/navigation on any of the 3 cards.
 - **Testing & Validation:** Vitest + RTL component tests. Because `CategoriesSummary` takes `categories` as a plain prop (no direct Apollo hook usage), tests need no `MockedProvider` — pass fixture arrays directly, per Test Cases below.
