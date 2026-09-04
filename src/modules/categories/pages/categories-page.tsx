@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { Header } from '@/components/header'
 import { Button } from '@/components/ui/button'
+import { CategoriesSummary } from '@/modules/categories/components/categories-summary'
 import { CategoryCard } from '@/modules/categories/components/category-card'
 import { DeleteCategoryAlert } from '@/modules/categories/components/delete-category-alert'
 import { EditCategoryDialog } from '@/modules/categories/components/edit-category-dialog'
@@ -37,9 +38,17 @@ export function CategoriesPage(): JSX.Element {
             {error}
           </p>
         )}
+
+        {!isLoading && !error && !!categories.length && (
+          <div className="mt-6">
+            <CategoriesSummary categories={categories} />
+          </div>
+        )}
+
         {!isLoading && !error && categories.length === 0 && (
           <p className="mt-6 text-gray-600">Nenhuma categoria cadastrada ainda.</p>
         )}
+
         {!isLoading && !error && categories.length > 0 && (
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((category) => (
@@ -54,20 +63,18 @@ export function CategoriesPage(): JSX.Element {
         )}
       </main>
       <NewCategoryDialog open={newDialogOpen} onOpenChange={setNewDialogOpen} />
-      {editingCategory && (
-        <EditCategoryDialog
-          category={editingCategory}
-          open={!!editingCategory}
-          onOpenChange={(open) => !open && setEditingCategory(null)}
-        />
-      )}
-      {deletingCategory && (
-        <DeleteCategoryAlert
-          category={deletingCategory}
-          open={!!deletingCategory}
-          onOpenChange={(open) => !open && setDeletingCategory(null)}
-        />
-      )}
+
+      <EditCategoryDialog
+        category={editingCategory}
+        open={!!editingCategory}
+        onOpenChange={(open) => !open && setEditingCategory(null)}
+      />
+
+      <DeleteCategoryAlert
+        category={deletingCategory}
+        open={!!deletingCategory}
+        onOpenChange={(open) => !open && setDeletingCategory(null)}
+      />
     </>
   )
 }

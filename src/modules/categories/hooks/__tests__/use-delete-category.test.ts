@@ -3,6 +3,7 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { createElement } from 'react'
 import { describe, expect, it } from 'vitest'
 import { DELETE_CATEGORY } from '@/modules/categories/graphql/mutations'
+import { LIST_CATEGORIES } from '@/modules/categories/graphql/queries'
 import { useDeleteCategory } from '@/modules/categories/hooks/use-delete-category'
 
 const ID = '1'
@@ -19,6 +20,10 @@ describe('useDeleteCategory', () => {
       {
         request: { query: DELETE_CATEGORY, variables: { id: ID } },
         result: { data: { deleteCategory: true } },
+      },
+      {
+        request: { query: LIST_CATEGORIES },
+        result: { data: { listCategories: [] } },
       },
     ]
 

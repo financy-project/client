@@ -3,6 +3,7 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { createElement } from 'react'
 import { describe, expect, it } from 'vitest'
 import { CREATE_CATEGORY } from '@/modules/categories/graphql/mutations'
+import { LIST_CATEGORIES } from '@/modules/categories/graphql/queries'
 import { useCreateCategory } from '@/modules/categories/hooks/use-create-category'
 
 const INPUT = { title: 'Alimentação', description: 'Gastos com comida', icon: 'Utensils', color: '#16A34A' }
@@ -23,6 +24,10 @@ describe('useCreateCategory', () => {
             createCategory: { id: '1', ...INPUT },
           },
         },
+      },
+      {
+        request: { query: LIST_CATEGORIES },
+        result: { data: { listCategories: [{ id: '1', ...INPUT, transactionsQuantity: 0 }] } },
       },
     ]
 
