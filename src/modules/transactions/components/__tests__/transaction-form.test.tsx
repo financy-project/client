@@ -87,10 +87,16 @@ describe('TransactionForm', () => {
     expect(screen.getByRole('button', { name: /despesa/i })).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('gives the category select trigger the exact Figma-spec padding (12px horizontal, 14px vertical)', async () => {
+  it('gives the category select trigger the exact Figma-spec padding (12px horizontal, 14px vertical) and 48px height', async () => {
     renderTransactionForm()
 
-    expect(await screen.findByRole('combobox')).toHaveClass('px-3', 'py-3.5')
+    const combobox = await screen.findByRole('combobox')
+    expect(combobox).toHaveClass('px-3', 'py-3.5', 'data-[size=default]:h-12')
+    // The Select primitive's own default is data-[size=default]:h-8 (32px) —
+    // a plain "h-12" class doesn't out-rank it in the compiled stylesheet
+    // (different tailwind-merge conflict group), so it must be overridden
+    // with the same data-[size=default]: variant to actually win.
+    expect(combobox).not.toHaveClass('data-[size=default]:h-8')
   })
 
   it('offers an option to revert the selected category back to its initial (unselected) value', async () => {
@@ -103,7 +109,7 @@ describe('TransactionForm', () => {
     await waitFor(() => expect(screen.queryByRole('option')).not.toBeInTheDocument())
 
     await user.click(screen.getByRole('combobox'))
-    await user.click(await screen.findByRole('option', { name: 'Voltar ao valor inicial' }))
+    await user.click(await screen.findByRole('option', { name: 'Selecione' }))
 
     await waitFor(() => expect(screen.getByRole('combobox')).toHaveTextContent('Selecione'))
   })

@@ -156,7 +156,7 @@ export function TransactionForm({
             >
               <SelectTrigger
                 id="categoryId"
-                className="h-12 w-full px-3 py-3.5 text-base"
+                className="data-[size=default]:h-12 w-full px-3 py-3.5 text-base"
                 aria-invalid={!!errors.categoryId}
               >
                 <SelectValue placeholder="Selecione" />
@@ -164,7 +164,7 @@ export function TransactionForm({
               <SelectContent>
                 {field.value && (
                   <SelectItem value={RESET_VALUE} className="text-gray-500">
-                    Voltar ao valor inicial
+                    Selecione
                   </SelectItem>
                 )}
                 {categories.map((category) => (
