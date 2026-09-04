@@ -99,6 +99,34 @@ describe('TransactionForm', () => {
   // file only needs to prove TransactionForm wires it correctly (options
   // from `categories`, resettable, submits the picked categoryId).
 
+  it('pre-fills all fields from defaultValues when provided', async () => {
+    const user = userEvent.setup()
+    const onSubmit = vi.fn()
+    renderTransactionForm({
+      defaultValues: {
+        type: 'INCOME',
+        description: 'Salário',
+        date: new Date(2026, 5, 15),
+        value: 340.25,
+        categoryId: 'cat-1',
+      },
+      onSubmit,
+    })
+
+    expect(screen.getByRole('button', { name: /receita/i })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: /despesa/i })).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByLabelText('Descrição')).toHaveValue('Salário')
+    expect(screen.getByLabelText('Data')).toHaveTextContent('15/06/2026')
+    expect(screen.getByLabelText('Valor')).toHaveValue('340,25')
+
+    await user.click(screen.getByRole('button', { name: /^salvar$/i }))
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
+    const values = onSubmit.mock.calls[0][0]
+    expect(values.type).toBe('INCOME')
+    expect(values.categoryId).toBe('cat-1')
+  })
+
   it('calls onSubmit with parsed values when all fields are valid', async () => {
     const user = userEvent.setup()
     const onSubmit = vi.fn()
