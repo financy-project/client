@@ -90,7 +90,7 @@ describe('TransactionsTable', () => {
     expect(onPageChange).toHaveBeenCalledWith(2)
   })
 
-  it('shows the "X a Y | Z resultados" summary text, with the numbers emphasized', () => {
+  it('shows the "X a Y | Z resultados" summary text in a single uniform color', () => {
     render(
       <TransactionsTable
         {...DEFAULT_PROPS}
@@ -103,6 +103,7 @@ describe('TransactionsTable', () => {
 
     const summary = screen.getByTestId('transactions-summary')
     expect(summary).toHaveTextContent('1 a 10 | 27 resultados')
-    expect(summary.querySelectorAll('span.font-semibold')).toHaveLength(3)
+    expect(summary).toHaveClass('text-gray-700')
+    expect(summary.querySelectorAll('span')).toHaveLength(0)
   })
 })

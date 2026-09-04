@@ -57,4 +57,35 @@ describe('Pagination', () => {
     const nav = screen.getByRole('navigation', { name: 'Paginação' })
     expect(nav).toHaveClass('gap-1')
   })
+
+  it('shows at most 3 page numbers, sliding the window as the current page changes', () => {
+    const { rerender } = render(<Pagination page={1} totalPages={5} onPageChange={vi.fn()} />)
+    expect(screen.getByRole('button', { name: '1' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '2' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '3' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '4' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '5' })).not.toBeInTheDocument()
+
+    rerender(<Pagination page={3} totalPages={5} onPageChange={vi.fn()} />)
+    expect(screen.queryByRole('button', { name: '1' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '2' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '3' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '4' })).toBeInTheDocument()
+
+    rerender(<Pagination page={5} totalPages={5} onPageChange={vi.fn()} />)
+    expect(screen.getByRole('button', { name: '3' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '4' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '5' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '1' })).not.toBeInTheDocument()
+  })
+
+  it('renders the previous/next controls with a gray-300 border, not the primary color', () => {
+    render(<Pagination page={2} totalPages={3} onPageChange={vi.fn()} />)
+    expect(screen.getByRole('button', { name: 'Página anterior' })).toHaveClass(
+      'border-gray-300'
+    )
+    expect(screen.getByRole('button', { name: 'Próxima página' })).toHaveClass(
+      'border-gray-300'
+    )
+  })
 })

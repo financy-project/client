@@ -6,7 +6,10 @@ import { IconButton } from '@/components/ui/icon-button'
 import { Pagination } from '@/components/ui/pagination'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import { TransactionCategoryCell } from '@/modules/transactions/components/transaction-category-cell'
+import {
+  CategoryIconSquare,
+  TransactionCategoryCell,
+} from '@/modules/transactions/components/transaction-category-cell'
 import type { TransactionListItem } from '@/modules/transactions/graphql/queries'
 import {
   formatTransactionDate,
@@ -74,8 +77,16 @@ export function TransactionsTable({
         <TableBody>
           {transactions.map((transaction) => (
             <TableRow key={transaction.id} className="border-gray-200">
-              <TableCell className={BODY_CELL_CLASS}>{transaction.description}</TableCell>
               <TableCell className={BODY_CELL_CLASS}>
+                <div className="flex items-center gap-3">
+                  <CategoryIconSquare
+                    category={transaction.category}
+                    testId="transaction-description-icon"
+                  />
+                  {transaction.description}
+                </div>
+              </TableCell>
+              <TableCell className={cn(BODY_CELL_CLASS, 'text-gray-600')}>
                 {formatTransactionDate(transaction.date)}
               </TableCell>
               <TableCell className={BODY_CELL_CLASS}>
@@ -86,12 +97,7 @@ export function TransactionsTable({
                   type={transaction.type === 'INCOME' ? 'income' : 'expense'}
                 />
               </TableCell>
-              <TableCell
-                className={cn(
-                  BODY_CELL_CLASS,
-                  transaction.type === 'EXPENSE' ? 'text-destructive' : 'text-success',
-                )}
-              >
+              <TableCell className={BODY_CELL_CLASS}>
                 {formatTransactionValue(transaction.value, transaction.type)}
               </TableCell>
               <TableCell className={BODY_CELL_CLASS}>
@@ -117,10 +123,8 @@ export function TransactionsTable({
         </TableBody>
       </Table>
       <div className="flex items-center justify-between px-6 py-5">
-        <p data-testid="transactions-summary" className="text-sm text-gray-600">
-          <span className="font-semibold text-gray-800">{firstItem}</span> a{' '}
-          <span className="font-semibold text-gray-800">{lastItem}</span> |{' '}
-          <span className="font-semibold text-gray-800">{totalRecord}</span> resultados
+        <p data-testid="transactions-summary" className="text-sm text-gray-700">
+          {firstItem} a {lastItem} | {totalRecord} resultados
         </p>
         <Pagination
           page={page}
