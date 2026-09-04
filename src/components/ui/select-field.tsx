@@ -70,7 +70,7 @@ export function SelectField({
             <SelectItem
               key={option.value}
               value={option.value}
-              className={option.value === RESET_VALUE ? 'text-gray-500' : undefined}
+              className={option.value === RESET_VALUE ? 'text-base text-gray-500' : 'text-base'}
             >
               {option.label}
             </SelectItem>

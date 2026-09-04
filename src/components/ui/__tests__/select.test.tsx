@@ -57,4 +57,10 @@ describe('Select', () => {
 
     expect(screen.queryByRole('option', { name: 'Option 1' })).not.toBeInTheDocument()
   })
+
+  it('shows a pointer cursor on the trigger', () => {
+    renderSelect()
+
+    expect(screen.getByRole('combobox')).toHaveClass('cursor-pointer')
+  })
 })

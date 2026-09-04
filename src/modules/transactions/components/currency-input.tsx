@@ -62,7 +62,7 @@ export function CurrencyInput({
         {label}
       </Label>
       <div className="relative">
-        <span className="pointer-events-none absolute inset-y-0 left-3 my-auto flex items-center text-sm font-medium text-gray-500">
+        <span className="pointer-events-none absolute inset-y-0 left-3 my-auto flex items-center text-base font-medium">
           R$
         </span>
         <Input
@@ -72,7 +72,7 @@ export function CurrencyInput({
           className="h-12 pl-10 text-base md:text-base"
           value={numberFormatter.format(centsToValue(cents))}
           onKeyDown={handleKeyDown}
-          onChange={() => {}}
+          onChange={() => { }}
         />
       </div>
       {errorMessage && <p className="text-destructive text-sm">{errorMessage}</p>}

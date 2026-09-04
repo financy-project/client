@@ -77,6 +77,13 @@ describe('TransactionForm', () => {
     expect(screen.getByRole('button', { name: /receita/i })).toHaveAttribute('aria-pressed', 'false')
   })
 
+  it('shows a pointer cursor on the Despesa/Receita toggle buttons', () => {
+    renderTransactionForm()
+
+    expect(screen.getByRole('button', { name: /despesa/i })).toHaveClass('cursor-pointer')
+    expect(screen.getByRole('button', { name: /receita/i })).toHaveClass('cursor-pointer')
+  })
+
   it('switches the type toggle to "Receita" (INCOME) when clicked', async () => {
     const user = userEvent.setup()
     renderTransactionForm()

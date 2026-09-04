@@ -81,7 +81,7 @@ export function TransactionForm({
                 aria-pressed={field.value === option.value}
                 onClick={() => field.onChange(option.value)}
                 className={cn(
-                  'flex items-center justify-center gap-2 rounded-lg border p-3 text-sm font-medium',
+                  'flex cursor-pointer items-center justify-center gap-2 rounded-lg border p-3 text-sm font-medium',
                   field.value === option.value ? option.selectedClass : 'border-gray-300 text-gray-600',
                 )}
               >
