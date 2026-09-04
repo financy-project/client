@@ -100,7 +100,7 @@ describe('SelectField', () => {
     expect(onValueChange).toHaveBeenCalledWith('')
   })
 
-  it('does not show the reset option when resettable but no value is selected yet', async () => {
+  it('shows the reset option even before any value is selected, when resettable', async () => {
     const user = userEvent.setup()
     render(
       <SelectField id="categoryId" label="Categoria" value="" onValueChange={vi.fn()} options={OPTIONS} resettable />,
@@ -108,6 +108,6 @@ describe('SelectField', () => {
 
     await user.click(screen.getByRole('combobox'))
 
-    expect(screen.queryByRole('option', { name: 'Selecione' })).not.toBeInTheDocument()
+    expect(screen.getByRole('option', { name: 'Selecione' })).toBeInTheDocument()
   })
 })

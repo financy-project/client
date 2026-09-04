@@ -44,6 +44,10 @@ export function SelectField({
   disabled,
   resettable = false,
 }: SelectFieldProps): JSX.Element {
+  const optionsWithReset = resettable
+    ? [{ value: RESET_VALUE, label: placeholder }, ...options]
+    : options
+
   return (
     <div className="grid gap-2" data-slot="select-field">
       <Label htmlFor={id} className="text-gray-700">
@@ -56,23 +60,18 @@ export function SelectField({
       >
         <SelectTrigger
           id={id}
-          // The Select primitive's own default is
-          // data-[size=default]:h-8 (32px) — a plain h-12 doesn't outrank
-          // it in the compiled stylesheet, so it must be overridden with
-          // the same data-[size=default]: variant to actually win.
           className="data-[size=default]:h-12 w-full px-3 py-3.5 text-base"
           aria-invalid={!!errorMessage}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
-          {resettable && value && (
-            <SelectItem value={RESET_VALUE} className="text-gray-500">
-              {placeholder}
-            </SelectItem>
-          )}
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+          {optionsWithReset.map((option) => (
+            <SelectItem
+              key={option.value}
+              value={option.value}
+              className={option.value === RESET_VALUE ? 'text-gray-500' : undefined}
+            >
               {option.label}
             </SelectItem>
           ))}
