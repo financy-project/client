@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { TransactionTypeIndicator } from '@/components/transaction-type-indicator'
 
 describe('TransactionTypeIndicator', () => {
-  it('renders "Entrada" with the correct icon and color for type="income"', () => {
+  it('renders "Receita" with the correct icon and color for type="income"', () => {
     render(<TransactionTypeIndicator type="income" />)
-    const label = screen.getByText('Entrada')
+    const label = screen.getByText('Receita')
     expect(label).toBeInTheDocument()
     expect(label.closest('[data-slot="transaction-type-indicator"]')).toHaveClass('text-success')
     expect(
@@ -13,9 +13,9 @@ describe('TransactionTypeIndicator', () => {
     ).toHaveClass('lucide-circle-arrow-up')
   })
 
-  it('renders "Saída" with the correct icon and color for type="expense"', () => {
+  it('renders "Despesa" with the correct icon and color for type="expense"', () => {
     render(<TransactionTypeIndicator type="expense" />)
-    const label = screen.getByText('Saída')
+    const label = screen.getByText('Despesa')
     expect(label).toBeInTheDocument()
     expect(label.closest('[data-slot="transaction-type-indicator"]')).toHaveClass(
       'text-destructive'
