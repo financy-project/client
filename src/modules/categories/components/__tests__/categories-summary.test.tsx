@@ -58,17 +58,20 @@ describe('CategoriesSummary', () => {
 
     expect(screen.getAllByText('0')).toHaveLength(2) // total de categorias + total de transações
     expect(screen.queryByText('Categoria mais utilizada')).not.toBeInTheDocument()
+    expect(screen.queryByText('Categoria mais recente')).not.toBeInTheDocument()
   })
 
-  it('omits card 3 entirely when every category has transactionsQuantity === 0', () => {
+  it('falls back to the most recently created category labeled "Categoria mais recente" when every category has transactionsQuantity === 0', () => {
     const categories = [
-      buildCategory({ id: '1', transactionsQuantity: 0 }),
-      buildCategory({ id: '2', transactionsQuantity: 0 }),
+      buildCategory({ id: '1', title: 'Alimentação', transactionsQuantity: 0 }),
+      buildCategory({ id: '2', title: 'Mercado', transactionsQuantity: 0 }),
     ]
 
     render(<CategoriesSummary categories={categories} />)
 
     expect(screen.queryByText('Categoria mais utilizada')).not.toBeInTheDocument()
+    expect(screen.getByText('Mercado')).toBeInTheDocument()
+    expect(screen.getByText('Categoria mais recente')).toBeInTheDocument()
   })
 
   it('renders card 1\'s icon in gray-700 and card 2\'s icon in purple-base', () => {

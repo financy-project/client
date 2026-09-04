@@ -49,22 +49,26 @@ function SummaryCard({ icon, iconClassName, iconTestId, value, label }: SummaryC
 
 export function CategoriesSummary({ categories }: CategoriesSummaryProps): JSX.Element {
   const totalCategories = categories.length
-  const totalTransactions = categories.reduce((sum, category) => sum + category.transactionsQuantity, 0)
-  const mostUsedCategory = categories.reduce<Category | null>(
-    (max, category) =>
-      category.transactionsQuantity > 0 &&
-      (!max || category.transactionsQuantity > max.transactionsQuantity)
-        ? category
-        : max,
-    null,
-  )
 
-  const MostUsedIcon = mostUsedCategory
-    ? (ICON_OPTIONS.find((option) => option.name === mostUsedCategory.icon)?.icon ?? TagIcon)
+  const totalTransactions = categories.reduce((sum, category) => sum + category.transactionsQuantity, 0)
+
+  const mostUsedCategory = categories.reduce<Category | null>((max, category) =>
+    category.transactionsQuantity > 0 &&
+      (!max || category.transactionsQuantity > max.transactionsQuantity) ? category : max, null)
+
+  const mostRecentCategory = categories.length > 0 ? categories[categories.length - 1] : null
+  const highlightedCategory = mostUsedCategory ?? mostRecentCategory
+
+  const highlightedLabel = mostUsedCategory ? 'Categoria mais utilizada' : 'Categoria mais recente'
+
+  const HighlightedIcon = highlightedCategory
+    ? (ICON_OPTIONS.find((option) => option.name === highlightedCategory.icon)?.icon ?? TagIcon)
     : null
-  const mostUsedColorName = mostUsedCategory
-    ? (COLOR_OPTIONS.find((option) => option.value.toLowerCase() === mostUsedCategory.color.toLowerCase())
-        ?.name ?? 'blue')
+
+  const highlightedColorName = highlightedCategory
+    ? (COLOR_OPTIONS.find(
+      (option) => option.value.toLowerCase() === highlightedCategory.color.toLowerCase(),
+    )?.name ?? 'blue')
     : null
 
   return (
@@ -83,13 +87,14 @@ export function CategoriesSummary({ categories }: CategoriesSummaryProps): JSX.E
         value={totalTransactions}
         label="Total de transações"
       />
-      {mostUsedCategory && MostUsedIcon && mostUsedColorName && (
+
+      {highlightedCategory && HighlightedIcon && highlightedColorName && (
         <SummaryCard
-          icon={<MostUsedIcon className="size-6" />}
-          iconClassName={iconTextClasses[mostUsedColorName]}
+          icon={<HighlightedIcon className="size-6" />}
+          iconClassName={iconTextClasses[highlightedColorName]}
           iconTestId="summary-card-most-used-icon"
-          value={mostUsedCategory.title}
-          label="Categoria mais utilizada"
+          value={highlightedCategory.title}
+          label={highlightedLabel}
         />
       )}
     </div>
