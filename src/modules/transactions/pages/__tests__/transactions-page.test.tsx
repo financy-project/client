@@ -4,14 +4,20 @@ import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useCategoriesForSelect } from '@/modules/transactions/hooks/use-categories-for-select'
 import { useCreateTransaction } from '@/modules/transactions/hooks/use-create-transaction'
+import { useDeleteTransaction } from '@/modules/transactions/hooks/use-delete-transaction'
 import { useListTransactions } from '@/modules/transactions/hooks/use-list-transactions'
+import { useUpdateTransaction } from '@/modules/transactions/hooks/use-update-transaction'
 import { TransactionsPage } from '@/modules/transactions/pages/transactions-page'
 
 vi.mock('@/modules/transactions/hooks/use-create-transaction')
+vi.mock('@/modules/transactions/hooks/use-update-transaction')
+vi.mock('@/modules/transactions/hooks/use-delete-transaction')
 vi.mock('@/modules/transactions/hooks/use-categories-for-select')
 vi.mock('@/modules/transactions/hooks/use-list-transactions')
 
 const useCreateTransactionMock = vi.mocked(useCreateTransaction)
+const useUpdateTransactionMock = vi.mocked(useUpdateTransaction)
+const useDeleteTransactionMock = vi.mocked(useDeleteTransaction)
 const useCategoriesForSelectMock = vi.mocked(useCategoriesForSelect)
 const useListTransactionsMock = vi.mocked(useListTransactions)
 
@@ -39,6 +45,17 @@ describe('TransactionsPage', () => {
       isLoading: false,
       fieldErrors: [],
       formError: null,
+    })
+    useUpdateTransactionMock.mockReturnValue({
+      updateTransaction: vi.fn().mockResolvedValue(null),
+      isLoading: false,
+      fieldErrors: [],
+      formError: null,
+    })
+    useDeleteTransactionMock.mockReturnValue({
+      deleteTransaction: vi.fn().mockResolvedValue(false),
+      isLoading: false,
+      error: null,
     })
     useCategoriesForSelectMock.mockReturnValue({ categories: [], isLoading: false, error: null })
     useListTransactionsMock.mockReturnValue({
@@ -74,5 +91,23 @@ describe('TransactionsPage', () => {
 
     expect(screen.getByText('Almoço no restaurante')).toBeInTheDocument()
     expect(screen.getByText('- R$ 88,50')).toBeInTheDocument()
+  })
+
+  it('opens EditTransactionDialog for the clicked row\'s transaction', async () => {
+    const user = userEvent.setup()
+    renderTransactionsPage()
+
+    await user.click(screen.getByRole('button', { name: 'Editar' }))
+
+    expect(screen.getByRole('heading', { name: 'Editar transação' })).toBeInTheDocument()
+  })
+
+  it('opens DeleteTransactionAlert for the clicked row\'s transaction', async () => {
+    const user = userEvent.setup()
+    renderTransactionsPage()
+
+    await user.click(screen.getByRole('button', { name: 'Excluir' }))
+
+    expect(screen.getByRole('heading', { name: 'Excluir transação' })).toBeInTheDocument()
   })
 })

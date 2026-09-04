@@ -10,5 +10,5 @@
 - [ ] T-015: `DeleteTransactionAlert` does not call `deleteTransaction` when "Não" is clicked
 - [ ] T-016: `DeleteTransactionAlert` calls `deleteTransaction(transaction.id)`, toasts and closes on "Sim" success
 - [ ] T-017: `DeleteTransactionAlert` stays open and renders the error when the delete fails
-- [ ] T-018: `TransactionsPage` opens `EditTransactionDialog` for the clicked row's transaction
-- [ ] T-019: `TransactionsPage` opens `DeleteTransactionAlert` for the clicked row's transaction
+- [x] T-018: `TransactionsPage` opens `EditTransactionDialog` for the clicked row's transaction
+- [x] T-019: `TransactionsPage` opens `DeleteTransactionAlert` for the clicked row's transaction
