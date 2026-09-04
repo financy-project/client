@@ -17,7 +17,7 @@ Usuários autenticados revisando um panorama rápido de suas categorias
 * [ ] A tela `/categorias` exibe 3 cards de resumo lado a lado, acima da grade de categorias
 * [ ] Card 1: número total de categorias cadastradas + rótulo "Total de categorias" (ícone de tag)
 * [ ] Card 2: soma de `transactionsQuantity` de todas as categorias + rótulo "Total de transações" (ícone de setas ↕)
-* [ ] Card 3: nome, ícone e cor da categoria com mais transações + rótulo "Categoria mais utilizada"
+* [ ] Card 3: nome e ícone da categoria com mais transações + rótulo "Categoria mais utilizada" — o ícone (sem fundo colorido, diferente do card de categoria do PM-011) é tingido na cor da própria categoria (`category.color`), igual aos ícones dos cards 1/2, que usam cor fixa (gray-700 e purple-base respectivamente)
 * [ ] Card 3 não é exibido (ou mostra um estado vazio) quando não há nenhuma categoria com transações
 
 ## Out of Scope
