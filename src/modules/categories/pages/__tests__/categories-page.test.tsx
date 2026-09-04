@@ -145,4 +145,31 @@ describe('CategoriesPage', () => {
 
     expect(screen.getByText(/alimentação/i, { selector: '[data-slot="alert-dialog-description"]' })).toBeInTheDocument()
   })
+
+  it('renders CategoriesSummary above the category grid once useListCategories resolves with data', () => {
+    useListCategoriesMock.mockReturnValue({ categories: [CATEGORY], isLoading: false, error: null })
+    renderCategoriesPage()
+
+    expect(screen.getByText('Total de categorias')).toBeInTheDocument()
+  })
+
+  it('does not render CategoriesSummary while isLoading is true or while error is present', () => {
+    useListCategoriesMock.mockReturnValue({ categories: [], isLoading: true, error: null })
+    const { rerender } = renderCategoriesPage()
+
+    expect(screen.queryByText('Total de categorias')).not.toBeInTheDocument()
+
+    useListCategoriesMock.mockReturnValue({
+      categories: [],
+      isLoading: false,
+      error: 'Não foi possível carregar as categorias.',
+    })
+    rerender(
+      <MemoryRouter initialEntries={['/categorias']}>
+        <CategoriesPage />
+      </MemoryRouter>,
+    )
+
+    expect(screen.queryByText('Total de categorias')).not.toBeInTheDocument()
+  })
 })

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { Header } from '@/components/header'
 import { Button } from '@/components/ui/button'
+import { CategoriesSummary } from '@/modules/categories/components/categories-summary'
 import { CategoryCard } from '@/modules/categories/components/category-card'
 import { DeleteCategoryAlert } from '@/modules/categories/components/delete-category-alert'
 import { EditCategoryDialog } from '@/modules/categories/components/edit-category-dialog'
@@ -36,6 +37,11 @@ export function CategoriesPage(): JSX.Element {
           <p role="alert" className="text-destructive mt-6 text-sm">
             {error}
           </p>
+        )}
+        {!isLoading && !error && (
+          <div className="mt-6">
+            <CategoriesSummary categories={categories} />
+          </div>
         )}
         {!isLoading && !error && categories.length === 0 && (
           <p className="mt-6 text-gray-600">Nenhuma categoria cadastrada ainda.</p>
