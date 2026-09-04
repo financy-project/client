@@ -37,7 +37,7 @@ export const UPDATE_CATEGORY = gql`
       description
       icon
       color
-      transactionQuantity
+      transactionsQuantity
     }
   }
 `
@@ -56,7 +56,7 @@ export interface UpdateCategoryData {
     description: string | null
     icon: string
     color: string
-    transactionQuantity: number
+    transactionsQuantity: number
   }
 }
 

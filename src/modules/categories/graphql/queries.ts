@@ -8,7 +8,7 @@ export const LIST_CATEGORIES = gql`
       description
       icon
       color
-      transactionQuantity
+      transactionsQuantity
     }
   }
 `
@@ -19,7 +19,7 @@ export interface Category {
   description: string | null
   icon: string
   color: string
-  transactionQuantity: number
+  transactionsQuantity: number
 }
 
 export interface ListCategoriesData {
