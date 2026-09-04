@@ -117,11 +117,10 @@ export function TransactionsTable({
         </TableBody>
       </Table>
       <div className="flex items-center justify-between px-6 py-5">
-        <p className="text-sm text-gray-600">
-          <span className="font-semibold text-gray-800">
-            {firstItem} a {lastItem}
-          </span>{' '}
-          | {totalRecord} resultados
+        <p data-testid="transactions-summary" className="text-sm text-gray-600">
+          <span className="font-semibold text-gray-800">{firstItem}</span> a{' '}
+          <span className="font-semibold text-gray-800">{lastItem}</span> |{' '}
+          <span className="font-semibold text-gray-800">{totalRecord}</span> resultados
         </p>
         <Pagination
           page={page}

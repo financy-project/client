@@ -55,7 +55,7 @@ describe('TransactionsTable', () => {
     expect(screen.getByText('Almoço no restaurante')).toBeInTheDocument()
     expect(screen.getByText('30/11/25')).toBeInTheDocument()
     expect(screen.getByText('Alimentação')).toBeInTheDocument()
-    expect(screen.getByText('Despesa')).toBeInTheDocument()
+    expect(screen.getByText('Saída')).toBeInTheDocument()
     expect(screen.getByText('- R$ 88,50')).toBeInTheDocument()
 
     const deleteButton = screen.getByRole('button', { name: 'Excluir' })
@@ -90,7 +90,7 @@ describe('TransactionsTable', () => {
     expect(onPageChange).toHaveBeenCalledWith(2)
   })
 
-  it('shows the "X a Y | Z resultados" summary text', () => {
+  it('shows the "X a Y | Z resultados" summary text, with the numbers emphasized', () => {
     render(
       <TransactionsTable
         {...DEFAULT_PROPS}
@@ -101,7 +101,8 @@ describe('TransactionsTable', () => {
       />,
     )
 
-    expect(screen.getByText(/1 a 1/)).toBeInTheDocument()
-    expect(screen.getByText(/27 resultados/)).toBeInTheDocument()
+    const summary = screen.getByTestId('transactions-summary')
+    expect(summary).toHaveTextContent('1 a 10 | 27 resultados')
+    expect(summary.querySelectorAll('span.font-semibold')).toHaveLength(3)
   })
 })
