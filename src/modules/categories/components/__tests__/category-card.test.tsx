@@ -67,6 +67,13 @@ describe('CategoryCard', () => {
     expect(onDelete).toHaveBeenCalledWith(CATEGORY)
   })
 
+  it('renders the card with a white background and a visible gray-200 border', () => {
+    render(<CategoryCard category={CATEGORY} onEdit={vi.fn()} onDelete={vi.fn()} />)
+
+    const card = screen.getByTestId('category-card')
+    expect(card).toHaveClass('bg-card', 'border', 'border-gray-200')
+  })
+
   it('renders Excluir (trash) on the left and Editar (square-pen) on the right, per Figma', () => {
     render(<CategoryCard category={CATEGORY} onEdit={vi.fn()} onDelete={vi.fn()} />)
 

@@ -36,7 +36,7 @@ export function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps):
     category.transactionsQuantity === 1 ? '1 item' : `${category.transactionsQuantity} itens`
 
   return (
-    <Card className="gap-5 border-gray-200 p-6 ring-0">
+    <Card data-testid="category-card" className="gap-5 border border-gray-200 p-6 ring-0">
       <div className="flex items-start justify-between">
         <div
           data-testid="category-card-icon"
