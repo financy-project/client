@@ -5,19 +5,32 @@ import { describe, expect, it, vi } from 'vitest'
 import { TransactionForm } from '@/modules/transactions/components/transaction-form'
 import { LIST_CATEGORIES_FOR_SELECT } from '@/modules/transactions/graphql/queries'
 
-function buildCategoriesMock() {
-  return {
-    request: { query: LIST_CATEGORIES_FOR_SELECT },
-    result: { data: { listCategories: [{ id: 'cat-1', title: 'Alimentação' }] } },
-  }
+const CATEGORIES_MOCK = {
+  request: { query: LIST_CATEGORIES_FOR_SELECT },
+  result: { data: { listCategories: [{ id: 'cat-1', title: 'Alimentação' }] } },
+  // Unbounded reuse: this same mock backs the query across every test in
+  // this file, and how many times React actually fires it per render isn't
+  // a detail worth pinning down here.
+  maxUsageCount: Number.POSITIVE_INFINITY,
 }
 
 function renderTransactionForm(props: Partial<React.ComponentProps<typeof TransactionForm>> = {}) {
   return render(
-    <MockedProvider mocks={[buildCategoriesMock(), buildCategoriesMock(), buildCategoriesMock()]}>
+    <MockedProvider mocks={[CATEGORIES_MOCK]}>
       <TransactionForm isLoading={false} fieldErrors={[]} formError={null} onSubmit={vi.fn()} {...props} />
     </MockedProvider>,
   )
+}
+
+// The category Select's options only exist once useCategoriesForSelect()
+// resolves (its trigger stays `disabled` — see categoriesLoading — until
+// then). Opening it before that race loses: Radix Select renders
+// SelectContent's items from whatever `categories` was at open time.
+async function openCategorySelect(user: ReturnType<typeof userEvent.setup>) {
+  const combobox = await screen.findByRole('combobox')
+  await waitFor(() => expect(combobox).not.toBeDisabled())
+  await user.click(combobox)
+  return combobox
 }
 
 describe('TransactionForm', () => {
@@ -74,24 +87,25 @@ describe('TransactionForm', () => {
     expect(screen.getByRole('button', { name: /despesa/i })).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it("gives the category select trigger the same horizontal padding as the xl button (px-4)", async () => {
+  it('gives the category select trigger the exact Figma-spec padding (12px horizontal, 14px vertical)', async () => {
     renderTransactionForm()
 
-    expect(await screen.findByRole('combobox')).toHaveClass('px-4')
+    expect(await screen.findByRole('combobox')).toHaveClass('px-3', 'py-3.5')
   })
 
   it('offers an option to revert the selected category back to its initial (unselected) value', async () => {
     const user = userEvent.setup()
     renderTransactionForm()
 
-    await user.click(await screen.findByRole('combobox'))
+    await openCategorySelect(user)
     await user.click(await screen.findByRole('option', { name: 'Alimentação' }))
-    expect(screen.getByRole('combobox')).toHaveTextContent('Alimentação')
+    await waitFor(() => expect(screen.getByRole('combobox')).toHaveTextContent('Alimentação'))
+    await waitFor(() => expect(screen.queryByRole('option')).not.toBeInTheDocument())
 
     await user.click(screen.getByRole('combobox'))
     await user.click(await screen.findByRole('option', { name: 'Voltar ao valor inicial' }))
 
-    expect(screen.getByRole('combobox')).toHaveTextContent('Selecione')
+    await waitFor(() => expect(screen.getByRole('combobox')).toHaveTextContent('Selecione'))
   })
 
   it('calls onSubmit with parsed values when all fields are valid', async () => {
@@ -107,7 +121,7 @@ describe('TransactionForm', () => {
 
     await user.type(screen.getByLabelText('Valor'), '150')
 
-    await user.click(await screen.findByRole('combobox'))
+    await openCategorySelect(user)
     await user.click(await screen.findByRole('option', { name: 'Alimentação' }))
 
     await user.click(screen.getByRole('button', { name: /^salvar$/i }))

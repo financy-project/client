@@ -156,7 +156,7 @@ export function TransactionForm({
             >
               <SelectTrigger
                 id="categoryId"
-                className="h-12 w-full px-4 text-base"
+                className="h-12 w-full px-3 py-3.5 text-base"
                 aria-invalid={!!errors.categoryId}
               >
                 <SelectValue placeholder="Selecione" />
