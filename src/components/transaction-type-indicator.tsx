@@ -9,8 +9,8 @@ type TransactionTypeIndicatorProps = {
 }
 
 const config: Record<TransactionType, { label: string; icon: typeof CircleArrowUp; className: string }> = {
-  income: { label: "Receita", icon: CircleArrowUp, className: "text-success" },
-  expense: { label: "Despesa", icon: CircleArrowDown, className: "text-destructive" },
+  income: { label: "Entrada", icon: CircleArrowUp, className: "text-success" },
+  expense: { label: "Saída", icon: CircleArrowDown, className: "text-destructive" },
 }
 
 function TransactionTypeIndicator({ type }: TransactionTypeIndicatorProps) {
