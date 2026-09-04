@@ -24,9 +24,29 @@ const DEFAULT_PROPS = {
 }
 
 describe('TransactionsTable', () => {
-  it('shows the loading message while isLoading', () => {
+  it('shows skeleton rows (not a full-page message) on the first fetch', () => {
     render(<TransactionsTable {...DEFAULT_PROPS} transactions={[]} isLoading />)
-    expect(screen.getByText('Carregando transações…')).toBeInTheDocument()
+    const skeletonBody = screen.getByTestId('transactions-skeleton')
+    expect(skeletonBody.querySelectorAll('tr')).toHaveLength(DEFAULT_PROPS.pageSize)
+    expect(screen.getByText('Descrição')).toBeInTheDocument()
+    expect(screen.queryByTestId('transactions-summary')).not.toBeInTheDocument()
+  })
+
+  it('keeps showing the previous rows and footer, with skeleton rows and disabled pagination, while a later page fetches', () => {
+    render(
+      <TransactionsTable
+        {...DEFAULT_PROPS}
+        transactions={[TRANSACTION]}
+        isLoading
+        totalPages={3}
+        totalRecord={27}
+      />,
+    )
+
+    expect(screen.getByTestId('transactions-skeleton')).toBeInTheDocument()
+    expect(screen.queryByText('Almoço no restaurante')).not.toBeInTheDocument()
+    expect(screen.getByTestId('transactions-summary')).toHaveTextContent('1 a 10 | 27 resultados')
+    expect(screen.getByRole('button', { name: 'Página anterior' })).toBeDisabled()
   })
 
   it('shows the error message when error is set', () => {
@@ -90,7 +110,25 @@ describe('TransactionsTable', () => {
     expect(onPageChange).toHaveBeenCalledWith(2)
   })
 
-  it('shows the "X a Y | Z resultados" summary text, with the numbers emphasized', () => {
+  it('pads a short page with invisible filler rows so the table always holds pageSize rows', () => {
+    render(<TransactionsTable {...DEFAULT_PROPS} transactions={[TRANSACTION]} />)
+
+    // Filler rows are aria-hidden (excluded from getByRole by default), so
+    // include hidden elements to count the full body: 1 real + 9 filler.
+    const rows = screen.getAllByRole('row', { hidden: true })
+    expect(rows).toHaveLength(1 + DEFAULT_PROPS.pageSize)
+    expect(screen.getAllByRole('row')).toHaveLength(2) // header + the 1 real row, filler excluded
+  })
+
+  it('renders no filler rows when the page is already full', () => {
+    const fullPage = Array.from({ length: 10 }, (_, i) => ({ ...TRANSACTION, id: `t${i}` }))
+    render(<TransactionsTable {...DEFAULT_PROPS} transactions={fullPage} totalRecord={10} />)
+
+    const rows = screen.getAllByRole('row', { hidden: true })
+    expect(rows).toHaveLength(1 + 10)
+  })
+
+  it('shows the "X a Y | Z resultados" summary text in a single uniform color', () => {
     render(
       <TransactionsTable
         {...DEFAULT_PROPS}
@@ -103,6 +141,7 @@ describe('TransactionsTable', () => {
 
     const summary = screen.getByTestId('transactions-summary')
     expect(summary).toHaveTextContent('1 a 10 | 27 resultados')
-    expect(summary.querySelectorAll('span.font-semibold')).toHaveLength(3)
+    expect(summary).toHaveClass('text-gray-700')
+    expect(summary.querySelectorAll('span')).toHaveLength(0)
   })
 })

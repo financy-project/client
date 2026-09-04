@@ -45,7 +45,12 @@ export function useListTransactions(): UseListTransactionsResult {
     }
   }
 
-  const totalRecord = data?.listTransactions.totalRecord ?? 0
+  // While a page-change fetch is in flight, Apollo has no cache entry for
+  // the new cursor yet (`data` is undefined) — fall back to the last
+  // successful response so the table keeps showing its previous rows/totals
+  // and only needs to swap the body for skeleton rows while `isLoading`.
+  const resolvedData = data ?? seenData
+  const totalRecord = resolvedData?.listTransactions.totalRecord ?? 0
 
   const goToPage = (target: number) => {
     if (target === page) return
@@ -55,7 +60,7 @@ export function useListTransactions(): UseListTransactionsResult {
   }
 
   return {
-    transactions: data?.listTransactions.edges.map((edge) => edge.node) ?? [],
+    transactions: resolvedData?.listTransactions.edges.map((edge) => edge.node) ?? [],
     isLoading: loading,
     error: error ? FALLBACK_ERROR_MESSAGE : null,
     page,

@@ -7,7 +7,7 @@ describe('TransactionTypeIndicator', () => {
     render(<TransactionTypeIndicator type="income" />)
     const label = screen.getByText('Entrada')
     expect(label).toBeInTheDocument()
-    expect(label.closest('[data-slot="transaction-type-indicator"]')).toHaveClass('text-success')
+    expect(label.closest('[data-slot="transaction-type-indicator"]')).toHaveClass('text-green-dark')
     expect(
       label.closest('[data-slot="transaction-type-indicator"]')?.querySelector('svg')
     ).toHaveClass('lucide-circle-arrow-up')
@@ -18,7 +18,7 @@ describe('TransactionTypeIndicator', () => {
     const label = screen.getByText('Saída')
     expect(label).toBeInTheDocument()
     expect(label.closest('[data-slot="transaction-type-indicator"]')).toHaveClass(
-      'text-destructive'
+      'text-red-dark'
     )
     expect(
       label.closest('[data-slot="transaction-type-indicator"]')?.querySelector('svg')

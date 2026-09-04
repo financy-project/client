@@ -12,8 +12,25 @@ type PaginationProps = {
   className?: string
 }
 
+const VISIBLE_PAGE_COUNT = 3
+
+// Slides a window of VISIBLE_PAGE_COUNT page numbers to keep `page` in view,
+// clamped so the window never runs past the first/last page.
+function getVisiblePages(page: number, totalPages: number): number[] {
+  if (totalPages <= VISIBLE_PAGE_COUNT) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1)
+  }
+
+  const start = Math.min(
+    Math.max(1, page - 1),
+    totalPages - VISIBLE_PAGE_COUNT + 1
+  )
+
+  return Array.from({ length: VISIBLE_PAGE_COUNT }, (_, i) => start + i)
+}
+
 function Pagination({ page, totalPages, onPageChange, disabled = false, className }: PaginationProps) {
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
+  const pages = getVisiblePages(page, totalPages)
 
   return (
     <nav
@@ -22,6 +39,8 @@ function Pagination({ page, totalPages, onPageChange, disabled = false, classNam
       aria-label="Paginação"
     >
       <IconButton
+        variant="outline"
+        className="border-gray-300"
         icon={<ChevronLeft />}
         aria-label="Página anterior"
         disabled={disabled || page === 1}
@@ -39,6 +58,8 @@ function Pagination({ page, totalPages, onPageChange, disabled = false, classNam
         </Button>
       ))}
       <IconButton
+        variant="outline"
+        className="border-gray-300"
         icon={<ChevronRight />}
         aria-label="Próxima página"
         disabled={disabled || page === totalPages}

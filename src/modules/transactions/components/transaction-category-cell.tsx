@@ -68,27 +68,48 @@ const iconSquareClasses: Record<TagColor, string> = {
   green: 'bg-green-light text-green-base',
 }
 
-interface TransactionCategoryCellProps {
+interface CategoryIconSquareProps {
   category: TransactionListItem['category']
+  className?: string
+  testId?: string
 }
 
-export function TransactionCategoryCell({ category }: TransactionCategoryCellProps): JSX.Element {
+export function CategoryIconSquare({
+  category,
+  className,
+  testId = 'transaction-category-icon',
+}: CategoryIconSquareProps): JSX.Element {
   const Icon = ICON_OPTIONS.find((option) => option.name === category?.icon)?.icon ?? TagIcon
   const colorName =
     COLOR_OPTIONS.find((option) => option.value.toLowerCase() === category?.color.toLowerCase())
       ?.name ?? 'blue'
 
   return (
+    <div
+      data-testid={testId}
+      className={cn(
+        'flex size-10 shrink-0 items-center justify-center rounded-[8px]',
+        iconSquareClasses[colorName],
+        className,
+      )}
+    >
+      <Icon className="size-4" />
+    </div>
+  )
+}
+
+interface TransactionCategoryCellProps {
+  category: TransactionListItem['category']
+}
+
+export function TransactionCategoryCell({ category }: TransactionCategoryCellProps): JSX.Element {
+  const colorName =
+    COLOR_OPTIONS.find((option) => option.value.toLowerCase() === category?.color.toLowerCase())
+      ?.name ?? 'blue'
+
+  return (
     <div className="flex items-center gap-3">
-      <div
-        data-testid="transaction-category-icon"
-        className={cn(
-          'flex size-10 shrink-0 items-center justify-center rounded-[8px]',
-          iconSquareClasses[colorName],
-        )}
-      >
-        <Icon className="size-4" />
-      </div>
+      <CategoryIconSquare category={category} />
       {category ? (
         <Tag color={colorName}>{category.title}</Tag>
       ) : (
