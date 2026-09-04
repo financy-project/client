@@ -23,23 +23,51 @@ export interface ListCategoriesForSelectData {
   listCategories: CategoryForSelect[]
 }
 
-// Stub — exists solely so useCreateTransaction's refetchQueries has a real
-// target. No component mounts a useQuery(LIST_TRANSACTIONS) in this
-// feature (the transaction list screen is out of scope); this minimal
-// id-only selection is expected to be superseded by that feature's own
-// richer query once it's built.
 export const LIST_TRANSACTIONS = gql`
-  query ListTransactions {
-    listTransactions {
+  query ListTransactions($first: Int, $after: String) {
+    listTransactions(first: $first, after: $after) {
       edges {
         node {
           id
+          type
+          description
+          date
+          value
+          category {
+            id
+            title
+            color
+            icon
+          }
         }
       }
       pageInfo {
         hasNextPage
         endCursor
       }
+      totalRecord
     }
   }
 `
+
+export interface TransactionListItem {
+  id: string
+  type: 'EXPENSE' | 'INCOME'
+  description: string
+  date: string
+  value: number
+  category: { id: string; title: string; color: string; icon: string } | null
+}
+
+export interface ListTransactionsData {
+  listTransactions: {
+    edges: { node: TransactionListItem }[]
+    pageInfo: { hasNextPage: boolean; endCursor: string | null }
+    totalRecord: number
+  }
+}
+
+export interface ListTransactionsVariables {
+  first?: number
+  after?: string
+}
