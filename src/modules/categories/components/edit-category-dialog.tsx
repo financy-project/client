@@ -9,7 +9,7 @@ import type { Category } from '@/modules/categories/graphql/queries'
 import { useUpdateCategory } from '@/modules/categories/hooks/use-update-category'
 
 interface EditCategoryDialogProps {
-  category: Category
+  category: Category | null
   open: boolean
   onOpenChange: (open: boolean) => void
 }
@@ -22,12 +22,18 @@ export function EditCategoryDialog({
   const { updateCategory, isLoading, fieldErrors, formError } = useUpdateCategory()
 
   const handleSubmit = async (values: CategoryFormValues) => {
+    if (!category)
+      return
+
     const result = await updateCategory(category.id, values)
     if (result) {
       toast.success('Categoria atualizada com sucesso!')
       onOpenChange(false)
     }
   }
+
+  if (!open || !category)
+    return <></>
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

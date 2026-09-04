@@ -15,7 +15,7 @@ import type { Category } from '@/modules/categories/graphql/queries'
 import { useDeleteCategory } from '@/modules/categories/hooks/use-delete-category'
 
 interface DeleteCategoryAlertProps {
-  category: Category
+  category: Category | null
   open: boolean
   onOpenChange: (open: boolean) => void
 }
@@ -29,12 +29,19 @@ export function DeleteCategoryAlert({
 
   const handleDelete = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
+
+    if (!category)
+      return
+
     const result = await deleteCategory(category.id)
     if (result) {
       toast.success('Categoria excluída com sucesso!')
       onOpenChange(false)
     }
   }
+
+  if (!open || !category)
+    return <></>
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
