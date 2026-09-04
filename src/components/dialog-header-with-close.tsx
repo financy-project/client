@@ -4,12 +4,12 @@ import { X } from 'lucide-react'
 import { DialogClose } from '@/components/ui/dialog'
 import { IconButton } from '@/components/ui/icon-button'
 
-interface CategoryDialogHeaderProps {
+interface DialogHeaderWithCloseProps {
   title: string
   subtitle: string
 }
 
-export function CategoryDialogHeader({ title, subtitle }: CategoryDialogHeaderProps): JSX.Element {
+export function DialogHeaderWithClose({ title, subtitle }: DialogHeaderWithCloseProps): JSX.Element {
   return (
     <div className="flex items-start gap-4">
       <div className="grid flex-1 gap-0.5">

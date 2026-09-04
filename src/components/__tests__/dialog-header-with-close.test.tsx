@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import { CategoryDialogHeader } from '@/modules/categories/components/category-dialog-header'
+import { DialogHeaderWithClose } from '@/components/dialog-header-with-close'
 
-describe('CategoryDialogHeader', () => {
+describe('DialogHeaderWithClose', () => {
   it('renders the title, subtitle, and a close button', () => {
     render(
       <Dialog open>
         <DialogContent showCloseButton={false}>
-          <CategoryDialogHeader title="Nova categoria" subtitle="Organize suas transações" />
+          <DialogHeaderWithClose title="Nova categoria" subtitle="Organize suas transações" />
         </DialogContent>
       </Dialog>,
     )
