@@ -149,6 +149,52 @@ describe('useListTransactions', () => {
     expect(result.current.page).toBe(1)
   })
 
+  it('keeps the previous page\'s transactions/totalRecord visible (isLoading: true) while the next page fetches', async () => {
+    const mocks = [
+      {
+        request: { query: LIST_TRANSACTIONS, variables: { first: 10, after: undefined } },
+        result: {
+          data: {
+            listTransactions: {
+              edges: [{ node: TRANSACTION }],
+              pageInfo: { hasNextPage: true, endCursor: 'cursor-1' },
+              totalRecord: 15,
+            },
+          },
+        },
+      },
+      {
+        request: { query: LIST_TRANSACTIONS, variables: { first: 10, after: 'cursor-1' } },
+        result: {
+          data: {
+            listTransactions: {
+              edges: [{ node: { ...TRANSACTION, id: 't2' } }],
+              pageInfo: { hasNextPage: false, endCursor: null },
+              totalRecord: 15,
+            },
+          },
+        },
+        delay: 20,
+      },
+    ]
+
+    const { result } = renderUseListTransactions(mocks)
+
+    await waitFor(() => expect(result.current.transactions).toEqual([TRANSACTION]))
+
+    act(() => {
+      result.current.goToPage(2)
+    })
+
+    expect(result.current.isLoading).toBe(true)
+    expect(result.current.transactions).toEqual([TRANSACTION])
+    expect(result.current.totalRecord).toBe(15)
+
+    await waitFor(() =>
+      expect(result.current.transactions).toEqual([{ ...TRANSACTION, id: 't2' }]),
+    )
+  })
+
   it('totalPages computes Math.ceil(totalRecord / 10) from the mocked response', async () => {
     const mocks = [
       {
