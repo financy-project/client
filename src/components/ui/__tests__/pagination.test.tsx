@@ -44,4 +44,17 @@ describe('Pagination', () => {
     expect(screen.getByRole('button', { name: '1' })).toHaveAttribute('data-variant', 'ghost')
     expect(screen.getByRole('button', { name: '3' })).toHaveAttribute('data-variant', 'ghost')
   })
+
+  it('merges a custom className onto the nav alongside its default classes', () => {
+    render(<Pagination page={1} totalPages={3} onPageChange={vi.fn()} className="gap-2" />)
+    const nav = screen.getByRole('navigation', { name: 'Paginação' })
+    expect(nav).toHaveClass('flex', 'items-center', 'gap-2')
+    expect(nav).not.toHaveClass('gap-1')
+  })
+
+  it('keeps the default gap-1 class when className is omitted', () => {
+    render(<Pagination page={1} totalPages={3} onPageChange={vi.fn()} />)
+    const nav = screen.getByRole('navigation', { name: 'Paginação' })
+    expect(nav).toHaveClass('gap-1')
+  })
 })
