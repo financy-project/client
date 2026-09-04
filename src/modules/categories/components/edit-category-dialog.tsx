@@ -1,8 +1,8 @@
 import type { JSX } from 'react'
 
 import { toast } from 'sonner'
+import { DialogHeaderWithClose } from '@/components/dialog-header-with-close'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import { CategoryDialogHeader } from '@/modules/categories/components/category-dialog-header'
 import type { CategoryFormValues } from '@/modules/categories/components/category-form'
 import { CategoryForm } from '@/modules/categories/components/category-form'
 import type { Category } from '@/modules/categories/graphql/queries'
@@ -38,7 +38,7 @@ export function EditCategoryDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent showCloseButton={false} className="gap-6 rounded-xl p-6 sm:max-w-md">
-        <CategoryDialogHeader title="Editar categoria" subtitle="Atualize os dados da categoria" />
+        <DialogHeaderWithClose title="Editar categoria" subtitle="Atualize os dados da categoria" />
         <CategoryForm
           defaultValues={{
             title: category.title,

@@ -1,9 +1,8 @@
 import type { JSX } from 'react'
 
 import { useState } from 'react'
-import { Plus } from 'lucide-react'
 import { Header } from '@/components/header'
-import { Button } from '@/components/ui/button'
+import { PageHeader } from '@/components/page-header'
 import { CategoriesSummary } from '@/modules/categories/components/categories-summary'
 import { CategoryCard } from '@/modules/categories/components/category-card'
 import { DeleteCategoryAlert } from '@/modules/categories/components/delete-category-alert'
@@ -22,16 +21,12 @@ export function CategoriesPage(): JSX.Element {
     <>
       <Header />
       <main className="mx-auto max-w-[1280px] p-12">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Categorias</h1>
-            <p className="text-base text-gray-600">Organize suas transações por categorias</p>
-          </div>
-          <Button size="xl" className="gap-2 px-3" onClick={() => setNewDialogOpen(true)}>
-            <Plus className="size-4" />
-            Nova categoria
-          </Button>
-        </div>
+        <PageHeader
+          title="Categorias"
+          subtitle="Organize suas transações por categorias"
+          actionLabel="Nova categoria"
+          onAction={() => setNewDialogOpen(true)}
+        />
         {isLoading && <p className="mt-6 text-gray-600">Carregando categorias…</p>}
         {error && (
           <p role="alert" className="text-destructive mt-6 text-sm">
