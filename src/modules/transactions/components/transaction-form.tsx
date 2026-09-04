@@ -5,16 +5,9 @@ import { CircleArrowDown, CircleArrowUp } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { TextInput } from '@/components/ui/text-input'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
+import { SelectField } from '@/components/ui/select-field'
+import { TextInput } from '@/components/ui/text-input'
 import { cn } from '@/lib/utils'
 import type { RegisterFieldError } from '@/modules/auth/hooks/use-register-user'
 import { CurrencyInput } from '@/modules/transactions/components/currency-input'
@@ -30,10 +23,6 @@ const transactionFormSchema = z.object({
 })
 
 export type TransactionFormValues = z.infer<typeof transactionFormSchema>
-
-// Radix Select disallows an empty-string item value, so a sentinel stands
-// in for "clear the selection back to its initial (unselected) value".
-const RESET_VALUE = '__reset__'
 
 const TYPE_OPTIONS = [
   { value: 'EXPENSE' as const, label: 'Despesa', icon: CircleArrowDown, selectedClass: 'border-destructive text-destructive' },
@@ -141,45 +130,22 @@ export function TransactionForm({
         />
       </div>
 
-      <div className="grid gap-2">
-        <Label htmlFor="categoryId" className="text-gray-700">
-          Categoria
-        </Label>
-        <Controller
-          control={control}
-          name="categoryId"
-          render={({ field }) => (
-            <Select
-              value={field.value}
-              onValueChange={(next) => field.onChange(next === RESET_VALUE ? '' : next)}
-              disabled={categoriesLoading}
-            >
-              <SelectTrigger
-                id="categoryId"
-                className="data-[size=default]:h-12 w-full px-3 py-3.5 text-base"
-                aria-invalid={!!errors.categoryId}
-              >
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent>
-                {field.value && (
-                  <SelectItem value={RESET_VALUE} className="text-gray-500">
-                    Selecione
-                  </SelectItem>
-                )}
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        />
-        {errors.categoryId && (
-          <p className="text-destructive text-sm">{errors.categoryId.message}</p>
+      <Controller
+        control={control}
+        name="categoryId"
+        render={({ field }) => (
+          <SelectField
+            id="categoryId"
+            label="Categoria"
+            value={field.value}
+            onValueChange={field.onChange}
+            options={categories.map((category) => ({ value: category.id, label: category.title }))}
+            errorMessage={errors.categoryId?.message}
+            disabled={categoriesLoading}
+            resettable
+          />
         )}
-      </div>
+      />
 
       {formError && (
         <p role="alert" className="text-destructive text-sm">

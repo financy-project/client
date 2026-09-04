@@ -87,32 +87,10 @@ describe('TransactionForm', () => {
     expect(screen.getByRole('button', { name: /despesa/i })).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('gives the category select trigger the exact Figma-spec padding (12px horizontal, 14px vertical) and 48px height', async () => {
-    renderTransactionForm()
-
-    const combobox = await screen.findByRole('combobox')
-    expect(combobox).toHaveClass('px-3', 'py-3.5', 'data-[size=default]:h-12')
-    // The Select primitive's own default is data-[size=default]:h-8 (32px) —
-    // a plain "h-12" class doesn't out-rank it in the compiled stylesheet
-    // (different tailwind-merge conflict group), so it must be overridden
-    // with the same data-[size=default]: variant to actually win.
-    expect(combobox).not.toHaveClass('data-[size=default]:h-8')
-  })
-
-  it('offers an option to revert the selected category back to its initial (unselected) value', async () => {
-    const user = userEvent.setup()
-    renderTransactionForm()
-
-    await openCategorySelect(user)
-    await user.click(await screen.findByRole('option', { name: 'Alimentação' }))
-    await waitFor(() => expect(screen.getByRole('combobox')).toHaveTextContent('Alimentação'))
-    await waitFor(() => expect(screen.queryByRole('option')).not.toBeInTheDocument())
-
-    await user.click(screen.getByRole('combobox'))
-    await user.click(await screen.findByRole('option', { name: 'Selecione' }))
-
-    await waitFor(() => expect(screen.getByRole('combobox')).toHaveTextContent('Selecione'))
-  })
+  // The category select's own padding/height/reset-option behavior is
+  // generic to SelectField now — covered by select-field.test.tsx. This
+  // file only needs to prove TransactionForm wires it correctly (options
+  // from `categories`, resettable, submits the picked categoryId).
 
   it('calls onSubmit with parsed values when all fields are valid', async () => {
     const user = userEvent.setup()
