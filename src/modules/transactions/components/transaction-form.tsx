@@ -31,6 +31,10 @@ const transactionFormSchema = z.object({
 
 export type TransactionFormValues = z.infer<typeof transactionFormSchema>
 
+// Radix Select disallows an empty-string item value, so a sentinel stands
+// in for "clear the selection back to its initial (unselected) value".
+const RESET_VALUE = '__reset__'
+
 const TYPE_OPTIONS = [
   { value: 'EXPENSE' as const, label: 'Despesa', icon: CircleArrowDown, selectedClass: 'border-destructive text-destructive' },
   { value: 'INCOME' as const, label: 'Receita', icon: CircleArrowUp, selectedClass: 'border-success text-success' },
@@ -145,15 +149,24 @@ export function TransactionForm({
           control={control}
           name="categoryId"
           render={({ field }) => (
-            <Select value={field.value} onValueChange={field.onChange} disabled={categoriesLoading}>
+            <Select
+              value={field.value}
+              onValueChange={(next) => field.onChange(next === RESET_VALUE ? '' : next)}
+              disabled={categoriesLoading}
+            >
               <SelectTrigger
                 id="categoryId"
-                className="h-12 w-full text-base"
+                className="h-12 w-full px-4 text-base"
                 aria-invalid={!!errors.categoryId}
               >
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>
+                {field.value && (
+                  <SelectItem value={RESET_VALUE} className="text-gray-500">
+                    Voltar ao valor inicial
+                  </SelectItem>
+                )}
                 {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id}>
                     {category.title}

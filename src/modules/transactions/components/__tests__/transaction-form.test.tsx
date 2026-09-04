@@ -5,14 +5,16 @@ import { describe, expect, it, vi } from 'vitest'
 import { TransactionForm } from '@/modules/transactions/components/transaction-form'
 import { LIST_CATEGORIES_FOR_SELECT } from '@/modules/transactions/graphql/queries'
 
-const CATEGORIES_MOCK = {
-  request: { query: LIST_CATEGORIES_FOR_SELECT },
-  result: { data: { listCategories: [{ id: 'cat-1', title: 'Alimentação' }] } },
+function buildCategoriesMock() {
+  return {
+    request: { query: LIST_CATEGORIES_FOR_SELECT },
+    result: { data: { listCategories: [{ id: 'cat-1', title: 'Alimentação' }] } },
+  }
 }
 
 function renderTransactionForm(props: Partial<React.ComponentProps<typeof TransactionForm>> = {}) {
   return render(
-    <MockedProvider mocks={[CATEGORIES_MOCK, CATEGORIES_MOCK]}>
+    <MockedProvider mocks={[buildCategoriesMock(), buildCategoriesMock(), buildCategoriesMock()]}>
       <TransactionForm isLoading={false} fieldErrors={[]} formError={null} onSubmit={vi.fn()} {...props} />
     </MockedProvider>,
   )
@@ -70,6 +72,26 @@ describe('TransactionForm', () => {
 
     expect(screen.getByRole('button', { name: /receita/i })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: /despesa/i })).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  it("gives the category select trigger the same horizontal padding as the xl button (px-4)", async () => {
+    renderTransactionForm()
+
+    expect(await screen.findByRole('combobox')).toHaveClass('px-4')
+  })
+
+  it('offers an option to revert the selected category back to its initial (unselected) value', async () => {
+    const user = userEvent.setup()
+    renderTransactionForm()
+
+    await user.click(await screen.findByRole('combobox'))
+    await user.click(await screen.findByRole('option', { name: 'Alimentação' }))
+    expect(screen.getByRole('combobox')).toHaveTextContent('Alimentação')
+
+    await user.click(screen.getByRole('combobox'))
+    await user.click(await screen.findByRole('option', { name: 'Voltar ao valor inicial' }))
+
+    expect(screen.getByRole('combobox')).toHaveTextContent('Selecione')
   })
 
   it('calls onSubmit with parsed values when all fields are valid', async () => {
