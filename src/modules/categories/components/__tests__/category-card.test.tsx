@@ -66,4 +66,13 @@ describe('CategoryCard', () => {
     expect(onEdit).toHaveBeenCalledWith(CATEGORY)
     expect(onDelete).toHaveBeenCalledWith(CATEGORY)
   })
+
+  it('renders Excluir (trash) on the left and Editar (square-pen) on the right, per Figma', () => {
+    render(<CategoryCard category={CATEGORY} onEdit={vi.fn()} onDelete={vi.fn()} />)
+
+    const buttons = screen.getAllByRole('button')
+    const deleteIndex = buttons.findIndex((b) => b.getAttribute('aria-label') === 'Excluir')
+    const editIndex = buttons.findIndex((b) => b.getAttribute('aria-label') === 'Editar')
+    expect(deleteIndex).toBeLessThan(editIndex)
+  })
 })

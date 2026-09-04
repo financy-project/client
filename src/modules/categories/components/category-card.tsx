@@ -1,6 +1,6 @@
 import type { JSX } from 'react'
 
-import { Pencil, Tag as TagIcon, Trash2 } from 'lucide-react'
+import { SquarePen, Tag as TagIcon, Trash } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { IconButton } from '@/components/ui/icon-button'
 import { Tag, type TagColor } from '@/components/ui/tag'
@@ -52,17 +52,17 @@ export function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps):
             variant="outline"
             size="icon"
             className="border-gray-300"
-            icon={<Pencil className="text-gray-700" />}
-            aria-label="Editar"
-            onClick={() => onEdit(category)}
+            icon={<Trash className="text-destructive" />}
+            aria-label="Excluir"
+            onClick={() => onDelete(category)}
           />
           <IconButton
             variant="outline"
             size="icon"
             className="border-gray-300"
-            icon={<Trash2 className="text-destructive" />}
-            aria-label="Excluir"
-            onClick={() => onDelete(category)}
+            icon={<SquarePen className="text-gray-700" />}
+            aria-label="Editar"
+            onClick={() => onEdit(category)}
           />
         </div>
       </div>
