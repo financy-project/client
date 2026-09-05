@@ -27,6 +27,8 @@ interface TransactionsTableProps {
   totalRecord: number
   pageSize: number
   className?: string
+  onEdit: (transaction: TransactionListItem) => void
+  onDelete: (transaction: TransactionListItem) => void
 }
 
 const HEADER_CELL_CLASS = 'px-6 py-5 text-xs font-medium tracking-wide text-gray-500'
@@ -86,6 +88,8 @@ export function TransactionsTable({
   totalRecord,
   pageSize,
   className,
+  onEdit,
+  onDelete,
 }: TransactionsTableProps): JSX.Element {
   if (error) {
     return (
@@ -157,6 +161,7 @@ export function TransactionsTable({
                         className="border-gray-300"
                         icon={<Trash className="text-destructive" />}
                         aria-label="Excluir"
+                        onClick={() => onDelete(transaction)}
                       />
                       <IconButton
                         variant="outline"
@@ -164,6 +169,7 @@ export function TransactionsTable({
                         className="border-gray-300"
                         icon={<SquarePen className="text-gray-700" />}
                         aria-label="Editar"
+                        onClick={() => onEdit(transaction)}
                       />
                     </div>
                   </TableCell>

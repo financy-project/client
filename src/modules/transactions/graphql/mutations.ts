@@ -37,3 +37,49 @@ export interface CreateTransactionData {
     category: { id: string; title: string; color: string } | null
   }
 }
+
+export const UPDATE_TRANSACTION = gql`
+  mutation UpdateTransaction($id: ID!, $input: UpdateTransactionInput!) {
+    updateTransaction(id: $id, input: $input) {
+      id
+      type
+      description
+      date
+      value
+      category {
+        id
+        title
+        color
+      }
+    }
+  }
+`
+
+export interface UpdateTransactionInput {
+  type?: TransactionKind
+  description?: string
+  date?: string
+  value?: number
+  categoryId?: string
+}
+
+export interface UpdateTransactionData {
+  updateTransaction: {
+    id: string
+    type: TransactionKind
+    description: string
+    date: string
+    value: number
+    category: { id: string; title: string; color: string } | null
+  }
+}
+
+export const DELETE_TRANSACTION = gql`
+  mutation DeleteTransaction($id: ID!) {
+    deleteTransaction(id: $id)
+  }
+`
+
+export interface DeleteTransactionData {
+  deleteTransaction: boolean
+}
