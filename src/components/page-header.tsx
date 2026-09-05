@@ -1,6 +1,7 @@
 import type { JSX } from 'react'
 
 import { Plus } from 'lucide-react'
+import { Subtitle } from '@/components/subtitle'
 import { Button } from '@/components/ui/button'
 
 interface PageHeaderProps {
@@ -15,7 +16,7 @@ export function PageHeader({ title, subtitle, actionLabel, onAction }: PageHeade
     <div className="flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
-        <p className="text-base text-gray-600">{subtitle}</p>
+        <Subtitle className="text-base">{subtitle}</Subtitle>
       </div>
       <Button size="xl" className="gap-2 px-3" onClick={onAction}>
         <Plus className="size-4" />
