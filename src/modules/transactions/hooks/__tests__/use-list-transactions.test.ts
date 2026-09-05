@@ -197,7 +197,7 @@ describe('useListTransactions', () => {
         },
       },
       {
-        request: { query: LIST_TRANSACTIONS, variables: { first: 10, after: 'cursor-1' } },
+        request: { query: LIST_TRANSACTIONS, variables: { ...BASE_VARIABLES, after: 'cursor-1' } },
         result: {
           data: {
             listTransactions: {
@@ -209,7 +209,7 @@ describe('useListTransactions', () => {
         },
       },
       {
-        request: { query: LIST_TRANSACTIONS, variables: { first: 10, after: 'cursor-2' } },
+        request: { query: LIST_TRANSACTIONS, variables: { ...BASE_VARIABLES, after: 'cursor-2' } },
         result: {
           data: {
             listTransactions: {
@@ -237,7 +237,7 @@ describe('useListTransactions', () => {
   it('goToPage(n) is a no-op when n is beyond the last page (no further hasNextPage)', async () => {
     const mocks = [
       {
-        request: { query: LIST_TRANSACTIONS, variables: { first: 10, after: undefined } },
+        request: { query: LIST_TRANSACTIONS, variables: BASE_VARIABLES },
         result: {
           data: {
             listTransactions: {
