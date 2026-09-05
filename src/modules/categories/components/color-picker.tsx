@@ -1,16 +1,7 @@
 import type { JSX } from 'react'
 
 import { cn } from '@/lib/utils'
-
-const COLOR_OPTIONS = [
-  { name: 'green', value: '#16A34A', className: 'bg-green-base' },
-  { name: 'blue', value: '#2563EB', className: 'bg-blue-base' },
-  { name: 'purple', value: '#9333EA', className: 'bg-purple-base' },
-  { name: 'pink', value: '#DB2777', className: 'bg-pink-base' },
-  { name: 'red', value: '#DC2626', className: 'bg-red-base' },
-  { name: 'orange', value: '#EA580C', className: 'bg-orange-base' },
-  { name: 'yellow', value: '#CA8A04', className: 'bg-yellow-base' },
-] as const
+import { CATEGORY_COLOR_OPTIONS } from '@/lib/category-visuals'
 
 interface ColorPickerProps {
   value: string
@@ -20,7 +11,7 @@ interface ColorPickerProps {
 export function ColorPicker({ value, onChange }: ColorPickerProps): JSX.Element {
   return (
     <div className="flex gap-2">
-      {COLOR_OPTIONS.map((option) => (
+      {CATEGORY_COLOR_OPTIONS.map((option) => (
         <button
           key={option.value}
           type="button"
@@ -38,5 +29,3 @@ export function ColorPicker({ value, onChange }: ColorPickerProps): JSX.Element 
     </div>
   )
 }
-
-export { COLOR_OPTIONS }
