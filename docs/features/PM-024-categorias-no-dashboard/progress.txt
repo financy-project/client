@@ -18,3 +18,12 @@
 ### Known follow-on (fixed in Phase 3, F-009 — do not "fix" it in this phase)
 
 - `src/modules/dashboard/pages/__tests__/dashboard-page.test.tsx`'s `useGetDashboardMock.mockReturnValue` calls predate this phase and don't include `categories`, so `DashboardCategoriesCard` receives `categories: undefined` in those 2 tests and throws on `.length`. This is `plan.md`'s Phase 3 / task F-009 by design (see `docs/architecture/dor.md`'s phase-scoping) — `pnpm test` on this branch alone shows 291/293 passing, with exactly those 2 pre-existing tests red until Phase 3 lands.
+
+## Phase 3: Polish — done 2026-09-05
+
+### Exports
+
+- `dashboard-page.test.tsx`'s `useGetDashboardMock.mockReturnValue` calls now all include `categories` (fixing the Phase 2 known follow-on above); added a case asserting the categories card's own `"Carregando categorias…"` renders within `<main>` when `useGetDashboard()` returns `isLoading: true`.
+- Found and fixed a real duplicate-alert issue while wiring F-009: when the shared `dashboard` query errors, both `DashboardPage`'s own banner and `DashboardCategoriesCard`'s error state render `role="alert"` with the same message (each section owns its error display independently, per plan.md) — the "shows the role=alert error message" test now asserts every `role="alert"` on the page carries the expected text instead of assuming a single one.
+- Full suite: `pnpm test` → 294/294 passing. `pnpm build` (`tsc -b && vite build`) → clean (pre-existing >500kB chunk-size warning only, unrelated). `pnpm lint` → clean (pre-existing warning in untouched `button.tsx` only).
+- Manual verification (F-010): ran `pnpm dev` against the local GraphQL API (`../server`, unauthenticated in this pass — no seeded test user available). Confirmed live: `Header` nav unaffected, `DashboardCategoriesCard`'s header (title + "Gerenciar" + chevron, divider, spacing/colors) matches the Figma Fidelity table, clicking "Gerenciar" navigates to `/categorias`, and the error state (page banner + card's own alert) renders as designed. The populated-row visual (tags/counts/values) was not re-verified live — no seeded account with transactions was available in this environment — but is covered by `dashboard-categories-card.test.tsx`'s T-003 case.

@@ -18,4 +18,4 @@ Generated mechanically from `plan.md`'s `## Test Cases` — one `T-NNN` per bull
 
 ## Phase 3: Polish
 
-- [ ] T-009: `DashboardPage` passes `categories`/`isLoading`/`error` from `useGetDashboard()` into `DashboardHighlights`
+- [x] T-009: `DashboardPage` passes `categories`/`isLoading`/`error` from `useGetDashboard()` into `DashboardHighlights`
