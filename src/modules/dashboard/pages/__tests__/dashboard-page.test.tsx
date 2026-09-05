@@ -1,12 +1,15 @@
 import { render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useGetDashboard } from '@/modules/dashboard/hooks/use-get-dashboard'
 import { DashboardPage } from '@/modules/dashboard/pages/dashboard-page'
+import { useCreateTransaction } from '@/modules/transactions/hooks/use-create-transaction'
 
 vi.mock('@/modules/dashboard/hooks/use-get-dashboard')
+vi.mock('@/modules/transactions/hooks/use-create-transaction')
 
 const useGetDashboardMock = vi.mocked(useGetDashboard)
+const useCreateTransactionMock = vi.mocked(useCreateTransaction)
 
 const MOVEMENT = {
   income: 425000,
@@ -23,6 +26,15 @@ function renderDashboardPage() {
 }
 
 describe('DashboardPage', () => {
+  beforeEach(() => {
+    useCreateTransactionMock.mockReturnValue({
+      createTransaction: vi.fn().mockResolvedValue(null),
+      isLoading: false,
+      fieldErrors: [],
+      formError: null,
+    })
+  })
+
   it('shows the loading text while useGetDashboard().isLoading is true', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
@@ -44,9 +56,12 @@ describe('DashboardPage', () => {
     })
     renderDashboardPage()
 
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'Não foi possível carregar o resumo do dashboard.',
-    )
+    // Both DashboardPage's own error paragraph and RecentTransactionsCard's
+    // (it reads the same useGetDashboard() error independently) render a
+    // role="alert" here — redundant but deliberate, see PM-023's plan.md.
+    for (const alert of screen.getAllByRole('alert')) {
+      expect(alert).toHaveTextContent('Não foi possível carregar o resumo do dashboard.')
+    }
   })
 
   it('renders DashboardSummary with the resolved movement once loaded without error', () => {

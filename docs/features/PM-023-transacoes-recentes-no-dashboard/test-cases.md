@@ -17,7 +17,7 @@
 - [x] T-010: `DashboardTransactionRow` renders `CircleArrowUp` with `text-green-dark` when `type: 'INCOME'`
 - [x] T-011: `DashboardTransactionRow` renders `CircleArrowDown` with `text-red-dark` when `type: 'EXPENSE'`
 - [x] T-012: `DashboardTransactionRow` renders without crashing when `category` is `null`
-- [ ] T-013: `RecentTransactionsCard` renders one `DashboardTransactionRow` per item in `recentTransactions`
+- [x] T-013: `RecentTransactionsCard` renders one `DashboardTransactionRow` per item in `recentTransactions`
 
 ## Phase 3: Polish
 
