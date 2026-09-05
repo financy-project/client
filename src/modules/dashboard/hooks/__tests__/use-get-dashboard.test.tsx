@@ -11,6 +11,17 @@ const MOVEMENT = {
   totalBalance: 1284732,
 }
 
+const RECENT_TRANSACTIONS = [
+  {
+    id: 't1',
+    type: 'INCOME',
+    description: 'Pagamento de Salário',
+    date: '2025-12-01T00:00:00.000Z',
+    value: 425000,
+    category: { id: 'c1', title: 'Receita', color: '#16A34A', icon: 'BriefcaseBusiness' },
+  },
+]
+
 function renderUseGetDashboard(mocks: React.ComponentProps<typeof MockedProvider>['mocks']) {
   return renderHook(() => useGetDashboard(), {
     wrapper: ({ children }) => createElement(MockedProvider, { mocks }, children),
@@ -61,5 +72,31 @@ describe('useGetDashboard', () => {
       expect(result.current.error).toBe('Não foi possível carregar o resumo do dashboard.'),
     )
     expect(result.current.movement).toBeNull()
+  })
+
+  it('resolves with the mocked recentTransactions', async () => {
+    const mocks = [
+      {
+        request: { query: GET_DASHBOARD },
+        result: { data: { dashboard: { movement: MOVEMENT, recentTransactions: RECENT_TRANSACTIONS } } },
+      },
+    ]
+
+    const { result } = renderUseGetDashboard(mocks)
+
+    await waitFor(() => expect(result.current.recentTransactions).toEqual(RECENT_TRANSACTIONS))
+  })
+
+  it('recentTransactions is an empty array before the query resolves', () => {
+    const mocks = [
+      {
+        request: { query: GET_DASHBOARD },
+        result: { data: { dashboard: { movement: MOVEMENT, recentTransactions: RECENT_TRANSACTIONS } } },
+      },
+    ]
+
+    const { result } = renderUseGetDashboard(mocks)
+
+    expect(result.current.recentTransactions).toEqual([])
   })
 })
