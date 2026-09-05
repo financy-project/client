@@ -1,6 +1,7 @@
 import type { JSX } from 'react'
 
 import { Header } from '@/components/header'
+import { DashboardHighlights } from '@/modules/dashboard/components/dashboard-highlights'
 import { DashboardSummary } from '@/modules/dashboard/components/dashboard-summary'
 import { useGetDashboard } from '@/modules/dashboard/hooks/use-get-dashboard'
 
@@ -19,6 +20,7 @@ export function DashboardPage(): JSX.Element {
         )}
 
         {!isLoading && !error && movement && <DashboardSummary movement={movement} />}
+        <DashboardHighlights />
       </main>
     </>
   )
