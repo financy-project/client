@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { ErrorMessage } from '@/components/error-message'
 import { Button } from '@/components/ui/button'
 import { PasswordInput } from '@/components/ui/password-input'
 import { TextInput } from '@/components/ui/text-input'
@@ -97,11 +98,7 @@ export function RegisterForm(): JSX.Element {
           )}
         </div>
       </div>
-      {formError && (
-        <p role="alert" className="text-destructive text-sm">
-          {formError}
-        </p>
-      )}
+      <ErrorMessage error={formError} />
       <Button type="submit" size="xl" disabled={isLoading}>
         {isLoading ? 'Criando conta…' : 'Cadastrar'}
       </Button>

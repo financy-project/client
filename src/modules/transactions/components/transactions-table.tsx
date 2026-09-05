@@ -1,6 +1,7 @@
 import type { JSX } from 'react'
 
 import { SquarePen, Trash } from 'lucide-react'
+import { ErrorMessage } from '@/components/error-message'
 import { TransactionTypeIndicator } from '@/components/transaction-type-indicator'
 import { IconButton } from '@/components/ui/icon-button'
 import { Pagination } from '@/components/ui/pagination'
@@ -92,11 +93,7 @@ export function TransactionsTable({
   onDelete,
 }: TransactionsTableProps): JSX.Element {
   if (error) {
-    return (
-      <p role="alert" className={cn('text-destructive text-sm', className)}>
-        {error}
-      </p>
-    )
+    return <ErrorMessage error={error} className={className} />
   }
 
   // Only the very first fetch (no rows yet to keep showing) falls back to

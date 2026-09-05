@@ -5,6 +5,7 @@ import { CircleArrowDown, CircleArrowUp } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { ErrorMessage } from '@/components/error-message'
 import { Button } from '@/components/ui/button'
 import { TextInput } from '@/components/ui/text-input'
 import { cn } from '@/lib/utils'
@@ -145,11 +146,7 @@ export function TransactionForm({
         )}
       />
 
-      {formError && (
-        <p role="alert" className="text-destructive text-sm">
-          {formError}
-        </p>
-      )}
+      <ErrorMessage error={formError} />
 
       <Button type="submit" size="xl" className="w-full" disabled={isLoading}>
         {isLoading ? 'Salvando…' : 'Salvar'}

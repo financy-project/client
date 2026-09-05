@@ -1,6 +1,7 @@
 import type { JSX, MouseEvent } from 'react'
 
 import { toast } from 'sonner'
+import { ErrorMessage } from '@/components/error-message'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -52,11 +53,7 @@ export function DeleteTransactionAlert({
             Tem certeza que deseja excluir esta transação? Essa ação não pode ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        {error && (
-          <p role="alert" className="text-destructive text-sm">
-            {error}
-          </p>
-        )}
+        <ErrorMessage error={error} />
         <AlertDialogFooter>
           <AlertDialogCancel>Não</AlertDialogCancel>
           <AlertDialogAction variant="destructive" disabled={isLoading} onClick={handleDelete}>

@@ -1,6 +1,7 @@
 import type { JSX, MouseEvent } from 'react'
 
 import { toast } from 'sonner'
+import { ErrorMessage } from '@/components/error-message'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -53,11 +54,7 @@ export function DeleteCategoryAlert({
             desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        {error && (
-          <p role="alert" className="text-destructive text-sm">
-            {error}
-          </p>
-        )}
+        <ErrorMessage error={error} />
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction variant="destructive" disabled={isLoading} onClick={handleDelete}>

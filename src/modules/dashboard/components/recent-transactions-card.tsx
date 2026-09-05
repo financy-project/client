@@ -2,6 +2,7 @@ import type { JSX } from 'react'
 
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
+import { ErrorMessage } from '@/components/error-message'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -42,11 +43,7 @@ export function RecentTransactionsCard(): JSX.Element {
       />
 
       <div className="mt-4">
-        {error && (
-          <p role="alert" className="text-destructive text-sm">
-            {error}
-          </p>
-        )}
+        <ErrorMessage error={error} />
 
         {!error && isLoading && (
           <div className="grid gap-1">
