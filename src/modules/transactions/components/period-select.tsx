@@ -2,6 +2,7 @@ import type { JSX } from 'react'
 
 import { ChevronDown } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
@@ -97,14 +98,16 @@ export function PeriodSelect({
       <Label htmlFor={id}>{label}</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <button
+          <Button
             id={id}
             type="button"
-            className="flex h-12 w-full cursor-pointer items-center justify-between gap-1.5 rounded-lg border border-input bg-transparent px-3 py-3.5 text-base whitespace-nowrap outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            variant="field"
+            size="xl"
+            className="w-full justify-between px-3 py-3.5 gap-1.5"
           >
             <span>{formatPeriod(value)}</span>
             <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
-          </button>
+          </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="w-56 p-1">
           <div
