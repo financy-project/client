@@ -53,3 +53,11 @@
 
     export function RecentTransactionsCard(): JSX.Element // real content now
     // src/modules/dashboard/components/recent-transactions-card.tsx
+
+[2026-09-05 14:32:00] ✅ Phase 3: Polish
+  Branch: PM-023/phase-3-polish
+  - [x] F-011: Full component tests for `RecentTransactionsCard` (loading/error/empty/populated, "Ver todas" href, dialog open + submit flow)
+  - [x] F-012: Verified `dashboard-page.test.tsx` already covers both `useGetDashboard()` call sites (fixed in phase 2)
+  - [x] F-013: Accessibility pass — Button/Link-based interactive elements, role="alert" intact — no changes needed
+  Exports: none new — this phase only adds test coverage.
+  Final state: pnpm test 306/306, pnpm build clean.
