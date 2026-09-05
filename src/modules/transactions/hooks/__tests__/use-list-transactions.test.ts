@@ -122,7 +122,9 @@ describe('useListTransactions', () => {
     expect(result.current.page).toBe(2)
   })
 
-  it("goToPage(n) is a no-op when page n's cursor isn't yet known", async () => {
+  it("goToPage(n) walks forward through the intermediate pages to resolve page n's cursor when it isn't yet known", async () => {
+    const page2 = { ...TRANSACTION, id: 't2' }
+    const page3 = { ...TRANSACTION, id: 't3' }
     const mocks = [
       {
         request: { query: LIST_TRANSACTIONS, variables: { first: 10, after: undefined } },
@@ -136,14 +138,66 @@ describe('useListTransactions', () => {
           },
         },
       },
+      {
+        request: { query: LIST_TRANSACTIONS, variables: { first: 10, after: 'cursor-1' } },
+        result: {
+          data: {
+            listTransactions: {
+              edges: [{ node: page2 }],
+              pageInfo: { hasNextPage: true, endCursor: 'cursor-2' },
+              totalRecord: 25,
+            },
+          },
+        },
+      },
+      {
+        request: { query: LIST_TRANSACTIONS, variables: { first: 10, after: 'cursor-2' } },
+        result: {
+          data: {
+            listTransactions: {
+              edges: [{ node: page3 }],
+              pageInfo: { hasNextPage: false, endCursor: null },
+              totalRecord: 25,
+            },
+          },
+        },
+      },
     ]
 
     const { result } = renderUseListTransactions(mocks)
 
     await waitFor(() => expect(result.current.transactions).toEqual([TRANSACTION]))
 
-    act(() => {
-      result.current.goToPage(3)
+    await act(async () => {
+      await result.current.goToPage(3)
+    })
+
+    expect(result.current.page).toBe(3)
+    await waitFor(() => expect(result.current.transactions).toEqual([page3]))
+  })
+
+  it('goToPage(n) is a no-op when n is beyond the last page (no further hasNextPage)', async () => {
+    const mocks = [
+      {
+        request: { query: LIST_TRANSACTIONS, variables: { first: 10, after: undefined } },
+        result: {
+          data: {
+            listTransactions: {
+              edges: [{ node: TRANSACTION }],
+              pageInfo: { hasNextPage: false, endCursor: null },
+              totalRecord: 5,
+            },
+          },
+        },
+      },
+    ]
+
+    const { result } = renderUseListTransactions(mocks)
+
+    await waitFor(() => expect(result.current.transactions).toEqual([TRANSACTION]))
+
+    await act(async () => {
+      await result.current.goToPage(3)
     })
 
     expect(result.current.page).toBe(1)

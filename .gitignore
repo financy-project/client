@@ -29,3 +29,6 @@ dist-ssr
 *.sw?
 
 .workspace
+
+# Git worktrees
+.claude/worktrees/
