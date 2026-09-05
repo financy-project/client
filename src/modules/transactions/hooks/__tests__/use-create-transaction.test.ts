@@ -13,6 +13,10 @@ import { useListTransactions } from '@/modules/transactions/hooks/use-list-trans
 // Stands in for a caller-supplied query (e.g. dashboard's GET_DASHBOARD) — the
 // hook only needs an opaque DocumentNode, so a throwaway query keeps this
 // test from depending on another module's document.
+interface SomeOtherQueryData {
+  someOtherQuery: { id: string }
+}
+
 const SOME_OTHER_QUERY = gql`
   query SomeOtherQuery {
     someOtherQuery {
@@ -161,7 +165,7 @@ describe('useCreateTransaction', () => {
 
     const { result } = renderHook(
       () => ({
-        other: useQuery(SOME_OTHER_QUERY),
+        other: useQuery<SomeOtherQueryData>(SOME_OTHER_QUERY),
         create: useCreateTransaction({ additionalRefetchQueries: [SOME_OTHER_QUERY] }),
       }),
       { wrapper: ({ children }) => createElement(MockedProvider, { mocks }, children) },
