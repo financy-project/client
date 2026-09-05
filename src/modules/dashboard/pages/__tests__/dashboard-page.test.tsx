@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 import { useGetDashboard } from '@/modules/dashboard/hooks/use-get-dashboard'
@@ -49,5 +49,14 @@ describe('DashboardPage', () => {
 
     expect(screen.getByText('Saldo Total')).toBeInTheDocument()
     expect(screen.getByText('R$ 12.847,32')).toBeInTheDocument()
+  })
+
+  it('renders DashboardHighlights regardless of the summary loading state', () => {
+    useGetDashboardMock.mockReturnValue({ movement: null, isLoading: true, error: null })
+    renderDashboardPage()
+
+    // "Categorias" also appears as a nav link in Header, hence scoping to <main>.
+    expect(within(screen.getByRole('main')).getByText('Transações Recentes')).toBeInTheDocument()
+    expect(within(screen.getByRole('main')).getByText('Categorias')).toBeInTheDocument()
   })
 })
