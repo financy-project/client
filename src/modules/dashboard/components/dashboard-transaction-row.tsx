@@ -1,27 +1,12 @@
 import type { JSX } from 'react'
 
+import { CircleArrowDown, CircleArrowUp } from 'lucide-react'
+import { Tag } from '@/components/ui/tag'
 import {
-  BaggageClaim,
-  BookOpen,
-  BriefcaseBusiness,
-  CarFront,
-  CircleArrowDown,
-  CircleArrowUp,
-  Dumbbell,
-  Gift,
-  HeartPulse,
-  House,
-  Mailbox,
-  PawPrint,
-  PiggyBank,
-  ReceiptText,
-  ShoppingCart,
-  Tag as TagIcon,
-  Ticket,
-  ToolCase,
-  Utensils,
-} from 'lucide-react'
-import { Tag, type TagColor } from '@/components/ui/tag'
+  CATEGORY_ICON_SQUARE_CLASSES,
+  resolveCategoryColorName,
+  resolveCategoryIcon,
+} from '@/lib/category-visuals'
 import { cn } from '@/lib/utils'
 import type { DashboardRecentTransaction } from '@/modules/dashboard/graphql/queries'
 import {
@@ -29,59 +14,14 @@ import {
   formatDashboardTransactionValue,
 } from '@/modules/dashboard/utils/format-dashboard-transaction'
 
-// Duplicated (not imported) from
-// src/modules/transactions/components/transaction-category-cell.tsx — this
-// module never imports from @/modules/transactions, same isolation
-// precedent that file itself follows for @/modules/categories.
-const ICON_OPTIONS = [
-  { name: 'BriefcaseBusiness', icon: BriefcaseBusiness },
-  { name: 'CarFront', icon: CarFront },
-  { name: 'HeartPulse', icon: HeartPulse },
-  { name: 'PiggyBank', icon: PiggyBank },
-  { name: 'ShoppingCart', icon: ShoppingCart },
-  { name: 'Ticket', icon: Ticket },
-  { name: 'ToolCase', icon: ToolCase },
-  { name: 'Utensils', icon: Utensils },
-  { name: 'PawPrint', icon: PawPrint },
-  { name: 'House', icon: House },
-  { name: 'Gift', icon: Gift },
-  { name: 'Dumbbell', icon: Dumbbell },
-  { name: 'BookOpen', icon: BookOpen },
-  { name: 'BaggageClaim', icon: BaggageClaim },
-  { name: 'Mailbox', icon: Mailbox },
-  { name: 'ReceiptText', icon: ReceiptText },
-] as const
-
-const COLOR_OPTIONS = [
-  { name: 'green', value: '#16A34A' },
-  { name: 'blue', value: '#2563EB' },
-  { name: 'purple', value: '#9333EA' },
-  { name: 'pink', value: '#DB2777' },
-  { name: 'red', value: '#DC2626' },
-  { name: 'orange', value: '#EA580C' },
-  { name: 'yellow', value: '#CA8A04' },
-] as const
-
-const iconSquareClasses: Record<TagColor, string> = {
-  blue: 'bg-blue-light text-blue-base',
-  purple: 'bg-purple-light text-purple-base',
-  pink: 'bg-pink-light text-pink-base',
-  red: 'bg-red-light text-red-base',
-  orange: 'bg-orange-light text-orange-base',
-  yellow: 'bg-yellow-light text-yellow-base',
-  green: 'bg-green-light text-green-base',
-}
-
 export interface DashboardTransactionRowProps {
   transaction: DashboardRecentTransaction
 }
 
 export function DashboardTransactionRow({ transaction }: DashboardTransactionRowProps): JSX.Element {
   const { category } = transaction
-  const Icon = ICON_OPTIONS.find((option) => option.name === category?.icon)?.icon ?? TagIcon
-  const colorName =
-    COLOR_OPTIONS.find((option) => option.value.toLowerCase() === category?.color.toLowerCase())
-      ?.name ?? 'blue'
+  const Icon = resolveCategoryIcon(category?.icon)
+  const colorName = resolveCategoryColorName(category?.color)
 
   return (
     <div className="flex items-center justify-between gap-3 py-3">
@@ -89,9 +29,11 @@ export function DashboardTransactionRow({ transaction }: DashboardTransactionRow
         <div
           className={cn(
             'flex size-10 shrink-0 items-center justify-center rounded-[8px]',
-            iconSquareClasses[colorName],
+            CATEGORY_ICON_SQUARE_CLASSES[colorName],
           )}
         >
+          {/* Picking an existing icon reference from a fixed lookup table, not defining a new component. */}
+          {/* oxlint-disable-next-line react/static-components */}
           <Icon className="size-4" />
         </div>
         <div>

@@ -3,8 +3,7 @@ import type { JSX, ReactNode } from 'react'
 import { ArrowUpDown, Tag as TagIcon } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import type { TagColor } from '@/components/ui/tag'
-import { COLOR_OPTIONS } from '@/modules/categories/components/color-picker'
-import { ICON_OPTIONS } from '@/modules/categories/components/icon-picker'
+import { resolveCategoryColorName, resolveCategoryIcon } from '@/lib/category-visuals'
 import type { Category } from '@/modules/categories/graphql/queries'
 
 export interface CategoriesSummaryProps {
@@ -61,14 +60,10 @@ export function CategoriesSummary({ categories }: CategoriesSummaryProps): JSX.E
 
   const highlightedLabel = mostUsedCategory ? 'Categoria mais utilizada' : 'Categoria mais recente'
 
-  const HighlightedIcon = highlightedCategory
-    ? (ICON_OPTIONS.find((option) => option.name === highlightedCategory.icon)?.icon ?? TagIcon)
-    : null
+  const HighlightedIcon = highlightedCategory ? resolveCategoryIcon(highlightedCategory.icon) : null
 
   const highlightedColorName = highlightedCategory
-    ? (COLOR_OPTIONS.find(
-      (option) => option.value.toLowerCase() === highlightedCategory.color.toLowerCase(),
-    )?.name ?? 'blue')
+    ? resolveCategoryColorName(highlightedCategory.color)
     : null
 
   return (
@@ -90,6 +85,8 @@ export function CategoriesSummary({ categories }: CategoriesSummaryProps): JSX.E
 
       {highlightedCategory && HighlightedIcon && highlightedColorName && (
         <SummaryCard
+          // Picking an existing icon reference from a fixed lookup table, not defining a new component.
+          // oxlint-disable-next-line react/static-components
           icon={<HighlightedIcon className="size-6" />}
           iconClassName={iconTextClasses[highlightedColorName]}
           iconTestId="summary-card-most-used-icon"

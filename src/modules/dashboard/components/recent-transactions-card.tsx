@@ -1,11 +1,11 @@
 import type { JSX } from 'react'
 
-import { ChevronRight, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { DashboardCardHeader } from '@/modules/dashboard/components/dashboard-card-header'
 import { DashboardTransactionRow } from '@/modules/dashboard/components/dashboard-transaction-row'
 import { GET_DASHBOARD } from '@/modules/dashboard/graphql/queries'
 import { useGetDashboard } from '@/modules/dashboard/hooks/use-get-dashboard'
@@ -36,17 +36,10 @@ export function RecentTransactionsCard(): JSX.Element {
 
   return (
     <Card className="border border-gray-200 p-6 ring-0">
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
-          Transações Recentes
-        </span>
-        <Button variant="link" asChild className="h-auto gap-1 p-0">
-          <Link to="/transactions">
-            Ver todas
-            <ChevronRight className="size-4" />
-          </Link>
-        </Button>
-      </div>
+      <DashboardCardHeader
+        title="Transações Recentes"
+        action={{ label: 'Ver todas', to: '/transacoes' }}
+      />
 
       <div className="mt-4">
         {error && (

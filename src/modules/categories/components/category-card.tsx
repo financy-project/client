@@ -1,12 +1,11 @@
 import type { JSX } from 'react'
 
-import { SquarePen, Tag as TagIcon, Trash } from 'lucide-react'
+import { SquarePen, Trash } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { IconButton } from '@/components/ui/icon-button'
-import { Tag, type TagColor } from '@/components/ui/tag'
+import { Tag } from '@/components/ui/tag'
+import { CATEGORY_ICON_SQUARE_CLASSES, resolveCategoryColorName, resolveCategoryIcon } from '@/lib/category-visuals'
 import { cn } from '@/lib/utils'
-import { COLOR_OPTIONS } from '@/modules/categories/components/color-picker'
-import { ICON_OPTIONS } from '@/modules/categories/components/icon-picker'
 import type { Category } from '@/modules/categories/graphql/queries'
 
 interface CategoryCardProps {
@@ -15,23 +14,9 @@ interface CategoryCardProps {
   onDelete: (category: Category) => void
 }
 
-// Written out in full (not `bg-${color}-light`) so Tailwind's class scanner
-// can statically find every class — same reasoning as Tag's colorClasses.
-const iconSquareClasses: Record<TagColor, string> = {
-  blue: 'bg-blue-light text-blue-base',
-  purple: 'bg-purple-light text-purple-base',
-  pink: 'bg-pink-light text-pink-base',
-  red: 'bg-red-light text-red-base',
-  orange: 'bg-orange-light text-orange-base',
-  yellow: 'bg-yellow-light text-yellow-base',
-  green: 'bg-green-light text-green-base',
-}
-
 export function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps): JSX.Element {
-  const Icon = ICON_OPTIONS.find((option) => option.name === category.icon)?.icon ?? TagIcon
-  const colorName =
-    COLOR_OPTIONS.find((option) => option.value.toLowerCase() === category.color.toLowerCase())
-      ?.name ?? 'blue'
+  const Icon = resolveCategoryIcon(category.icon)
+  const colorName = resolveCategoryColorName(category.color)
   const itemsLabel =
     category.transactionsQuantity === 1 ? '1 item' : `${category.transactionsQuantity} itens`
 
@@ -42,9 +27,11 @@ export function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps):
           data-testid="category-card-icon"
           className={cn(
             'flex size-10 items-center justify-center rounded-[8px]',
-            iconSquareClasses[colorName],
+            CATEGORY_ICON_SQUARE_CLASSES[colorName],
           )}
         >
+          {/* Picking an existing icon reference from a fixed lookup table, not defining a new component. */}
+          {/* oxlint-disable-next-line react/static-components */}
           <Icon className="size-4" />
         </div>
         <div className="flex gap-2">
