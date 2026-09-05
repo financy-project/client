@@ -15,6 +15,9 @@ vi.mock('@/modules/transactions/hooks/use-update-transaction')
 vi.mock('@/modules/transactions/hooks/use-delete-transaction')
 vi.mock('@/modules/transactions/hooks/use-list-transactions')
 vi.mock('@/modules/transactions/hooks/use-sync-categories-for-select')
+vi.mock('@/modules/auth/hooks/use-logout', () => ({
+  useLogout: () => ({ logout: vi.fn().mockResolvedValue(undefined), isLoading: false }),
+}))
 
 const useCreateTransactionMock = vi.mocked(useCreateTransaction)
 const useUpdateTransactionMock = vi.mocked(useUpdateTransaction)
