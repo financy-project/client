@@ -1,6 +1,7 @@
 import type { JSX } from 'react'
 
 import { useState } from 'react'
+import { ErrorMessage } from '@/components/error-message'
 import { Header } from '@/components/header'
 import { PageHeader } from '@/components/page-header'
 import { CategoriesSummary } from '@/modules/categories/components/categories-summary'
@@ -28,11 +29,7 @@ export function CategoriesPage(): JSX.Element {
           onAction={() => setNewDialogOpen(true)}
         />
         {isLoading && <p className="mt-6 text-gray-600">Carregando categorias…</p>}
-        {error && (
-          <p role="alert" className="text-destructive mt-6 text-sm">
-            {error}
-          </p>
-        )}
+        <ErrorMessage error={error} className="mt-6" />
 
         {!isLoading && !error && !!categories.length && (
           <div className="mt-6">

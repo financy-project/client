@@ -1,5 +1,6 @@
 import type { JSX } from 'react'
 
+import { ErrorMessage } from '@/components/error-message'
 import { Card } from '@/components/ui/card'
 import { Tag } from '@/components/ui/tag'
 import { DashboardCardHeader } from '@/modules/dashboard/components/dashboard-card-header'
@@ -15,11 +16,7 @@ export function DashboardCategoriesCard(): JSX.Element {
       <DashboardCardHeader title="Categorias" action={{ label: 'Gerenciar', to: '/categorias' }} />
 
       <div className="mt-4">
-        {error && (
-          <p role="alert" className="text-destructive text-sm">
-            {error}
-          </p>
-        )}
+        <ErrorMessage error={error} />
 
         {!error && isLoading && <p className="text-sm text-gray-400">Carregando categorias…</p>}
 

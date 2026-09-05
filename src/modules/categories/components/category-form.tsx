@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { ErrorMessage } from '@/components/error-message'
 import { Button } from '@/components/ui/button'
 import { TextInput } from '@/components/ui/text-input'
 import { CATEGORY_COLOR_OPTIONS, CATEGORY_ICON_OPTIONS } from '@/lib/category-visuals'
@@ -97,11 +98,7 @@ export function CategoryForm({
           render={({ field }) => <ColorPicker value={field.value} onChange={field.onChange} />}
         />
       </div>
-      {formError && (
-        <p role="alert" className="text-destructive text-sm">
-          {formError}
-        </p>
-      )}
+      <ErrorMessage error={formError} />
       <Button type="submit" size="xl" className="w-full" disabled={isLoading}>
         {isLoading ? 'Salvando…' : 'Salvar'}
       </Button>

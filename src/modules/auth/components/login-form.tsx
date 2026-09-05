@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { ErrorMessage } from '@/components/error-message'
 import { Button } from '@/components/ui/button'
 import { CheckboxField } from '@/components/ui/checkbox-field'
 import { PasswordInput } from '@/components/ui/password-input'
@@ -104,11 +105,7 @@ export function LoginForm(): JSX.Element {
           Recuperar senha
         </Button>
       </div>
-      {formError && (
-        <p role="alert" className="text-destructive text-sm">
-          {formError}
-        </p>
-      )}
+      <ErrorMessage error={formError} />
       <Button type="submit" size="xl" disabled={isLoading}>
         {isLoading ? 'Entrando…' : 'Entrar'}
       </Button>
