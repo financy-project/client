@@ -19,10 +19,13 @@ export interface UseUpdateTransactionResult {
 }
 
 export function useUpdateTransaction(): UseUpdateTransactionResult {
+  // Bare document, not `{ query: LIST_TRANSACTIONS }` — see the comment in
+  // use-delete-transaction.ts for why the object form silently fails to
+  // refresh the table.
   const [mutate, { loading }] = useMutation<
     UpdateTransactionData,
     { id: string; input: UpdateTransactionInput }
-  >(UPDATE_TRANSACTION, { refetchQueries: [{ query: LIST_TRANSACTIONS }] })
+  >(UPDATE_TRANSACTION, { refetchQueries: [LIST_TRANSACTIONS] })
   const [fieldErrors, setFieldErrors] = useState<RegisterFieldError[]>([])
   const [formError, setFormError] = useState<string | null>(null)
 

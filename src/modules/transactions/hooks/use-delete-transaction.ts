@@ -13,9 +13,17 @@ export interface UseDeleteTransactionResult {
 }
 
 export function useDeleteTransaction(): UseDeleteTransactionResult {
+  // A bare document (not `{ query: LIST_TRANSACTIONS }`) is required here:
+  // Apollo only matches this against the *active* useListTransactions()
+  // watcher (refetching it with its own current page/cursor variables)
+  // when it's a plain document/operation-name string. The `{ query }`
+  // object form takes Apollo's "legacy" path instead, which spins up a
+  // brand new, disconnected query with no variables — writing to a
+  // different cache entry than the one the table is actually watching, so
+  // the table never sees the delete.
   const [mutate, { loading }] = useMutation<DeleteTransactionData, { id: string }>(
     DELETE_TRANSACTION,
-    { refetchQueries: [{ query: LIST_TRANSACTIONS }] },
+    { refetchQueries: [LIST_TRANSACTIONS] },
   )
   const [error, setError] = useState<string | null>(null)
 
