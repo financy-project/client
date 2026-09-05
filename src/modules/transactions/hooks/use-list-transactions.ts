@@ -1,5 +1,5 @@
 import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type {
   ListTransactionsData,
   ListTransactionsVariables,
@@ -49,11 +49,30 @@ export function useListTransactions(filters: TransactionFilterValues): UseListTr
     period: filters.period,
   })
 
+  // A fresh AbortController per distinct filtersKey — its signal is
+  // threaded into this render's useQuery call below via
+  // context.fetchOptions, which Apollo's HttpLink forwards into the
+  // underlying fetch. Apollo's own variable-change handling only *ignores*
+  // a stale response, it doesn't cancel the network request, hence doing
+  // it explicitly here. Creating it via useMemo (a pure derivation, safe
+  // to run during render) rather than mutating a ref during render keeps
+  // this correct under React's rules for refs/render. filtersKey is only
+  // the trigger for a new instance, not a value the controller depends
+  // on, so it's intentionally unused inside the factory.
+  // oxlint-disable-next-line react-hooks/exhaustive-deps
+  const abortController = useMemo(() => new AbortController(), [filtersKey])
+
+  // Aborts the *previous* filtersKey's controller the moment this one
+  // takes over (cleanup runs before the next effect when `abortController`
+  // changes identity) — and the current one on unmount.
+  useEffect(() => {
+    return () => abortController.abort()
+  }, [abortController])
+
   // null on the very first render only — guarantees the block below runs
-  // once up front (to create the initial AbortController) and again every
-  // time the *debounced* filters actually change.
+  // once up front and again every time the *debounced* filters actually
+  // change.
   const [lastFiltersKey, setLastFiltersKey] = useState<string | null>(null)
-  const abortControllerRef = useRef<AbortController | null>(null)
 
   let effectivePage = page
   let effectiveCursors = cursors
@@ -62,16 +81,6 @@ export function useListTransactions(filters: TransactionFilterValues): UseListTr
   if (filtersKey !== lastFiltersKey) {
     setLastFiltersKey(filtersKey)
 
-    // Cancel the in-flight request for the previous filters (if any — a
-    // no-op on the first render, since the ref starts null) and start a
-    // fresh one; its signal is threaded into this render's useQuery call
-    // below via context.fetchOptions, which Apollo's HttpLink forwards
-    // into the underlying fetch. Apollo's own variable-change handling
-    // only *ignores* a stale response, it doesn't cancel the network
-    // request, hence doing it explicitly here.
-    abortControllerRef.current?.abort()
-    abortControllerRef.current = new AbortController()
-
     effectivePage = 1
     effectiveCursors = { 1: undefined }
     effectiveSeenData = undefined
@@ -79,12 +88,6 @@ export function useListTransactions(filters: TransactionFilterValues): UseListTr
     setCursors({ 1: undefined })
     setSeenData(undefined)
   }
-
-  useEffect(() => {
-    return () => {
-      abortControllerRef.current?.abort()
-    }
-  }, [])
 
   const variables: ListTransactionsVariables = {
     first: PAGE_SIZE,
@@ -101,7 +104,7 @@ export function useListTransactions(filters: TransactionFilterValues): UseListTr
     {
       variables,
       fetchPolicy: 'cache-and-network',
-      context: { fetchOptions: { signal: abortControllerRef.current!.signal } },
+      context: { fetchOptions: { signal: abortController.signal } },
     },
   )
 
