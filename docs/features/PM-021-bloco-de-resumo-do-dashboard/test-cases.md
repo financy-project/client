@@ -11,13 +11,13 @@
 
 ## Phase 2: Features
 
-- [ ] T-007: `SummaryCard` with `mode="balance"` renders the `Wallet` icon with `text-purple-base` and the given `title`/formatted `value`
-- [ ] T-008: `SummaryCard` with `mode="income"` renders the `CircleArrowUp` icon with `text-green-dark`
-- [ ] T-009: `SummaryCard` with `mode="expense"` renders the `CircleArrowDown` icon with `text-red-dark`
-- [ ] T-010: `DashboardSummary` renders 3 `SummaryCard`s in order: balance, income, expense, each with the corresponding `movement` field as `value`
+- [x] T-007: `SummaryCard` with `mode="balance"` renders the `Wallet` icon with `text-purple-base` and the given `title`/formatted `value`
+- [x] T-008: `SummaryCard` with `mode="income"` renders the `CircleArrowUp` icon with `text-green-dark`
+- [x] T-009: `SummaryCard` with `mode="expense"` renders the `CircleArrowDown` icon with `text-red-dark`
+- [x] T-010: `DashboardSummary` renders 3 `SummaryCard`s in order: balance, income, expense, each with the corresponding `movement` field as `value`
 
 ## Phase 3: Polish
 
-- [ ] T-011: `DashboardPage` shows the loading text while `useGetDashboard().isLoading` is `true`
-- [ ] T-012: `DashboardPage` shows the `role="alert"` error message when `useGetDashboard().error` is set
-- [ ] T-013: `DashboardPage` renders `DashboardSummary` with the resolved `movement` once loaded without error
+- [x] T-011: `DashboardPage` shows the loading text while `useGetDashboard().isLoading` is `true`
+- [x] T-012: `DashboardPage` shows the `role="alert"` error message when `useGetDashboard().error` is set
+- [x] T-013: `DashboardPage` renders `DashboardSummary` with the resolved `movement` once loaded without error
