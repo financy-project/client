@@ -1,0 +1,10 @@
+[2026-09-05 06:38:03] ✅ Phase 1: Foundation
+  Branch: PM-019/phase-1-foundation
+  - F-001: restored useCategoriesStore, CategorySelect, TransactionTypeSelect, TransactionSearchInput, PeriodSelect
+  - F-002: tests for all of the above (pnpm test — 228/228 passing)
+  Exports:
+    useCategoriesStore: Zustand store — { categories: CategoryForSelect[], isLoading: boolean, error: string | null, setCategories, setLoading, setError } (src/modules/transactions/stores/use-categories-store.ts)
+    CategorySelect({ id?, label?, value, onValueChange, placeholder?, errorMessage?, resettable? }): JSX.Element (src/modules/transactions/components/category-select.tsx) — reads useCategoriesStore internally
+    TransactionTypeSelect({ id?, label?, value: TransactionTypeFilterValue, onValueChange }): JSX.Element (src/modules/transactions/components/transaction-type-select.tsx) — TransactionTypeFilterValue = 'EXPENSE' | 'INCOME' | ''
+    TransactionSearchInput({ id?, value, onChange }): JSX.Element (src/modules/transactions/components/transaction-search-input.tsx)
+    PeriodSelect({ id?, label?, value: PeriodValue, onChange }): JSX.Element (src/modules/transactions/components/period-select.tsx) — PeriodValue = { month: number, year: number }
