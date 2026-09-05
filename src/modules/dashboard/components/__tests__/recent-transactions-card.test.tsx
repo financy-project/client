@@ -59,6 +59,7 @@ describe('RecentTransactionsCard', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: TRANSACTIONS,
+      categories: [],
       isLoading: false,
       error: null,
     })
@@ -73,6 +74,7 @@ describe('RecentTransactionsCard', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: true,
       error: null,
     })
@@ -87,6 +89,7 @@ describe('RecentTransactionsCard', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: false,
       error: 'Não foi possível carregar o resumo do dashboard.',
     })
@@ -102,6 +105,7 @@ describe('RecentTransactionsCard', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: false,
       error: null,
     })
@@ -115,6 +119,7 @@ describe('RecentTransactionsCard', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: false,
       error: null,
     })
@@ -128,6 +133,7 @@ describe('RecentTransactionsCard', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: false,
       error: null,
     })
@@ -145,6 +151,7 @@ describe('RecentTransactionsCard', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: false,
       error: null,
     })

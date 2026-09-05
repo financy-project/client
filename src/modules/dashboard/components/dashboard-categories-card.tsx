@@ -1,16 +1,46 @@
 import type { JSX } from 'react'
 
 import { Card } from '@/components/ui/card'
+import { Tag } from '@/components/ui/tag'
 import { DashboardCardHeader } from '@/modules/dashboard/components/dashboard-card-header'
+import { useGetDashboard } from '@/modules/dashboard/hooks/use-get-dashboard'
+import { formatCurrencyValue } from '@/modules/dashboard/utils/format-currency-value'
+import { resolveCategoryColorName } from '@/lib/category-visuals'
 
-// Placeholder for PM-022 — real content (categories summary, "Gerenciar"
-// link) lands in a future feature.
 export function DashboardCategoriesCard(): JSX.Element {
+  const { categories, isLoading, error } = useGetDashboard()
+
   return (
     <Card className="border border-gray-200 p-6 ring-0">
-      {/* "to" is a placeholder — no destination decided yet for this still-unbuilt block */}
-      <DashboardCardHeader title="Categorias" action={{ label: 'Gerenciar', to: '/' }} />
-      <p className="mt-4 text-sm text-gray-400">Em construção.</p>
+      <DashboardCardHeader title="Categorias" action={{ label: 'Gerenciar', to: '/categorias' }} />
+
+      <div className="mt-4">
+        {error && (
+          <p role="alert" className="text-destructive text-sm">
+            {error}
+          </p>
+        )}
+
+        {!error && isLoading && <p className="text-sm text-gray-400">Carregando categorias…</p>}
+
+        {!error && !isLoading && categories.length === 0 && (
+          <p className="text-sm text-gray-600">Nenhuma categoria com movimentação neste mês.</p>
+        )}
+
+        {!error && !isLoading && categories.length > 0 && (
+          <div className="flex flex-col gap-5">
+            {categories.map((category) => (
+              <div key={category.categoryId} className="flex items-center justify-between">
+                <Tag color={resolveCategoryColorName(category.color)}>{category.title}</Tag>
+                <span className="text-sm text-gray-600">{category.transactionCount} itens</span>
+                <span className="text-sm font-semibold text-gray-800">
+                  {formatCurrencyValue(Math.abs(category.totalValue))}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </Card>
   )
 }
