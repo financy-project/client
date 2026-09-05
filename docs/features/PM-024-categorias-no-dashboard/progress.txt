@@ -6,3 +6,15 @@
 - `DashboardCategoryBalance` interface (`src/modules/dashboard/graphql/queries.ts`): `{ categoryId: string; title: string; color: string; transactionCount: number; totalValue: number }`.
 - `GetDashboardData['dashboard']` gained `balanceByCategory: DashboardCategoryBalance[]`.
 - `useGetDashboard()` (`src/modules/dashboard/hooks/use-get-dashboard.ts`) return type `UseGetDashboardResult` gained `categories: DashboardCategoryBalance[]` (defaults to `[]` before resolution and on error, same as `movement`'s `null` default).
+
+## Phase 2: Features — done 2026-09-05
+
+### Exports
+
+- `DashboardCategoriesCard` (`src/modules/dashboard/components/dashboard-categories-card.tsx`): `DashboardCategoriesCardProps = { categories: DashboardCategoryBalance[]; isLoading: boolean; error: string | null }`. Renders the "CATEGORIAS" header + "Gerenciar" link (`react-router-dom` `Link` to `/categorias`) and one row per category (`Tag` + "{n} itens" + `formatCurrencyValue(Math.abs(totalValue))`), with loading/error/empty states.
+- `DashboardHighlights` (`src/modules/dashboard/components/dashboard-highlights.tsx`): `DashboardHighlightsProps = { categories: DashboardCategoryBalance[]; isLoading: boolean; error: string | null }` — forwards these to `DashboardCategoriesCard`; `RecentTransactionsCard` is unchanged (still prop-less, PM-023 scope).
+- `DashboardPage` (`src/modules/dashboard/pages/dashboard-page.tsx`) now destructures `categories` from `useGetDashboard()` and passes `categories`/`isLoading`/`error` into `<DashboardHighlights>`.
+
+### Known follow-on (fixed in Phase 3, F-009 — do not "fix" it in this phase)
+
+- `src/modules/dashboard/pages/__tests__/dashboard-page.test.tsx`'s `useGetDashboardMock.mockReturnValue` calls predate this phase and don't include `categories`, so `DashboardCategoriesCard` receives `categories: undefined` in those 2 tests and throws on `.length`. This is `plan.md`'s Phase 3 / task F-009 by design (see `docs/architecture/dor.md`'s phase-scoping) — `pnpm test` on this branch alone shows 291/293 passing, with exactly those 2 pre-existing tests red until Phase 3 lands.
