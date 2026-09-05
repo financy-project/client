@@ -1,0 +1,42 @@
+# Transações Recentes no Dashboard - PM-023
+
+## Design
+
+Referência: [Figma - Financy (Community)](https://www.figma.com/design/ZF0QlJlYLMEUz6DH93SwbK/Financy--Community-?node-id=3103-2246), card "TRANSAÇÕES RECENTES" — mesmo modelo visual de linha usado na tela `/transactions` (ícone da categoria, descrição, data, tag de categoria, valor), mas num layout compacto (sem colunas de tabela, sem ações de editar/excluir).
+
+## Description
+
+Substitui o placeholder de `src/modules/dashboard/components/recent-transactions-card.tsx` (criado no PM-022) pelo conteúdo real:
+
+- **Cabeçalho**: título "TRANSAÇÕES RECENTES" + link "Ver todas" navegando para `/transactions` (sem parâmetros/filtros).
+- **Lista**: até 5 transações recentes (mesmo limite já usado no backend, ver Notas técnicas), cada linha com:
+  - ícone quadrado da categoria (ou tratamento equivalente ao já usado na tabela de transações quando a transação é uma receita sem categoria) + descrição + data, à esquerda;
+  - tag de categoria + valor formatado + indicador circular colorido do tipo (seta verde pra cima = receita, seta vermelha pra baixo = despesa), à direita.
+- **Rodapé**: botão "+ Nova transação" que **abre o `NewTransactionDialog` diretamente na tela do dashboard, sem navegar** para `/transactions`. Ao criar a transação com sucesso, a **query do dashboard (`GET_DASHBOARD`) deve ser refeita** — não a `LIST_TRANSACTIONS` (que não está ativa nesta tela) — para que a lista e os cards de resumo reflitam a nova transação.
+
+## Notas técnicas (para detalhar em `plan.md`)
+
+- O backend (`../server/src/modules/dashboard`) **já retorna** `dashboard.recentTransactions: [TransactionType]` (5 mais recentes, mesmo shape de `TransactionListItem` usado em `LIST_TRANSACTIONS`) — não é necessário nenhum trabalho de backend, só estender a query `GET_DASHBOARD` do frontend (`src/modules/dashboard/graphql/queries.ts`) para pedir esse campo.
+- `useCreateTransaction` hoje faz `refetchQueries: [LIST_TRANSACTIONS]` de forma fixa (`src/modules/transactions/hooks/use-create-transaction.ts`). Para o fluxo "Nova transação" a partir do dashboard funcionar, esse hook precisa também disparar o refetch de `GET_DASHBOARD` quando usado a partir daqui — decidir em `plan.md` a forma (colocar as duas queries incondicionalmente no refetch, já que Apollo ignora queries não-ativas; ou parametrizar o hook).
+- Definir em `plan.md` o tratamento do ícone/tag quando a transação é uma receita sem categoria (no Figma aparece uma tag "Receita" verde, diferente do "Sem categoria" cinza já usado na tabela completa — `transaction-category-cell.tsx`).
+- Definir se o indicador circular colorido do tipo é um componente novo (ex.: variante compacta de `transaction-type-indicator.tsx`) ou uma extensão do existente.
+
+## Users
+
+Usuários autenticados vendo a tela `/dashboard`, querendo um atalho rápido pras últimas movimentações e para registrar uma nova transação sem sair da tela.
+
+## Acceptance Criteria
+
+* [ ] O cabeçalho do card mostra "TRANSAÇÕES RECENTES" e um link "Ver todas" que navega para `/transactions`
+* [ ] A lista mostra as transações recentes vindas de `dashboard.recentTransactions` (via `GET_DASHBOARD` estendida)
+* [ ] Cada linha segue o modelo visual do Figma: ícone + descrição + data à esquerda; tag de categoria + valor + indicador circular do tipo à direita
+* [ ] O botão "+ Nova transação" abre o `NewTransactionDialog` sem navegar para `/transactions`
+* [ ] Ao criar a transação com sucesso pelo modal aberto no dashboard, a query `GET_DASHBOARD` é refeita (lista e cards de resumo atualizam)
+* [ ] Estado vazio (sem transações no mês) tratado de forma equivalente ao já usado em `transactions-table.tsx` ("Nenhuma transação cadastrada ainda.")
+
+## Out of Scope
+
+- Paginação/scroll da lista de recentes (sempre as últimas 5, sem "carregar mais")
+- Editar/excluir transações a partir desta lista (ações não aparecem no Figma para este card)
+- Conteúdo real de `dashboard-categories-card.tsx` (`balanceByCategory`) — feature futura separada
+- Loading/skeleton específico deste bloco (pode reaproveitar o loading já existente de `useGetDashboard`, detalhar em `plan.md`)
