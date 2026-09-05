@@ -10,10 +10,10 @@
 
 ## Phase 2: Features
 
-- [ ] F-006: Implement `SummaryCard` (`src/modules/dashboard/components/summary-card.tsx`), props `SummaryCardProps` per Component Blueprint — renders `Card` (`border border-gray-200 p-6 ring-0`), mode→icon/color map (`balance`→`Wallet`/`text-purple-base`, `income`→`CircleArrowUp`/`text-green-dark`, `expense`→`CircleArrowDown`/`text-red-dark`), title row (`text-xs font-medium tracking-wider text-gray-500 uppercase`), value row (`formatCurrencyValue(value)`, `text-2xl font-bold text-gray-800`)
-- [ ] F-007: Implement `DashboardSummary` (`src/modules/dashboard/components/dashboard-summary.tsx`), props `DashboardSummaryProps` per Component Blueprint — `grid grid-cols-3 gap-6` rendering the 3 `SummaryCard`s with `mode`/`title`/`value` wired from `movement` exactly as listed in the Component Blueprint's Composition section
-- [ ] F-008: Move `src/pages/dashboard-page.tsx` → `src/modules/dashboard/pages/dashboard-page.tsx`; wire `useGetDashboard()` + loading/error/populated states per Component Blueprint's "States to render" (loading: `"Carregando resumo…"`; error: `role="alert"`, `text-destructive`; populated: `<DashboardSummary movement={movement} />`), replacing the `"Dashboard em breve"` placeholder
-- [ ] F-009: Update `src/App.tsx`'s import from `@/pages/dashboard-page` to `@/modules/dashboard/pages/dashboard-page`
+- [x] F-006: Implement `SummaryCard` (`src/modules/dashboard/components/summary-card.tsx`), props `SummaryCardProps` per Component Blueprint — renders `Card` (`border border-gray-200 p-6 ring-0`), mode→icon/color map (`balance`→`Wallet`/`text-purple-base`, `income`→`CircleArrowUp`/`text-green-dark`, `expense`→`CircleArrowDown`/`text-red-dark`), title row (`text-xs font-medium tracking-wider text-gray-500 uppercase`), value row (`formatCurrencyValue(value)`, `text-2xl font-bold text-gray-800`)
+- [x] F-007: Implement `DashboardSummary` (`src/modules/dashboard/components/dashboard-summary.tsx`), props `DashboardSummaryProps` per Component Blueprint — `grid grid-cols-3 gap-6` rendering the 3 `SummaryCard`s with `mode`/`title`/`value` wired from `movement` exactly as listed in the Component Blueprint's Composition section
+- [x] F-008: Move `src/pages/dashboard-page.tsx` → `src/modules/dashboard/pages/dashboard-page.tsx`; wire `useGetDashboard()` + loading/error/populated states per Component Blueprint's "States to render" (loading: `"Carregando resumo…"`; error: `role="alert"`, `text-destructive`; populated: `<DashboardSummary movement={movement} />`), replacing the `"Dashboard em breve"` placeholder
+- [x] F-009: Update `src/App.tsx`'s import from `@/pages/dashboard-page` to `@/modules/dashboard/pages/dashboard-page`
 
 ## Phase 3: Polish
 
