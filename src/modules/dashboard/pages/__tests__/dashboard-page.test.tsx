@@ -24,7 +24,12 @@ function renderDashboardPage() {
 
 describe('DashboardPage', () => {
   it('shows the loading text while useGetDashboard().isLoading is true', () => {
-    useGetDashboardMock.mockReturnValue({ movement: null, isLoading: true, error: null })
+    useGetDashboardMock.mockReturnValue({
+      movement: null,
+      recentTransactions: [],
+      isLoading: true,
+      error: null,
+    })
     renderDashboardPage()
 
     expect(screen.getByText('Carregando resumo…')).toBeInTheDocument()
@@ -33,6 +38,7 @@ describe('DashboardPage', () => {
   it('shows the role="alert" error message when useGetDashboard().error is set', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
+      recentTransactions: [],
       isLoading: false,
       error: 'Não foi possível carregar o resumo do dashboard.',
     })
@@ -44,7 +50,12 @@ describe('DashboardPage', () => {
   })
 
   it('renders DashboardSummary with the resolved movement once loaded without error', () => {
-    useGetDashboardMock.mockReturnValue({ movement: MOVEMENT, isLoading: false, error: null })
+    useGetDashboardMock.mockReturnValue({
+      movement: MOVEMENT,
+      recentTransactions: [],
+      isLoading: false,
+      error: null,
+    })
     renderDashboardPage()
 
     expect(screen.getByText('Saldo Total')).toBeInTheDocument()
@@ -52,7 +63,12 @@ describe('DashboardPage', () => {
   })
 
   it('renders DashboardHighlights regardless of the summary loading state', () => {
-    useGetDashboardMock.mockReturnValue({ movement: null, isLoading: true, error: null })
+    useGetDashboardMock.mockReturnValue({
+      movement: null,
+      recentTransactions: [],
+      isLoading: true,
+      error: null,
+    })
     renderDashboardPage()
 
     // "Categorias" also appears as a nav link in Header, hence scoping to <main>.

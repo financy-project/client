@@ -1,0 +1,22 @@
+
+[2026-09-05 14:08:00] ✅ Phase 1: Foundation
+  Branch: PM-023/phase-1-foundation
+  - [x] F-001: Extend `GET_DASHBOARD` (`src/modules/dashboard/graphql/queries.ts`) to select `recentTransactions { id type description date value category { id title color icon } }`; add `DashboardRecentTransaction` interface and extend `GetDashboardData` per GraphQL/API Blueprint
+  - [x] F-002: Extend `useGetDashboard()` (`src/modules/dashboard/hooks/use-get-dashboard.ts`): add `recentTransactions: data?.dashboard.recentTransactions ?? []` to `UseGetDashboardResult` and its return object
+  - [x] F-003: Unit tests for `useGetDashboard`'s new field
+  - [x] F-004: Implement `formatDashboardTransactionDate`/`formatDashboardTransactionValue` (`src/modules/dashboard/utils/format-dashboard-transaction.ts`)
+  - [x] F-005: Unit tests for the formatters
+  Exports:
+    export interface DashboardRecentTransaction {
+      id: string
+      type: 'EXPENSE' | 'INCOME'
+      description: string
+      date: string
+      value: number
+      category: { id: string; title: string; color: string; icon: string } | null
+    }
+    // GetDashboardData.dashboard now also has: recentTransactions: DashboardRecentTransaction[]
+    // useGetDashboard() now also returns: recentTransactions: DashboardRecentTransaction[]
+    export function formatDashboardTransactionDate(iso: string): string
+    export function formatDashboardTransactionValue(cents: number, type: 'EXPENSE' | 'INCOME'): string
+    // both in src/modules/dashboard/utils/format-dashboard-transaction.ts
