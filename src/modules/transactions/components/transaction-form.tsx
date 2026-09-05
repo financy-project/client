@@ -6,13 +6,12 @@ import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
-import { SelectField } from '@/components/ui/select-field'
 import { TextInput } from '@/components/ui/text-input'
 import { cn } from '@/lib/utils'
 import type { RegisterFieldError } from '@/modules/auth/hooks/use-register-user'
+import { CategorySelect } from '@/modules/transactions/components/category-select'
 import { CurrencyInput } from '@/modules/transactions/components/currency-input'
 import { DatePickerField } from '@/modules/transactions/components/date-picker-field'
-import { useCategoriesForSelect } from '@/modules/transactions/hooks/use-categories-for-select'
 
 const transactionFormSchema = z.object({
   type: z.enum(['EXPENSE', 'INCOME']),
@@ -44,8 +43,6 @@ export function TransactionForm({
   formError,
   onSubmit,
 }: TransactionFormProps): JSX.Element {
-  const { categories, isLoading: categoriesLoading } = useCategoriesForSelect()
-
   const {
     control,
     register,
@@ -137,14 +134,12 @@ export function TransactionForm({
         control={control}
         name="categoryId"
         render={({ field }) => (
-          <SelectField
+          <CategorySelect
             id="categoryId"
             label="Categoria"
             value={field.value}
             onValueChange={field.onChange}
-            options={categories.map((category) => ({ value: category.id, label: category.title }))}
             errorMessage={errors.categoryId?.message}
-            disabled={categoriesLoading}
             resettable
           />
         )}

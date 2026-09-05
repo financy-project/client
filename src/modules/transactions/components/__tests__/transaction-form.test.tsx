@@ -1,39 +1,30 @@
-import { MockedProvider } from '@apollo/client/testing/react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { TransactionForm } from '@/modules/transactions/components/transaction-form'
-import { LIST_CATEGORIES_FOR_SELECT } from '@/modules/transactions/graphql/queries'
-
-const CATEGORIES_MOCK = {
-  request: { query: LIST_CATEGORIES_FOR_SELECT },
-  result: { data: { listCategories: [{ id: 'cat-1', title: 'Alimentação' }] } },
-  // Unbounded reuse: this same mock backs the query across every test in
-  // this file, and how many times React actually fires it per render isn't
-  // a detail worth pinning down here.
-  maxUsageCount: Number.POSITIVE_INFINITY,
-}
+import { useCategoriesStore } from '@/modules/transactions/stores/use-categories-store'
 
 function renderTransactionForm(props: Partial<React.ComponentProps<typeof TransactionForm>> = {}) {
   return render(
-    <MockedProvider mocks={[CATEGORIES_MOCK]}>
-      <TransactionForm isLoading={false} fieldErrors={[]} formError={null} onSubmit={vi.fn()} {...props} />
-    </MockedProvider>,
+    <TransactionForm isLoading={false} fieldErrors={[]} formError={null} onSubmit={vi.fn()} {...props} />,
   )
 }
 
-// The category Select's options only exist once useCategoriesForSelect()
-// resolves (its trigger stays `disabled` — see categoriesLoading — until
-// then). Opening it before that race loses: Radix Select renders
-// SelectContent's items from whatever `categories` was at open time.
 async function openCategorySelect(user: ReturnType<typeof userEvent.setup>) {
-  const combobox = await screen.findByRole('combobox')
-  await waitFor(() => expect(combobox).not.toBeDisabled())
+  const combobox = screen.getByRole('combobox')
   await user.click(combobox)
   return combobox
 }
 
 describe('TransactionForm', () => {
+  beforeEach(() => {
+    useCategoriesStore.setState({
+      categories: [{ id: 'cat-1', title: 'Alimentação' }],
+      isLoading: false,
+      error: null,
+    })
+  })
+
   it('shows "A descrição é obrigatória" when description is submitted empty', async () => {
     const user = userEvent.setup()
     renderTransactionForm()
@@ -95,9 +86,10 @@ describe('TransactionForm', () => {
   })
 
   // The category select's own padding/height/reset-option behavior is
-  // generic to SelectField now — covered by select-field.test.tsx. This
-  // file only needs to prove TransactionForm wires it correctly (options
-  // from `categories`, resettable, submits the picked categoryId).
+  // generic to SelectField/CategorySelect now — covered by
+  // select-field.test.tsx/category-select.test.tsx. This file only needs
+  // to prove TransactionForm wires it correctly (options from the store,
+  // not resettable, submits the picked categoryId).
 
   it('pre-fills all fields from defaultValues when provided', async () => {
     const user = userEvent.setup()
