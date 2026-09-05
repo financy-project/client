@@ -1,3 +1,5 @@
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { MockedProvider } from '@apollo/client/testing/react'
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { createElement } from 'react'
@@ -7,6 +9,17 @@ import { LIST_TRANSACTIONS } from '@/modules/transactions/graphql/queries'
 import { useCreateTransaction } from '@/modules/transactions/hooks/use-create-transaction'
 import type { TransactionFilterValues } from '@/modules/transactions/hooks/use-list-transactions'
 import { useListTransactions } from '@/modules/transactions/hooks/use-list-transactions'
+
+// Stands in for a caller-supplied query (e.g. dashboard's GET_DASHBOARD) — the
+// hook only needs an opaque DocumentNode, so a throwaway query keeps this
+// test from depending on another module's document.
+const SOME_OTHER_QUERY = gql`
+  query SomeOtherQuery {
+    someOtherQuery {
+      id
+    }
+  }
+`
 
 const LIST_FILTERS: TransactionFilterValues = {
   description: '',
@@ -122,6 +135,45 @@ describe('useCreateTransaction', () => {
 
     await waitFor(() => expect(result.current.list.transactions).toHaveLength(1))
     expect(result.current.list.totalRecord).toBe(1)
+  })
+
+  it('also refetches an active query passed via additionalRefetchQueries', async () => {
+    const createdTransaction = {
+      id: 't1',
+      ...INPUT,
+      category: { id: INPUT.categoryId, title: 'Alimentação', color: '#2563EB' },
+    }
+
+    const mocks = [
+      {
+        request: { query: SOME_OTHER_QUERY },
+        result: { data: { someOtherQuery: { id: 'before' } } },
+      },
+      {
+        request: { query: CREATE_TRANSACTION, variables: { input: INPUT } },
+        result: { data: { createTransaction: createdTransaction } },
+      },
+      {
+        request: { query: SOME_OTHER_QUERY },
+        result: { data: { someOtherQuery: { id: 'after' } } },
+      },
+    ]
+
+    const { result } = renderHook(
+      () => ({
+        other: useQuery(SOME_OTHER_QUERY),
+        create: useCreateTransaction({ additionalRefetchQueries: [SOME_OTHER_QUERY] }),
+      }),
+      { wrapper: ({ children }) => createElement(MockedProvider, { mocks }, children) },
+    )
+
+    await waitFor(() => expect(result.current.other.data?.someOtherQuery.id).toBe('before'))
+
+    await act(async () => {
+      await result.current.create.createTransaction(INPUT)
+    })
+
+    await waitFor(() => expect(result.current.other.data?.someOtherQuery.id).toBe('after'))
   })
 
   it('maps extensions.validationErrors straight to fieldErrors when present', async () => {
