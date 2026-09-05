@@ -58,9 +58,10 @@ describe('DashboardPage', () => {
     })
     renderDashboardPage()
 
-    // Both DashboardPage's own error paragraph and RecentTransactionsCard's
-    // (it reads the same useGetDashboard() error independently) render a
-    // role="alert" here — redundant but deliberate, see PM-023's plan.md.
+    // DashboardPage's own error paragraph, RecentTransactionsCard's and
+    // DashboardCategoriesCard's (each reads the same useGetDashboard()
+    // error independently) all render a role="alert" here — redundant but
+    // deliberate, see PM-023's and PM-024's plan.md.
     for (const alert of screen.getAllByRole('alert')) {
       expect(alert).toHaveTextContent('Não foi possível carregar o resumo do dashboard.')
     }
@@ -93,5 +94,20 @@ describe('DashboardPage', () => {
     // "Categorias" also appears as a nav link in Header, hence scoping to <main>.
     expect(within(screen.getByRole('main')).getByText('Transações Recentes')).toBeInTheDocument()
     expect(within(screen.getByRole('main')).getByText('Categorias')).toBeInTheDocument()
+  })
+
+  it('renders DashboardCategoriesCard\'s own loading state via the shared useGetDashboard() data', () => {
+    useGetDashboardMock.mockReturnValue({
+      movement: null,
+      recentTransactions: [],
+      categories: [],
+      isLoading: true,
+      error: null,
+    })
+    renderDashboardPage()
+
+    expect(
+      within(screen.getByRole('main')).getByText('Carregando categorias…'),
+    ).toBeInTheDocument()
   })
 })
