@@ -10,16 +10,16 @@ Substitui o placeholder de `src/modules/dashboard/components/recent-transactions
 
 - **Cabeçalho**: título "TRANSAÇÕES RECENTES" + link "Ver todas" navegando para `/transactions` (sem parâmetros/filtros).
 - **Lista**: até 5 transações recentes (mesmo limite já usado no backend, ver Notas técnicas), cada linha com:
-  - ícone quadrado da categoria (ou tratamento equivalente ao já usado na tabela de transações quando a transação é uma receita sem categoria) + descrição + data, à esquerda;
-  - tag de categoria + valor formatado + indicador circular colorido do tipo (seta verde pra cima = receita, seta vermelha pra baixo = despesa), à direita.
+  - ícone quadrado da categoria + descrição + data, à esquerda ("Receita" no Figma é uma categoria normal como qualquer outra — verde, ícone maleta —, não um caso especial de "sem categoria");
+  - tag de categoria + valor formatado + ícone colorido do tipo (seta verde pra cima = receita, seta vermelha pra baixo = despesa — mesmos `CircleArrowUp`/`CircleArrowDown` já usados em `transaction-type-indicator.tsx`), à direita.
 - **Rodapé**: botão "+ Nova transação" que **abre o `NewTransactionDialog` diretamente na tela do dashboard, sem navegar** para `/transactions`. Ao criar a transação com sucesso, a **query do dashboard (`GET_DASHBOARD`) deve ser refeita** — não a `LIST_TRANSACTIONS` (que não está ativa nesta tela) — para que a lista e os cards de resumo reflitam a nova transação.
 
 ## Notas técnicas (para detalhar em `plan.md`)
 
 - O backend (`../server/src/modules/dashboard`) **já retorna** `dashboard.recentTransactions: [TransactionType]` (5 mais recentes, mesmo shape de `TransactionListItem` usado em `LIST_TRANSACTIONS`) — não é necessário nenhum trabalho de backend, só estender a query `GET_DASHBOARD` do frontend (`src/modules/dashboard/graphql/queries.ts`) para pedir esse campo.
-- `useCreateTransaction` hoje faz `refetchQueries: [LIST_TRANSACTIONS]` de forma fixa (`src/modules/transactions/hooks/use-create-transaction.ts`). Para o fluxo "Nova transação" a partir do dashboard funcionar, esse hook precisa também disparar o refetch de `GET_DASHBOARD` quando usado a partir daqui — decidir em `plan.md` a forma (colocar as duas queries incondicionalmente no refetch, já que Apollo ignora queries não-ativas; ou parametrizar o hook).
-- Definir em `plan.md` o tratamento do ícone/tag quando a transação é uma receita sem categoria (no Figma aparece uma tag "Receita" verde, diferente do "Sem categoria" cinza já usado na tabela completa — `transaction-category-cell.tsx`).
-- Definir se o indicador circular colorido do tipo é um componente novo (ex.: variante compacta de `transaction-type-indicator.tsx`) ou uma extensão do existente.
+- `useCreateTransaction` hoje faz `refetchQueries: [LIST_TRANSACTIONS]` de forma fixa (`src/modules/transactions/hooks/use-create-transaction.ts`). Para o fluxo "Nova transação" a partir do dashboard funcionar, esse hook precisa também disparar o refetch de `GET_DASHBOARD` quando usado a partir daqui — detalhado em `plan.md` (hook passa a aceitar uma lista opcional de refetch adicionais).
+- Confirmado via `/figma-fidelity`: o ícone colorido ao lado do valor não é um componente novo — a camada do Figma se chama `icon/circle-arrow-up`/`circle-arrow-down`, ou seja, é literalmente `CircleArrowUp`/`CircleArrowDown` (lucide-react) já usados em `transaction-type-indicator.tsx` e `summary-card.tsx`.
+- O módulo `dashboard` não importa de `@/modules/transactions` hoje (mesma convenção de isolamento entre módulos já usada no backend e espelhada em `transaction-category-cell.tsx`, que duplica os `ICON_OPTIONS`/`COLOR_OPTIONS` em vez de importar de `@/modules/categories`). `plan.md` detalha onde reaproveitar (o modal/hook de criar transação, por serem um fluxo grande demais pra duplicar) e onde duplicar (ícone/cor da categoria, formatação de data/valor — pequeno o bastante pra seguir o mesmo padrão já estabelecido).
 
 ## Users
 
