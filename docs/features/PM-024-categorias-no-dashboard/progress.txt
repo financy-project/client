@@ -1,0 +1,8 @@
+## Phase 1: Foundation — done 2026-09-05
+
+### Exports
+
+- `GET_DASHBOARD` (`src/modules/dashboard/graphql/queries.ts`) now selects `dashboard.balanceByCategory { categoryId title color transactionCount totalValue }` in addition to `movement`.
+- `DashboardCategoryBalance` interface (`src/modules/dashboard/graphql/queries.ts`): `{ categoryId: string; title: string; color: string; transactionCount: number; totalValue: number }`.
+- `GetDashboardData['dashboard']` gained `balanceByCategory: DashboardCategoryBalance[]`.
+- `useGetDashboard()` (`src/modules/dashboard/hooks/use-get-dashboard.ts`) return type `UseGetDashboardResult` gained `categories: DashboardCategoryBalance[]` (defaults to `[]` before resolution and on error, same as `movement`'s `null` default).
