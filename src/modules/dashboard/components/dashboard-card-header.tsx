@@ -2,6 +2,7 @@ import type { JSX } from 'react'
 
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { CardEyebrow } from '@/components/card-eyebrow'
 import { Button } from '@/components/ui/button'
 
 export interface DashboardCardHeaderAction {
@@ -21,7 +22,7 @@ export interface DashboardCardHeaderProps {
 export function DashboardCardHeader({ title, action }: DashboardCardHeaderProps): JSX.Element {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">{title}</span>
+      <CardEyebrow>{title}</CardEyebrow>
       <Button variant="link" asChild className="h-auto gap-1 p-0">
         <Link to={action.to}>
           {action.label}

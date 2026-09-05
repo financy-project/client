@@ -1,6 +1,7 @@
 import type { JSX } from 'react'
 
 import { X } from 'lucide-react'
+import { Subtitle } from '@/components/subtitle'
 import { DialogClose } from '@/components/ui/dialog'
 import { IconButton } from '@/components/ui/icon-button'
 
@@ -14,7 +15,7 @@ export function DialogHeaderWithClose({ title, subtitle }: DialogHeaderWithClose
     <div className="flex items-start gap-4">
       <div className="grid flex-1 gap-0.5">
         <h2 className="text-base font-semibold text-gray-800">{title}</h2>
-        <p className="text-sm text-gray-600">{subtitle}</p>
+        <Subtitle className="text-sm">{subtitle}</Subtitle>
       </div>
       <DialogClose asChild>
         <IconButton

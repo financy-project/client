@@ -1,6 +1,7 @@
 import type { JSX } from 'react'
 
 import { CircleArrowDown, CircleArrowUp, Wallet } from 'lucide-react'
+import { CardEyebrow } from '@/components/card-eyebrow'
 import { Card } from '@/components/ui/card'
 import { formatCurrencyValue } from '@/modules/dashboard/utils/format-currency-value'
 
@@ -27,7 +28,7 @@ export function SummaryCard({ mode, title, value }: SummaryCardProps): JSX.Eleme
         <span data-testid={`summary-card-${mode}-icon`} className={className}>
           <Icon className="size-4" />
         </span>
-        <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">{title}</span>
+        <CardEyebrow>{title}</CardEyebrow>
       </div>
       <span className="mt-2 text-2xl font-bold text-gray-800">{formatCurrencyValue(value)}</span>
     </Card>
