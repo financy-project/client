@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
 
 export interface PeriodValue {
   month: number // 1-12
@@ -120,19 +119,17 @@ export function PeriodSelect({
               const isSelected = option.month === value.month && option.year === value.year
 
               return (
-                <button
+                <Button
                   key={`${option.year}-${option.month}`}
                   type="button"
+                  variant="option"
                   role="option"
                   aria-selected={isSelected}
                   onClick={() => handleSelect(option)}
-                  className={cn(
-                    'w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-600 hover:bg-accent',
-                    isSelected && 'font-medium text-gray-800',
-                  )}
+                  className="h-auto w-full justify-start rounded-md px-2 py-1.5 text-left"
                 >
                   {formatPeriod(option)}
-                </button>
+                </Button>
               )
             })}
           </div>
