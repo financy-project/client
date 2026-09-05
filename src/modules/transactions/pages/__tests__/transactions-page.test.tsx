@@ -1,25 +1,26 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useCategoriesForSelect } from '@/modules/transactions/hooks/use-categories-for-select'
 import { useCreateTransaction } from '@/modules/transactions/hooks/use-create-transaction'
 import { useDeleteTransaction } from '@/modules/transactions/hooks/use-delete-transaction'
 import { useListTransactions } from '@/modules/transactions/hooks/use-list-transactions'
 import { useUpdateTransaction } from '@/modules/transactions/hooks/use-update-transaction'
+import { useSyncCategoriesForSelect } from '@/modules/transactions/hooks/use-sync-categories-for-select'
 import { TransactionsPage } from '@/modules/transactions/pages/transactions-page'
+import { useCategoriesStore } from '@/modules/transactions/stores/use-categories-store'
 
 vi.mock('@/modules/transactions/hooks/use-create-transaction')
 vi.mock('@/modules/transactions/hooks/use-update-transaction')
 vi.mock('@/modules/transactions/hooks/use-delete-transaction')
-vi.mock('@/modules/transactions/hooks/use-categories-for-select')
 vi.mock('@/modules/transactions/hooks/use-list-transactions')
+vi.mock('@/modules/transactions/hooks/use-sync-categories-for-select')
 
 const useCreateTransactionMock = vi.mocked(useCreateTransaction)
 const useUpdateTransactionMock = vi.mocked(useUpdateTransaction)
 const useDeleteTransactionMock = vi.mocked(useDeleteTransaction)
-const useCategoriesForSelectMock = vi.mocked(useCategoriesForSelect)
 const useListTransactionsMock = vi.mocked(useListTransactions)
+const useSyncCategoriesForSelectMock = vi.mocked(useSyncCategoriesForSelect)
 
 const TRANSACTION = {
   id: 't1',
@@ -57,7 +58,8 @@ describe('TransactionsPage', () => {
       isLoading: false,
       error: null,
     })
-    useCategoriesForSelectMock.mockReturnValue({ categories: [], isLoading: false, error: null })
+    useSyncCategoriesForSelectMock.mockReturnValue(undefined)
+    useCategoriesStore.setState({ categories: [], isLoading: false, error: null })
     useListTransactionsMock.mockReturnValue({
       transactions: [TRANSACTION],
       isLoading: false,
@@ -109,5 +111,23 @@ describe('TransactionsPage', () => {
     await user.click(screen.getByRole('button', { name: 'Excluir' }))
 
     expect(screen.getByRole('heading', { name: 'Excluir transação' })).toBeInTheDocument()
+  })
+
+  it('renders the filter bar above the table', () => {
+    renderTransactionsPage()
+
+    expect(screen.getByLabelText('Buscar')).toBeInTheDocument()
+  })
+
+  it('re-queries useListTransactions with the updated filters when a filter changes', async () => {
+    const user = userEvent.setup()
+    renderTransactionsPage()
+
+    await user.type(screen.getByLabelText('Buscar'), 'a')
+
+    await waitFor(() => {
+      const lastCallFilters = useListTransactionsMock.mock.calls.at(-1)?.[0]
+      expect(lastCallFilters?.description).toBe('a')
+    })
   })
 })

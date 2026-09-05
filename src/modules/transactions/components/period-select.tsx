@@ -2,9 +2,9 @@ import type { JSX } from 'react'
 
 import { ChevronDown } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
 
 export interface PeriodValue {
   month: number // 1-12
@@ -97,14 +97,16 @@ export function PeriodSelect({
       <Label htmlFor={id}>{label}</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <button
+          <Button
             id={id}
             type="button"
-            className="flex h-12 w-full cursor-pointer items-center justify-between gap-1.5 rounded-lg border border-input bg-transparent px-3 py-3.5 text-base whitespace-nowrap outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            variant="field"
+            size="xl"
+            className="w-full justify-between px-3 py-3.5 gap-1.5"
           >
             <span>{formatPeriod(value)}</span>
             <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
-          </button>
+          </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="w-56 p-1">
           <div
@@ -117,19 +119,17 @@ export function PeriodSelect({
               const isSelected = option.month === value.month && option.year === value.year
 
               return (
-                <button
+                <Button
                   key={`${option.year}-${option.month}`}
                   type="button"
+                  variant="option"
                   role="option"
                   aria-selected={isSelected}
                   onClick={() => handleSelect(option)}
-                  className={cn(
-                    'w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-sm text-gray-600 hover:bg-accent',
-                    isSelected && 'font-medium text-gray-800',
-                  )}
+                  className="h-auto w-full justify-start rounded-md px-2 py-1.5 text-left"
                 >
                   {formatPeriod(option)}
-                </button>
+                </Button>
               )
             })}
           </div>

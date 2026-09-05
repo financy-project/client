@@ -2,14 +2,12 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { NewTransactionDialog } from '@/modules/transactions/components/new-transaction-dialog'
-import { useCategoriesForSelect } from '@/modules/transactions/hooks/use-categories-for-select'
 import { useCreateTransaction } from '@/modules/transactions/hooks/use-create-transaction'
+import { useCategoriesStore } from '@/modules/transactions/stores/use-categories-store'
 
 vi.mock('@/modules/transactions/hooks/use-create-transaction')
-vi.mock('@/modules/transactions/hooks/use-categories-for-select')
 
 const useCreateTransactionMock = vi.mocked(useCreateTransaction)
-const useCategoriesForSelectMock = vi.mocked(useCategoriesForSelect)
 
 describe('NewTransactionDialog', () => {
   beforeEach(() => {
@@ -19,7 +17,7 @@ describe('NewTransactionDialog', () => {
       fieldErrors: [],
       formError: null,
     })
-    useCategoriesForSelectMock.mockReturnValue({
+    useCategoriesStore.setState({
       categories: [{ id: 'cat-1', title: 'Alimentação' }],
       isLoading: false,
       error: null,
