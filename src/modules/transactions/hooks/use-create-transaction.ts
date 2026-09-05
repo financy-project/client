@@ -18,9 +18,12 @@ export interface UseCreateTransactionResult {
 }
 
 export function useCreateTransaction(): UseCreateTransactionResult {
+  // Bare document, not `{ query: LIST_TRANSACTIONS }` — see the comment in
+  // use-delete-transaction.ts for why the object form silently fails to
+  // refresh the table.
   const [mutate, { loading }] = useMutation<CreateTransactionData, { input: CreateTransactionInput }>(
     CREATE_TRANSACTION,
-    { refetchQueries: [{ query: LIST_TRANSACTIONS }] },
+    { refetchQueries: [LIST_TRANSACTIONS] },
   )
   const [fieldErrors, setFieldErrors] = useState<RegisterFieldError[]>([])
   const [formError, setFormError] = useState<string | null>(null)
