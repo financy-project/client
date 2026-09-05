@@ -2,6 +2,7 @@ import type { JSX } from 'react'
 
 import { LogIn } from 'lucide-react'
 import logo from '@/assets/logo.svg'
+import { Subtitle } from '@/components/subtitle'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AuthDivider } from '@/modules/auth/components/auth-divider'
 import { AuthSwitchLink } from '@/modules/auth/components/auth-switch-link'
@@ -14,9 +15,7 @@ export function RegisterPage(): JSX.Element {
       <Card className="border border-gray-200 ring-0 [--card-spacing:--spacing(8)]">
         <CardHeader className="text-center">
           <CardTitle className="text-xl leading-7 font-bold">Criar conta</CardTitle>
-          <p className="text-base font-normal text-gray-600">
-            Comece a controlar suas finanças ainda hoje
-          </p>
+          <Subtitle className="text-base">Comece a controlar suas finanças ainda hoje</Subtitle>
         </CardHeader>
         <CardContent className="grid gap-6">
           <RegisterForm />
