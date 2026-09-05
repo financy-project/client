@@ -1,43 +1,7 @@
 import type { JSX } from 'react'
 
-import {
-  BaggageClaim,
-  BookOpen,
-  BriefcaseBusiness,
-  CarFront,
-  Dumbbell,
-  Gift,
-  HeartPulse,
-  House,
-  Mailbox,
-  PawPrint,
-  PiggyBank,
-  ReceiptText,
-  ShoppingCart,
-  Ticket,
-  ToolCase,
-  Utensils,
-} from 'lucide-react'
 import { cn } from '@/lib/utils'
-
-const ICON_OPTIONS = [
-  { name: 'BriefcaseBusiness', icon: BriefcaseBusiness },
-  { name: 'CarFront', icon: CarFront },
-  { name: 'HeartPulse', icon: HeartPulse },
-  { name: 'PiggyBank', icon: PiggyBank },
-  { name: 'ShoppingCart', icon: ShoppingCart },
-  { name: 'Ticket', icon: Ticket },
-  { name: 'ToolCase', icon: ToolCase },
-  { name: 'Utensils', icon: Utensils },
-  { name: 'PawPrint', icon: PawPrint },
-  { name: 'House', icon: House },
-  { name: 'Gift', icon: Gift },
-  { name: 'Dumbbell', icon: Dumbbell },
-  { name: 'BookOpen', icon: BookOpen },
-  { name: 'BaggageClaim', icon: BaggageClaim },
-  { name: 'Mailbox', icon: Mailbox },
-  { name: 'ReceiptText', icon: ReceiptText },
-] as const
+import { CATEGORY_ICON_OPTIONS } from '@/lib/category-visuals'
 
 interface IconPickerProps {
   value: string
@@ -47,7 +11,7 @@ interface IconPickerProps {
 export function IconPicker({ value, onChange }: IconPickerProps): JSX.Element {
   return (
     <div className="flex flex-wrap gap-2">
-      {ICON_OPTIONS.map(({ name, icon: Icon }) => (
+      {CATEGORY_ICON_OPTIONS.map(({ name, icon: Icon }) => (
         <button
           key={name}
           type="button"
@@ -67,5 +31,3 @@ export function IconPicker({ value, onChange }: IconPickerProps): JSX.Element {
     </div>
   )
 }
-
-export { ICON_OPTIONS }

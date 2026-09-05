@@ -6,9 +6,10 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { TextInput } from '@/components/ui/text-input'
+import { CATEGORY_COLOR_OPTIONS, CATEGORY_ICON_OPTIONS } from '@/lib/category-visuals'
 import type { RegisterFieldError } from '@/modules/auth/hooks/use-register-user'
-import { COLOR_OPTIONS, ColorPicker } from '@/modules/categories/components/color-picker'
-import { ICON_OPTIONS, IconPicker } from '@/modules/categories/components/icon-picker'
+import { ColorPicker } from '@/modules/categories/components/color-picker'
+import { IconPicker } from '@/modules/categories/components/icon-picker'
 
 const categoryFormSchema = z.object({
   title: z.string().min(1, 'O título é obrigatório'),
@@ -45,8 +46,8 @@ export function CategoryForm({
     defaultValues: {
       title: '',
       description: '',
-      icon: ICON_OPTIONS[0].name,
-      color: COLOR_OPTIONS[0].value,
+      icon: CATEGORY_ICON_OPTIONS[0].name,
+      color: CATEGORY_COLOR_OPTIONS[0].value,
       ...defaultValues,
     },
   })

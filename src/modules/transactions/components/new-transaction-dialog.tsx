@@ -1,3 +1,4 @@
+import type { DocumentNode } from '@apollo/client'
 import type { JSX } from 'react'
 
 import { toast } from 'sonner'
@@ -10,10 +11,20 @@ import { useCreateTransaction } from '@/modules/transactions/hooks/use-create-tr
 interface NewTransactionDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  // Forwarded to useCreateTransaction — lets a caller outside the
+  // transactions screen (e.g. the dashboard's RecentTransactionsCard) also
+  // refetch its own query on success. See PM-023's plan.md.
+  additionalRefetchQueries?: DocumentNode[]
 }
 
-export function NewTransactionDialog({ open, onOpenChange }: NewTransactionDialogProps): JSX.Element {
-  const { createTransaction, isLoading, fieldErrors, formError } = useCreateTransaction()
+export function NewTransactionDialog({
+  open,
+  onOpenChange,
+  additionalRefetchQueries,
+}: NewTransactionDialogProps): JSX.Element {
+  const { createTransaction, isLoading, fieldErrors, formError } = useCreateTransaction({
+    additionalRefetchQueries,
+  })
 
   const handleSubmit = async (values: TransactionFormValues) => {
     const result = await createTransaction({
