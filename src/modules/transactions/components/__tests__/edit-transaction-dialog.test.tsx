@@ -2,14 +2,12 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { EditTransactionDialog } from '@/modules/transactions/components/edit-transaction-dialog'
-import { useCategoriesForSelect } from '@/modules/transactions/hooks/use-categories-for-select'
 import { useUpdateTransaction } from '@/modules/transactions/hooks/use-update-transaction'
+import { useCategoriesStore } from '@/modules/transactions/stores/use-categories-store'
 
 vi.mock('@/modules/transactions/hooks/use-update-transaction')
-vi.mock('@/modules/transactions/hooks/use-categories-for-select')
 
 const useUpdateTransactionMock = vi.mocked(useUpdateTransaction)
-const useCategoriesForSelectMock = vi.mocked(useCategoriesForSelect)
 
 const TRANSACTION = {
   id: 't1',
@@ -28,7 +26,7 @@ describe('EditTransactionDialog', () => {
       fieldErrors: [],
       formError: null,
     })
-    useCategoriesForSelectMock.mockReturnValue({
+    useCategoriesStore.setState({
       categories: [{ id: 'cat-1', title: 'Alimentação' }],
       isLoading: false,
       error: null,

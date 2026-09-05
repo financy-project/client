@@ -5,7 +5,15 @@ import { describe, expect, it } from 'vitest'
 import { DELETE_TRANSACTION } from '@/modules/transactions/graphql/mutations'
 import { LIST_TRANSACTIONS } from '@/modules/transactions/graphql/queries'
 import { useDeleteTransaction } from '@/modules/transactions/hooks/use-delete-transaction'
+import type { TransactionFilterValues } from '@/modules/transactions/hooks/use-list-transactions'
 import { useListTransactions } from '@/modules/transactions/hooks/use-list-transactions'
+
+const LIST_FILTERS: TransactionFilterValues = {
+  description: '',
+  type: '',
+  categoryId: '',
+  period: { month: 9, year: 2026 },
+}
 
 const ID = 't1'
 
@@ -47,7 +55,15 @@ describe('useDeleteTransaction', () => {
   })
 
   it("refetches the active useListTransactions() watcher (with its own variables) after a successful delete, not an isolated no-variables query", async () => {
-    const listVariables = { first: 10, after: undefined }
+    const listVariables = {
+      first: 10,
+      after: undefined,
+      description: undefined,
+      type: undefined,
+      categoryIds: undefined,
+      month: 9,
+      year: 2026,
+    }
     const mocks = [
       {
         request: { query: LIST_TRANSACTIONS, variables: listVariables },
@@ -80,7 +96,7 @@ describe('useDeleteTransaction', () => {
     ]
 
     const { result } = renderHook(
-      () => ({ list: useListTransactions(), del: useDeleteTransaction() }),
+      () => ({ list: useListTransactions(LIST_FILTERS), del: useDeleteTransaction() }),
       { wrapper: ({ children }) => createElement(MockedProvider, { mocks }, children) },
     )
 

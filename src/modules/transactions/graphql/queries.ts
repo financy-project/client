@@ -24,8 +24,24 @@ export interface ListCategoriesForSelectData {
 }
 
 export const LIST_TRANSACTIONS = gql`
-  query ListTransactions($first: Int, $after: String) {
-    listTransactions(first: $first, after: $after) {
+  query ListTransactions(
+    $first: Int
+    $after: String
+    $description: String
+    $type: TransactionKind
+    $categoryIds: [ID!]
+    $month: Int
+    $year: Int
+  ) {
+    listTransactions(
+      first: $first
+      after: $after
+      description: $description
+      type: $type
+      categoryIds: $categoryIds
+      month: $month
+      year: $year
+    ) {
       edges {
         node {
           id
@@ -70,4 +86,9 @@ export interface ListTransactionsData {
 export interface ListTransactionsVariables {
   first?: number
   after?: string
+  description?: string
+  type?: 'EXPENSE' | 'INCOME'
+  categoryIds?: string[]
+  month?: number
+  year?: number
 }

@@ -5,7 +5,15 @@ import { describe, expect, it } from 'vitest'
 import { CREATE_TRANSACTION } from '@/modules/transactions/graphql/mutations'
 import { LIST_TRANSACTIONS } from '@/modules/transactions/graphql/queries'
 import { useCreateTransaction } from '@/modules/transactions/hooks/use-create-transaction'
+import type { TransactionFilterValues } from '@/modules/transactions/hooks/use-list-transactions'
 import { useListTransactions } from '@/modules/transactions/hooks/use-list-transactions'
+
+const LIST_FILTERS: TransactionFilterValues = {
+  description: '',
+  type: '',
+  categoryId: '',
+  period: { month: 9, year: 2026 },
+}
 
 const INPUT = {
   type: 'EXPENSE' as const,
@@ -55,7 +63,15 @@ describe('useCreateTransaction', () => {
   })
 
   it("refetches the active useListTransactions() watcher (with its own variables) after a successful create, not an isolated no-variables query", async () => {
-    const listVariables = { first: 10, after: undefined }
+    const listVariables = {
+      first: 10,
+      after: undefined,
+      description: undefined,
+      type: undefined,
+      categoryIds: undefined,
+      month: 9,
+      year: 2026,
+    }
     const createdTransaction = {
       id: 't1',
       ...INPUT,
@@ -94,7 +110,7 @@ describe('useCreateTransaction', () => {
     ]
 
     const { result } = renderHook(
-      () => ({ list: useListTransactions(), create: useCreateTransaction() }),
+      () => ({ list: useListTransactions(LIST_FILTERS), create: useCreateTransaction() }),
       { wrapper: ({ children }) => createElement(MockedProvider, { mocks }, children) },
     )
 
