@@ -10,8 +10,8 @@
 
 ### Phase 2: Features
 
-- [ ] T-006: `TransactionsTable` calls `onEdit(transaction)` when that row's "Editar" button is clicked
-- [ ] T-007: `TransactionsTable` calls `onDelete(transaction)` when that row's "Excluir" button is clicked
+- [x] T-006: `TransactionsTable` calls `onEdit(transaction)` when that row's "Editar" button is clicked
+- [x] T-007: `TransactionsTable` calls `onDelete(transaction)` when that row's "Excluir" button is clicked
 
 ### Phase 3: Polish
 
@@ -25,5 +25,5 @@
 - [ ] T-015: `DeleteTransactionAlert` does not call `deleteTransaction` when "Não" is clicked
 - [ ] T-016: `DeleteTransactionAlert` calls `deleteTransaction(transaction.id)`, toasts and closes on "Sim" success
 - [ ] T-017: `DeleteTransactionAlert` stays open and renders the error when the delete fails
-- [ ] T-018: `TransactionsPage` opens `EditTransactionDialog` for the clicked row's transaction
-- [ ] T-019: `TransactionsPage` opens `DeleteTransactionAlert` for the clicked row's transaction
+- [x] T-018: `TransactionsPage` opens `EditTransactionDialog` for the clicked row's transaction
+- [x] T-019: `TransactionsPage` opens `DeleteTransactionAlert` for the clicked row's transaction

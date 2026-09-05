@@ -21,6 +21,8 @@ const DEFAULT_PROPS = {
   onPageChange: vi.fn(),
   totalRecord: 1,
   pageSize: 10,
+  onEdit: vi.fn(),
+  onDelete: vi.fn(),
 }
 
 describe('TransactionsTable', () => {
@@ -65,11 +67,7 @@ describe('TransactionsTable', () => {
     expect(screen.getByText('Nenhuma transação cadastrada ainda.')).toBeInTheDocument()
   })
 
-  it('renders one row per transaction with description/date/category/type/value, and two inert action buttons', async () => {
-    const user = userEvent.setup()
-    const createTransactionMock = vi.fn()
-    const deleteTransactionMock = vi.fn()
-
+  it('renders one row per transaction with description/date/category/type/value', () => {
     render(<TransactionsTable {...DEFAULT_PROPS} transactions={[TRANSACTION]} />)
 
     expect(screen.getByText('Almoço no restaurante')).toBeInTheDocument()
@@ -77,17 +75,26 @@ describe('TransactionsTable', () => {
     expect(screen.getByText('Alimentação')).toBeInTheDocument()
     expect(screen.getByText('Saída')).toBeInTheDocument()
     expect(screen.getByText('- R$ 88,50')).toBeInTheDocument()
+  })
 
-    const deleteButton = screen.getByRole('button', { name: 'Excluir' })
-    const editButton = screen.getByRole('button', { name: 'Editar' })
-    expect(deleteButton).toBeInTheDocument()
-    expect(editButton).toBeInTheDocument()
+  it('calls onDelete(transaction) when the row\'s "Excluir" button is clicked', async () => {
+    const user = userEvent.setup()
+    const onDelete = vi.fn()
 
-    await user.click(deleteButton)
-    await user.click(editButton)
+    render(<TransactionsTable {...DEFAULT_PROPS} transactions={[TRANSACTION]} onDelete={onDelete} />)
+    await user.click(screen.getByRole('button', { name: 'Excluir' }))
 
-    expect(createTransactionMock).not.toHaveBeenCalled()
-    expect(deleteTransactionMock).not.toHaveBeenCalled()
+    expect(onDelete).toHaveBeenCalledWith(TRANSACTION)
+  })
+
+  it('calls onEdit(transaction) when the row\'s "Editar" button is clicked', async () => {
+    const user = userEvent.setup()
+    const onEdit = vi.fn()
+
+    render(<TransactionsTable {...DEFAULT_PROPS} transactions={[TRANSACTION]} onEdit={onEdit} />)
+    await user.click(screen.getByRole('button', { name: 'Editar' }))
+
+    expect(onEdit).toHaveBeenCalledWith(TRANSACTION)
   })
 
   it('calls onPageChange when a page button is clicked', async () => {

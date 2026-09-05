@@ -30,6 +30,7 @@ const TYPE_OPTIONS = [
 ]
 
 interface TransactionFormProps {
+  defaultValues?: Partial<TransactionFormValues>
   isLoading: boolean
   fieldErrors: RegisterFieldError[]
   formError: string | null
@@ -37,6 +38,7 @@ interface TransactionFormProps {
 }
 
 export function TransactionForm({
+  defaultValues,
   isLoading,
   fieldErrors,
   formError,
@@ -58,6 +60,7 @@ export function TransactionForm({
       date: undefined,
       value: 0,
       categoryId: '',
+      ...defaultValues,
     },
   })
 
