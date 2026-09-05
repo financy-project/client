@@ -24,6 +24,7 @@ describe('DashboardHighlights', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: false,
       error: null,
     })

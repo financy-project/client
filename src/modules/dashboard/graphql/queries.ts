@@ -21,6 +21,13 @@ export const GET_DASHBOARD = gql`
           icon
         }
       }
+      balanceByCategory {
+        categoryId
+        title
+        color
+        transactionCount
+        totalValue
+      }
     }
   }
 `
@@ -40,9 +47,18 @@ export interface DashboardRecentTransaction {
   category: { id: string; title: string; color: string; icon: string } | null
 }
 
+export interface DashboardCategoryBalance {
+  categoryId: string
+  title: string
+  color: string
+  transactionCount: number
+  totalValue: number
+}
+
 export interface GetDashboardData {
   dashboard: {
     movement: DashboardMovement
     recentTransactions: DashboardRecentTransaction[]
+    balanceByCategory: DashboardCategoryBalance[]
   }
 }

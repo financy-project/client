@@ -4,8 +4,8 @@ Generated mechanically from `plan.md`'s `## Test Cases` — one `T-NNN` per bull
 
 ## Phase 1: Foundation
 
-- [ ] T-001: `useGetDashboard` returns `categories` equal to the mocked `balanceByCategory` once the query resolves
-- [ ] T-002: `useGetDashboard` returns `categories: []` before the query resolves and after a network error (mirrors the existing `movement: null` cases)
+- [x] T-001: `useGetDashboard` returns `categories` equal to the mocked `balanceByCategory` once the query resolves
+- [x] T-002: `useGetDashboard` returns `categories: []` before the query resolves and after a network error (mirrors the existing `movement: null` cases)
 
 ## Phase 2: Features
 

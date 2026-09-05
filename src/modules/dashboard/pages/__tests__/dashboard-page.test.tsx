@@ -39,6 +39,7 @@ describe('DashboardPage', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: true,
       error: null,
     })
@@ -51,6 +52,7 @@ describe('DashboardPage', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: false,
       error: 'Não foi possível carregar o resumo do dashboard.',
     })
@@ -68,6 +70,7 @@ describe('DashboardPage', () => {
     useGetDashboardMock.mockReturnValue({
       movement: MOVEMENT,
       recentTransactions: [],
+      categories: [],
       isLoading: false,
       error: null,
     })
@@ -81,6 +84,7 @@ describe('DashboardPage', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
+      categories: [],
       isLoading: true,
       error: null,
     })

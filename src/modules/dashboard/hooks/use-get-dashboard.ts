@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client/react'
 import type {
+  DashboardCategoryBalance,
   DashboardMovement,
   DashboardRecentTransaction,
   GetDashboardData,
@@ -11,6 +12,7 @@ const FALLBACK_ERROR_MESSAGE = 'Não foi possível carregar o resumo do dashboar
 export interface UseGetDashboardResult {
   movement: DashboardMovement | null
   recentTransactions: DashboardRecentTransaction[]
+  categories: DashboardCategoryBalance[]
   isLoading: boolean
   error: string | null
 }
@@ -23,6 +25,7 @@ export function useGetDashboard(): UseGetDashboardResult {
   return {
     movement: data?.dashboard.movement ?? null,
     recentTransactions: data?.dashboard.recentTransactions ?? [],
+    categories: data?.dashboard.balanceByCategory ?? [],
     isLoading: loading,
     error: error ? FALLBACK_ERROR_MESSAGE : null,
   }
