@@ -8,3 +8,23 @@
     TransactionTypeSelect({ id?, label?, value: TransactionTypeFilterValue, onValueChange }): JSX.Element (src/modules/transactions/components/transaction-type-select.tsx) — TransactionTypeFilterValue = 'EXPENSE' | 'INCOME' | ''
     TransactionSearchInput({ id?, value, onChange }): JSX.Element (src/modules/transactions/components/transaction-search-input.tsx)
     PeriodSelect({ id?, label?, value: PeriodValue, onChange }): JSX.Element (src/modules/transactions/components/period-select.tsx) — PeriodValue = { month: number, year: number }
+
+[2026-09-05 07:01:44] ✅ Phase 2: Features
+  Branch: PM-019/phase-2-features
+  - F-003: useDebouncedValue hook
+  - F-004: useSyncCategoriesForSelect hook
+  - F-005: LIST_TRANSACTIONS filter args (description/type/categoryIds/month/year)
+  - F-006: useListTransactions rewritten to take TransactionFilterValues (debounce, pagination reset, AbortController cancellation)
+  - F-007: TransactionFilters component
+  - F-008: wired TransactionFilters + useSyncCategoriesForSelect into TransactionsPage
+  - F-009: migrated TransactionForm to shared CategorySelect
+  - F-010: deleted superseded useCategoriesForSelect hook + test
+  Exports:
+    useDebouncedValue<T>(value: T, delayMs: number): T (src/modules/transactions/hooks/use-debounced-value.ts)
+    useSyncCategoriesForSelect(): void (src/modules/transactions/hooks/use-sync-categories-for-select.ts) — call once, from TransactionsPage
+    TransactionFilterValues: { description: string, type: TransactionTypeFilterValue, categoryId: string, period: PeriodValue } (src/modules/transactions/hooks/use-list-transactions.ts)
+    useListTransactions(filters: TransactionFilterValues): UseListTransactionsResult (src/modules/transactions/hooks/use-list-transactions.ts) — signature change, was useListTransactions()
+    TransactionFilters({ value: TransactionFilterValues, onChange, className? }): JSX.Element (src/modules/transactions/components/transaction-filters.tsx)
+    LIST_TRANSACTIONS now takes $description/$type/$categoryIds/$month/$year (src/modules/transactions/graphql/queries.ts); ListTransactionsVariables updated to match
+    useCategoriesForSelect removed — TransactionForm now uses CategorySelect directly
+    Manually verified: pnpm test (245/245), pnpm lint (clean), pnpm build (compiles)
