@@ -41,7 +41,7 @@ export function RecentTransactionsCard(): JSX.Element {
           Transações Recentes
         </span>
         <Button variant="link" asChild className="h-auto gap-1 p-0">
-          <Link to="/transactions">
+          <Link to="/transacoes">
             Ver todas
             <ChevronRight className="size-4" />
           </Link>

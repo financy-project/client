@@ -111,7 +111,7 @@ describe('RecentTransactionsCard', () => {
     expect(screen.getByText('Nenhuma transação cadastrada ainda.')).toBeInTheDocument()
   })
 
-  it('"Ver todas" links to /transactions', () => {
+  it('"Ver todas" links to /transacoes', () => {
     useGetDashboardMock.mockReturnValue({
       movement: null,
       recentTransactions: [],
@@ -121,7 +121,7 @@ describe('RecentTransactionsCard', () => {
 
     renderCard()
 
-    expect(screen.getByRole('link', { name: /ver todas/i })).toHaveAttribute('href', '/transactions')
+    expect(screen.getByRole('link', { name: /ver todas/i })).toHaveAttribute('href', '/transacoes')
   })
 
   it('clicking "+ Nova transação" opens NewTransactionDialog', async () => {
