@@ -21,4 +21,15 @@ describe('useAuthStore', () => {
   it('has no user before any login', () => {
     expect(useAuthStore.getState().user).toBeNull()
   })
+
+  it('clears the user from state and localStorage on clearUser (logout)', () => {
+    const user = { id: '1', email: 'ana@example.com', name: 'Ana Silva' }
+    useAuthStore.getState().setUser(user)
+
+    useAuthStore.getState().clearUser()
+
+    expect(useAuthStore.getState().user).toBeNull()
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}')
+    expect(stored.state.user).toBeNull()
+  })
 })

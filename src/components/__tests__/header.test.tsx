@@ -1,9 +1,14 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Header } from '@/components/header'
+import { useLogout } from '@/modules/auth/hooks/use-logout'
 import { useAuthStore } from '@/modules/auth/stores/use-auth-store'
+
+vi.mock('@/modules/auth/hooks/use-logout')
+
+const useLogoutMock = vi.mocked(useLogout)
 
 function renderHeader(initialEntry = '/dashboard') {
   return render(
@@ -16,6 +21,7 @@ function renderHeader(initialEntry = '/dashboard') {
 describe('Header', () => {
   beforeEach(() => {
     useAuthStore.setState({ user: null })
+    useLogoutMock.mockReturnValue({ logout: vi.fn().mockResolvedValue(undefined), isLoading: false })
   })
 
   it('renders the Financy logo', () => {
@@ -79,5 +85,28 @@ describe('Header', () => {
     renderHeader()
 
     expect(screen.getByTestId('header-avatar')).toHaveTextContent('AS')
+  })
+
+  it('reveals a "Sair" option when the avatar is clicked', async () => {
+    const user = userEvent.setup()
+    renderHeader()
+
+    expect(screen.queryByRole('button', { name: /sair/i })).not.toBeInTheDocument()
+
+    await user.click(screen.getByTestId('header-avatar'))
+
+    expect(await screen.findByRole('button', { name: /sair/i })).toBeInTheDocument()
+  })
+
+  it('calls logout() when "Sair" is clicked', async () => {
+    const logout = vi.fn().mockResolvedValue(undefined)
+    useLogoutMock.mockReturnValue({ logout, isLoading: false })
+    const user = userEvent.setup()
+    renderHeader()
+
+    await user.click(screen.getByTestId('header-avatar'))
+    await user.click(await screen.findByRole('button', { name: /sair/i }))
+
+    expect(logout).toHaveBeenCalledTimes(1)
   })
 })

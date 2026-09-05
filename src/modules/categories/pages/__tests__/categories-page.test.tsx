@@ -19,6 +19,9 @@ vi.mock('@/modules/categories/hooks/use-update-category', () => ({
 vi.mock('@/modules/categories/hooks/use-delete-category', () => ({
   useDeleteCategory: () => ({ deleteCategory: vi.fn().mockResolvedValue(false), isLoading: false, error: null }),
 }))
+vi.mock('@/modules/auth/hooks/use-logout', () => ({
+  useLogout: () => ({ logout: vi.fn().mockResolvedValue(undefined), isLoading: false }),
+}))
 
 const useCreateCategoryMock = vi.mocked(useCreateCategory)
 const useListCategoriesMock = vi.mocked(useListCategories)

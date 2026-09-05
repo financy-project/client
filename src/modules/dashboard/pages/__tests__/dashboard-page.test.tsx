@@ -7,6 +7,9 @@ import { useCreateTransaction } from '@/modules/transactions/hooks/use-create-tr
 
 vi.mock('@/modules/dashboard/hooks/use-get-dashboard')
 vi.mock('@/modules/transactions/hooks/use-create-transaction')
+vi.mock('@/modules/auth/hooks/use-logout', () => ({
+  useLogout: () => ({ logout: vi.fn().mockResolvedValue(undefined), isLoading: false }),
+}))
 
 const useGetDashboardMock = vi.mocked(useGetDashboard)
 const useCreateTransactionMock = vi.mocked(useCreateTransaction)

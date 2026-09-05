@@ -46,3 +46,13 @@ export interface LoginData {
     name: string
   }
 }
+
+export const LOGOUT = gql`
+  mutation Logout {
+    logout
+  }
+`
+
+export interface LogoutData {
+  logout: boolean
+}
