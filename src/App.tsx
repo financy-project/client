@@ -3,8 +3,8 @@ import { Toaster } from '@/components/ui/sonner'
 import { LoginPage } from '@/modules/auth/pages/login-page'
 import { RegisterPage } from '@/modules/auth/pages/register-page'
 import { CategoriesPage } from '@/modules/categories/pages/categories-page'
+import { DashboardPage } from '@/modules/dashboard/pages/dashboard-page'
 import { TransactionsPage } from '@/modules/transactions/pages/transactions-page'
-import { DashboardPage } from '@/pages/dashboard-page'
 import { PreviewPage } from '@/pages/preview-page'
 
 function App() {
