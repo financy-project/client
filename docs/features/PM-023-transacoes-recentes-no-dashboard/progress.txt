@@ -20,3 +20,36 @@
     export function formatDashboardTransactionDate(iso: string): string
     export function formatDashboardTransactionValue(cents: number, type: 'EXPENSE' | 'INCOME'): string
     // both in src/modules/dashboard/utils/format-dashboard-transaction.ts
+
+[2026-09-05 14:27:00] ✅ Phase 2: Features
+  Branch: PM-023/phase-2-features
+  - [x] F-006: Extend `useCreateTransaction` with optional `UseCreateTransactionOptions` (`additionalRefetchQueries`)
+  - [x] F-007: Unit tests for the new parameter
+  - [x] F-008: Implement `DashboardTransactionRow` (`src/modules/dashboard/components/dashboard-transaction-row.tsx`)
+  - [x] F-009: Component tests for `DashboardTransactionRow`
+  - [x] F-010: Replace the `RecentTransactionsCard` placeholder with real content
+  Exports:
+    export interface UseCreateTransactionOptions {
+      additionalRefetchQueries?: DocumentNode[]
+    }
+    export function useCreateTransaction(options?: UseCreateTransactionOptions): UseCreateTransactionResult
+    // src/modules/transactions/hooks/use-create-transaction.ts
+
+    export interface DashboardTransactionRowProps {
+      transaction: DashboardRecentTransaction
+    }
+    export function DashboardTransactionRow(props: DashboardTransactionRowProps): JSX.Element
+    // src/modules/dashboard/components/dashboard-transaction-row.tsx
+
+    // Plan refinement: NewTransactionDialog gained a new optional prop,
+    // forwarded to its own internal useCreateTransaction() call, instead of
+    // RecentTransactionsCard calling useCreateTransaction itself:
+    interface NewTransactionDialogProps {
+      open: boolean
+      onOpenChange: (open: boolean) => void
+      additionalRefetchQueries?: DocumentNode[]
+    }
+    // src/modules/transactions/components/new-transaction-dialog.tsx
+
+    export function RecentTransactionsCard(): JSX.Element // real content now
+    // src/modules/dashboard/components/recent-transactions-card.tsx
