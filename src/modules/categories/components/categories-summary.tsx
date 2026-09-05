@@ -1,6 +1,7 @@
 import type { JSX, ReactNode } from 'react'
 
 import { ArrowUpDown, Tag as TagIcon } from 'lucide-react'
+import { CardEyebrow } from '@/components/card-eyebrow'
 import { Card } from '@/components/ui/card'
 import type { TagColor } from '@/components/ui/tag'
 import { resolveCategoryColorName, resolveCategoryIcon } from '@/lib/category-visuals'
@@ -38,9 +39,7 @@ function SummaryCard({ icon, iconClassName, iconTestId, value, label }: SummaryC
       </div>
       <div className="flex flex-col gap-2">
         <span className="text-[28px] leading-8 font-bold text-gray-800">{value}</span>
-        <span className="text-xs leading-4 font-medium tracking-wider text-gray-500 uppercase">
-          {label}
-        </span>
+        <CardEyebrow className="leading-4">{label}</CardEyebrow>
       </div>
     </Card>
   )
