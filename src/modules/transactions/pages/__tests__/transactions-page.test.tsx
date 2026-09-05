@@ -130,4 +130,35 @@ describe('TransactionsPage', () => {
       expect(lastCallFilters?.description).toBe('a')
     })
   })
+
+  it('applies search + type filters together, without one overwriting the other', async () => {
+    const user = userEvent.setup()
+    renderTransactionsPage()
+
+    await user.type(screen.getByLabelText('Buscar'), 'pizza')
+    await user.click(screen.getByRole('combobox', { name: 'Tipo' }))
+    await user.click(screen.getByRole('option', { name: 'Entrada' }))
+
+    await waitFor(() => {
+      const lastCallFilters = useListTransactionsMock.mock.calls.at(-1)?.[0]
+      expect(lastCallFilters).toMatchObject({ description: 'pizza', type: 'INCOME' })
+    })
+  })
+
+  it('shows the table\'s existing empty state when the filtered result is []', () => {
+    useListTransactionsMock.mockReturnValue({
+      transactions: [],
+      isLoading: false,
+      error: null,
+      page: 1,
+      totalPages: 0,
+      totalRecord: 0,
+      pageSize: 10,
+      goToPage: vi.fn(),
+    })
+
+    renderTransactionsPage()
+
+    expect(screen.getByText('Nenhuma transação cadastrada ainda.')).toBeInTheDocument()
+  })
 })

@@ -1,5 +1,5 @@
 import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type {
   ListTransactionsData,
   ListTransactionsVariables,
@@ -62,11 +62,27 @@ export function useListTransactions(filters: TransactionFilterValues): UseListTr
   // oxlint-disable-next-line react-hooks/exhaustive-deps
   const abortController = useMemo(() => new AbortController(), [filtersKey])
 
-  // Aborts the *previous* filtersKey's controller the moment this one
-  // takes over (cleanup runs before the next effect when `abortController`
-  // changes identity) — and the current one on unmount.
+  // Aborts the *previous* filtersKey's controller once a new one has
+  // genuinely taken over — detected by comparing against a ref rather
+  // than aborting unconditionally in a `useEffect` cleanup. A cleanup
+  // fires on every unmount, including the harmless mount→cleanup→mount
+  // cycle React's StrictMode simulates in development on initial mount;
+  // since `abortController` is the *same* memoized instance across that
+  // simulated cycle (filtersKey hasn't changed), a cleanup-based abort
+  // would cancel the one real in-flight request for this render before
+  // it ever gets a chance to resolve. Comparing here instead only aborts
+  // when the ref's previous value differs from the current one — i.e.
+  // filtersKey actually changed — which StrictMode's replay alone can't
+  // trigger.
+  const previousAbortControllerRef = useRef<AbortController | null>(null)
   useEffect(() => {
-    return () => abortController.abort()
+    if (
+      previousAbortControllerRef.current &&
+      previousAbortControllerRef.current !== abortController
+    ) {
+      previousAbortControllerRef.current.abort()
+    }
+    previousAbortControllerRef.current = abortController
   }, [abortController])
 
   // null on the very first render only — guarantees the block below runs
